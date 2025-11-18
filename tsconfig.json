@@ -2,5 +2,40 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
-  "references": []
+  "references": [
+    {
+      "path": "./web"
+    },
+    {
+      "path": "./web-e2e"
+    },
+    {
+      "path": "./api"
+    },
+    {
+      "path": "./packages/types"
+    },
+    {
+      "path": "./packages/domain"
+    },
+    {
+      "path": "./packages/data-access"
+    },
+    {
+      "path": "./packages/config"
+    },
+    {
+      "path": "./packages/testing"
+    },
+    {
+      "path": "./packages/ui"
+    }
+  ],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs",
+      "moduleResolution": "node10",
+      "customConditions": null
+    }
+  }
 }

@@ -6,8 +6,8 @@
     "importHelpers": true,
     "isolatedModules": true,
     "lib": ["es2022"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -16,6 +16,16 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": ["@nba-analytics-hub/source"]
+    "types": ["vitest/globals", "node"],
+    "customConditions": ["@nba-analytics-hub/source"],
+    "baseUrl": ".",
+    "paths": {
+      "@nba-analytics-hub/types": ["packages/types/src/index.ts"],
+      "@nba-analytics-hub/domain": ["packages/domain/src/index.ts"],
+      "@nba-analytics-hub/data-access": ["packages/data-access/src/index.ts"],
+      "@nba-analytics-hub/config": ["packages/config/src/index.ts"],
+      "@nba-analytics-hub/testing": ["packages/testing/src/index.ts"],
+      "@nba-analytics-hub/ui": ["packages/ui/src/index.ts"]
+    }
   }
 }

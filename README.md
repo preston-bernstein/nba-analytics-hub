@@ -1,109 +1,136 @@
-# NbaAnalyticsHub
+# NBA Analytics Hub
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+NBA Analytics Hub is an Nx monorepo that hosts a small but realistic NBA analytics stack:
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+- A React dashboard (`web`) for browsing upcoming games and model outputs
+- An Express API BFF (`api`) that fronts a future Python predictor service
+- Shared libraries for UI, domain logic, data access, config, and types
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+---
 
-## Generate a library
+## Goals
+
+- Clear separation of concerns between apps and libraries
+- Strong testing discipline (Vitest + Testing Library + Supertest)
+- Good type sharing across backend, frontend, and Python-facing clients
+- Simple DevOps (Docker + CI later)
+
+Current focus is **v1**:
+
+- List upcoming games
+- Display a prediction per game (mocked for now)
+- Exercise shared libs across the stack
+
+---
+
+## Architecture
+
+The repository uses a package-based Nx monorepo with isolated apps and shared libraries:
+
+```
+nba-analytics-hub/
+  apps/
+    api/        → Express BFF (REST API)
+    web/        → React dashboard (Vite)
+  packages/
+    ui/         → Shared component library + Storybook
+    domain/     → Pure business logic and helpers
+    data-access/→ API clients and HTTP wrappers
+    types/      → Shared TypeScript types
+    testing/    → Shared test utilities (future expansion)
+```
+
+Each package is version-able, testable, and buildable in isolation.
+All apps consume these libraries through workspace imports (@nba-analytics-hub/...).
+
+**Apps**
+
+- `web` – React + Vite dashboard, consumes the API
+- `api` – Express API BFF that will call the Python predictor
+
+**Libraries**
+
+- `@nba-analytics-hub/ui` – shared React components, hooks, theme, Storybook
+- `@nba-analytics-hub/domain` – pure domain helpers (e.g. selecting a favorite)
+- `@nba-analytics-hub/data-access` – HTTP clients for API + predictor
+- `@nba-analytics-hub/config` – environment loading and runtime config
+- `@nba-analytics-hub/types` – shared TypeScript types across the monorepo
+- `@nba-analytics-hub/testing` – shared test utilities (reserved for future use)
+
+Nx layout:
+
+- Apps live under `apps/`
+- Libraries live under `packages/`
+
+---
+
+## Tech stack
+
+- **Workspace**: Nx (package-based layout)
+- **Frontend**: React, Vite, React Router
+- **Backend**: Express
+- **Types / build**: TypeScript, Vite library builds
+- **Testing**:
+  - Vitest
+  - React Testing Library
+  - Supertest
+  - Coverage thresholds enforced (>= 80% lines/functions/statements, >= 70% branches in core libs)
+- **UI docs**: Storybook 9 (Vite)
+
+---
+
+## Getting started
+
+### Local Development
+Install dependencies
+```sh
+npm install
+```
+
+Run all tests
+```sh
+npx nx test --all
+```
+
+Run the API (Express)
+```sh
+npx nx serve api
+```
+
+Run the Web App (React)
+```sh
+npx nx serve web
+```
+
+Storybook (UI components)
+```sh
+npx nx storybook ui
+```
+
+Prereqs:
+
+- Node 20+ (using `nvm` is recommended)
+- npm
+
+Install dependencies:
 
 ```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+npm install
 ```
 
-## Run tasks
+## Project Philosophy
 
-To build the library use:
+### Modular design
+Each concern lives in its own library, with clear boundaries.
 
-```sh
-npx nx build pkg1
-```
+### Type safety everywhere
+Shared TypeScript types flow from domain → data-access → API → frontend.
 
-To run any task with Nx use:
+### Testing discipline
+Every layer has meaningful tests and coverage thresholds.
 
-```sh
-npx nx <target> <project-name>
-```
+### Predictor as a separate service
+The TypeScript BFF integrates with the Python predictor repo without coupling.
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+### Production-style structure
+CI-ready test configs, stable build steps, clean separation of responsibilities.
