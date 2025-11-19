@@ -3,14 +3,14 @@
   "compileOnSave": false,
   "files": [],
   "references": [
-    {
-      "path": "./web-e2e"
-    },
-    {
-      "path": "./web"
-    },
-    {
-      "path": "./api"
-    }
+    { "path": "./web" },
+    { "path": "./web-e2e" },
+    { "path": "./api" },
+    { "path": "./packages/types" },
+    { "path": "./packages/domain" },
+    { "path": "./packages/data-access" },
+    { "path": "./packages/config" },
+    { "path": "./packages/testing" },
+    { "path": "./packages/ui" }
   ]
 }
