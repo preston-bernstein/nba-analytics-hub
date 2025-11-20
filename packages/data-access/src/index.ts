@@ -1,1 +1,1 @@
-export * from './lib/data-access.js';
+export * from './lib/game-repository';
