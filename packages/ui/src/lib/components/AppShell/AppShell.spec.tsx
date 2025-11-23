@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import NbaAnalyticsHubUi from './ui';
+import NbaAnalyticsHubUi from './AppShell';
 
 describe('NbaAnalyticsHubUi', () => {
   it('should render successfully', () => {

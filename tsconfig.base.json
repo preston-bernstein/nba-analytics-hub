@@ -18,7 +18,7 @@
     "target": "es2022",
     "types": ["vitest/globals", "node"],
     "customConditions": ["@nba-analytics-hub/source"],
-    "baseUrl": ".",                         // <= add this
+    "baseUrl": ".",
     "paths": {
       "@nba-analytics-hub/types": ["packages/types/src/index.ts"],
       "@nba-analytics-hub/domain": ["packages/domain/src/index.ts"],
@@ -29,4 +29,3 @@
     }
   }
 }
- 

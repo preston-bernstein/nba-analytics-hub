@@ -1,4 +1,4 @@
-import styles from './ui.module.css';
+import styles from './AppShell.module.css';
 
 export function NbaAnalyticsHubUi() {
   return (
