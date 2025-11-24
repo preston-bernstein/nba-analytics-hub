@@ -1,1 +1,1 @@
-export * from './lib/game-repository';
+export * from './lib';

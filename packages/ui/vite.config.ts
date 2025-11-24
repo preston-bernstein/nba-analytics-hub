@@ -1,10 +1,10 @@
-/// <reference types='vitest' />
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import * as path from 'path';
 
-export default defineConfig(() => ({
+export default defineConfig({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/packages/ui',
   plugins: [
@@ -14,12 +14,6 @@ export default defineConfig(() => ({
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
     }),
   ],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [],
-  // },
-  // Configuration for building your library.
-  // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
     outDir: './dist',
     emptyOutDir: true,
@@ -28,41 +22,13 @@ export default defineConfig(() => ({
       transformMixedEsModules: true,
     },
     lib: {
-      // Could also be a dictionary or array of multiple entry points.
       entry: 'src/index.ts',
       name: '@nba-analytics-hub/ui',
       fileName: 'index',
-      // Change this to the formats you want to support.
-      // Don't forget to update your package.json as well.
-      formats: ['es' as const],
+      formats: ['es'],
     },
     rollupOptions: {
-      // External packages that should not be bundled into your library.
       external: ['react', 'react-dom', 'react/jsx-runtime'],
     },
   },
-  test: {
-    name: '@nba-analytics-hub/ui',
-    watch: false,
-    globals: true,
-    environment: 'jsdom',
-    include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    setupFiles: ['./src/test-setup.ts'],
-    reporters: ['default'],
-    coverage: {
-      enabled: true,
-      reporter: ['text', 'lcov'],
-      lines: 80,
-      branches: 70,
-      functions: 80,
-      statements: 80,
-      exclude: [
-        'src/**/index.ts',
-        'src/**/*.stories.@(ts|tsx)',
-        'src/test-setup.ts',
-      ],
-      reportsDirectory: './test-output/vitest/coverage',
-      provider: 'v8' as const,
-    },
-  },
-}));
+});

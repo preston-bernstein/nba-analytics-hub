@@ -1,6 +1,7 @@
 export interface AppEnv {
   NODE_ENV: 'development' | 'test' | 'production';
   API_BASE_URL: string;
+  PREDICTOR_BASE_URL: string;
 }
 
 export function loadEnv(env: Record<string, string | undefined>): AppEnv {
@@ -16,5 +17,10 @@ export function loadEnv(env: Record<string, string | undefined>): AppEnv {
     process.env.API_BASE_URL ??
     'http://localhost:3333';
 
-  return { NODE_ENV, API_BASE_URL };
+  const PREDICTOR_BASE_URL =
+    env.PREDICTOR_BASE_URL ??
+    process.env.PREDICTOR_BASE_URL ??
+    'http://localhost:8000';
+
+  return { NODE_ENV, API_BASE_URL, PREDICTOR_BASE_URL };
 }

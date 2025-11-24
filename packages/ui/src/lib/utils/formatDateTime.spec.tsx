@@ -1,12 +1,20 @@
-import { describe, expect, it } from 'vitest';
 import { formatDateTime } from './formatDateTime';
 
 describe('formatDateTime', () => {
-  it('should format ISO string into readable date', () => {
-    const iso = '2025-01-15T18:30:00.000Z';
-    const result = formatDateTime(iso, 'en-US');
+  it('formats an ISO string using short month, day, and time', () => {
+    const result = formatDateTime('2025-01-15T18:30:00.000Z', 'en-US');
 
-    expect(result).toMatch(/Jan|Jan\./i);
-    expect(result).toMatch(/15/);
+    // Locale/timezone will affect exact output, so keep assertions fuzzy.
+    expect(result).toMatch(/Jan/i);
+    expect(result).toMatch(/\d{2}/); // day of month
+    expect(result).toMatch(/\d{1,2}:\d{2}/); // time
+  });
+
+  it('uses the provided locale', () => {
+    const resultEn = formatDateTime('2025-01-15T18:30:00.000Z', 'en-US');
+    const resultFr = formatDateTime('2025-01-15T18:30:00.000Z', 'fr-FR');
+
+    // Don’t assert full string; just that they differ, proving locale was respected.
+    expect(resultEn).not.toEqual(resultFr);
   });
 });
