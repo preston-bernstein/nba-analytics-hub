@@ -2,9 +2,20 @@
   "name": "@nba-analytics-hub/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:all": "nx run-many -t test --all",
+    "lint:all": "nx run-many -t lint --all --output-style=stream",
+    "test:ui": "nx test ui",
+    "test:api": "nx test api",
+    "test:domain": "nx test domain",
+    "test:web":" nx test web",
+    "test:data-access": "nx test data-access",
+    "serve:web": "nx serve web",
+    "serve:api": "nx serve api"
+  },
   "private": true,
   "devDependencies": {
+    "msw": "^2.6.0",
     "@babel/core": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
     "@eslint/js": "^9.8.0",

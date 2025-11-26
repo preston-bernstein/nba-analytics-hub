@@ -14,7 +14,11 @@
       "default": "./dist/index.js"
     }
   },
+  "dependencies": {
+    "@nba-analytics-hub/types": "workspace:*"
+  },
   "devDependencies": {
+    "@storybook/react-vite": "workspace:*",
     "@testing-library/jest-dom": "^6.9.1"
   }
 }

@@ -12,5 +12,10 @@
     "eslint.config.mjs",
     "**/*.spec.ts",
     "**/*.test.ts"
+  ],
+  "references": [
+    {
+      "path": "../packages/types/tsconfig.lib.json"
+    }
   ]
 }

@@ -16,6 +16,18 @@
     }
   },
   "dependencies": {
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "@nba-analytics-hub/types": "workspace:*"
+  },
+    "nx": {
+    "targets": {
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run",
+          "cwd": "packages/domain"
+        }
+      }
+    }
   }
 }
