@@ -120,8 +120,6 @@ npm install
 
 ## Project Philosophy
 
-This project is intentionally designed to showcase:
-
 ### Modular design
 Each concern lives in its own library, with clear boundaries.
 
