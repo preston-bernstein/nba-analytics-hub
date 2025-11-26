@@ -2,7 +2,15 @@
   "name": "@nba-analytics-hub/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test:ui": "nx test ui",
+    "test:api": "nx test api",
+    "test:domain": "nx test domain",
+    "test:data-access": "nx test data-access",
+    "test:all": "nx test --all",
+    "serve:web": "nx serve web",
+    "serve:api": "nx serve api"
+  },
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.14.5",
