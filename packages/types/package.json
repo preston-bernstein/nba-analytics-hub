@@ -17,5 +17,13 @@
   },
   "dependencies": {
     "tslib": "^2.3.0"
+  },
+  "nx": {
+    "targets": {
+      "test": {
+        "executor": "nx:noop",
+        "options": {}
+      }
+    }
   }
 }
