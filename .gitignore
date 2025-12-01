@@ -4,7 +4,9 @@
 dist
 tmp
 out-tsc
-test-output
+/.vitest
+/vitest-temp
+test-output/
 
 # dependencies
 node_modules
