@@ -15,10 +15,15 @@
     }
   },
   "dependencies": {
-    "@nba-analytics-hub/types": "workspace:*"
+    "@nba-analytics-hub/types": "0.0.1",
+    "@nba-analytics-hub/domain": "0.0.1",
+    "class-variance-authority": "^0.7.0",
+    "lucide-react": "^0.453.0",
+    "tailwind-merge": "^2.5.0"
   },
   "devDependencies": {
-    "@storybook/react-vite": "workspace:*",
-    "@testing-library/jest-dom": "^6.9.1"
+    "@storybook/react-vite": "10.1.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "shadcn": "^3.5.1"
   }
 }

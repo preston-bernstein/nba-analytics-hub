@@ -17,15 +17,15 @@
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@nba-analytics-hub/types": "workspace:*"
+    "@nba-analytics-hub/types": "0.0.1"
   },
-    "nx": {
+  "nx": {
     "targets": {
       "test": {
         "executor": "nx:run-commands",
         "options": {
           "command": "vitest run",
-          "cwd": "packages/domain"
+          "cwd": "packages/data-access"
         }
       }
     }

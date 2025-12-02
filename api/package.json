@@ -2,7 +2,6 @@
   "name": "@nba-analytics-hub/api",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest"
@@ -32,7 +31,8 @@
             "outExtension": {
               ".js": ".js"
             }
-          }
+          },
+          "generatePackageJson": false
         },
         "configurations": {
           "development": {},
@@ -117,6 +117,10 @@
     }
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
   }
 }

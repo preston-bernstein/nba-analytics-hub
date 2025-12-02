@@ -1,4 +1,6 @@
 export default [
-  '**/vite.config.{mjs,js,ts,mts}',
-  '**/vitest.config.{mjs,js,ts,mts}',
+  'api/vitest.config.ts',
+  'packages/ui/vitest.config.ts',
+  'packages/domain/vitest.config.ts',
+  'packages/data-access/vitest.config.ts',
 ];
