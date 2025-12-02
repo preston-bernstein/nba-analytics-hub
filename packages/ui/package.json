@@ -15,10 +15,10 @@
     }
   },
   "dependencies": {
-    "@nba-analytics-hub/types": "workspace:*"
+    "@nba-analytics-hub/types": "0.0.1"
   },
   "devDependencies": {
-    "@storybook/react-vite": "workspace:*",
+    "@storybook/react-vite": "10.1.2",
     "@testing-library/jest-dom": "^6.9.1"
   }
 }

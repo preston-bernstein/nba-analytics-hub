@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@nba-analytics-hub/types": "workspace:*"
+    "@nba-analytics-hub/types": "0.0.1"
   },
     "nx": {
     "targets": {
