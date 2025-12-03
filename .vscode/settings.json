@@ -3,11 +3,10 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.importModuleSpecifierEnding": "auto",
   "typescript.preferences.importModuleSpecifier": "non-relative",
+
   "vitest.enable": true,
-  "vitest.commandLine": "npx vitest --config packages/ui/vite.config.ts",
-  "vitest.include": [
-    "packages/ui/src/**/*.spec.{ts,tsx}",
-    "packages/domain/src/**/*.spec.{ts,tsx}",
-    "packages/data-access/src/**/*.spec.{ts,tsx}"
-  ]
+
+  "vitest.workspaceConfig": "vitest.workspace.ts",
+
+  "vitest.maximumConfigs": 10
 }

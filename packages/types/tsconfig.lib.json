@@ -6,10 +6,20 @@
     "declaration": true,
     "declarationMap": true,
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
-    "types": ["node"],
-    "noEmit": false
+    "types": [
+      "node",
+      "@nx/react/typings/cssmodule.d.ts",
+      "@nx/react/typings/image.d.ts",
+      "vite/client"
+    ],
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "noEmit": false,
+    "paths": {
+      "@/*": ["*"]
+    }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "vite.config.ts",
     "vite.config.mts",

@@ -22,6 +22,7 @@
 
     "baseUrl": ".",
     "paths": {
+      "@workspace/ui/*": ["packages/ui/src/*"],
       "@nba-analytics-hub/types": ["packages/types/src/index.ts"],
       "@nba-analytics-hub/domain": ["packages/domain/src/index.ts"],
       "@nba-analytics-hub/data-access": ["packages/data-access/src/index.ts"],

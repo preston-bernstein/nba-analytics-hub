@@ -43,7 +43,7 @@
       "path": "../packages/types/tsconfig.lib.json"
     },
     {
-      "path": "../packages/ui"
+      "path": "../packages/ui/tsconfig.lib.json"
     }
   ]
 }

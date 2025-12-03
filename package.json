@@ -49,6 +49,7 @@
     "@vitest/ui": "^3.0.0",
     "ajv": "^8.0.0",
     "autoprefixer": "^10.4.22",
+    "empathic": "^2.0.0",
     "esbuild": "^0.19.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
@@ -64,6 +65,7 @@
     "nx": "22.0.4",
     "postcss": "^8.5.6",
     "prettier": "^2.6.2",
+    "shadcn": "^3.5.1",
     "storybook": "9.1.16",
     "supertest": "^7.1.4",
     "tailwindcss": "^4.1.17",
@@ -85,9 +87,12 @@
     "packages"
   ],
   "dependencies": {
+    "clsx": "^2.1.1",
     "express": "^4.21.2",
+    "lucide-react": "^0.555.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "6.29.0"
+    "react-router-dom": "6.29.0",
+    "tailwind-merge": "^3.4.0"
   }
 }

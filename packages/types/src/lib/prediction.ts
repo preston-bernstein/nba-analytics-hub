@@ -11,3 +11,10 @@ export interface PredictionResponse {
   awayWinProbability: number; // 0–1
   modelVersion?: string;
 }
+
+export interface PredictionDisplay {
+  homePct: number;
+  awayPct: number;
+  favoriteLabel: string;
+  isHomeFavored: boolean;
+}
