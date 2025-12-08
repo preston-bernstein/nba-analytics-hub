@@ -1,45 +1,23 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type {
   PredictorServicePredictQuery,
   PredictorServicePredictResponse,
 } from '@nba-analytics-hub/types';
 import { createPredictorServiceClient } from './predictorServiceClient';
+import { predictorResponse } from '../../test-files/fixtures';
+import { mockFetch } from '../../test-files/helpers';
 
 const BASE_URL = 'https://predictor-service.example.com';
 
 describe('createPredictorServiceClient', () => {
-  const originalFetch = globalThis.fetch;
-
-  beforeEach(() => {
-    (globalThis as any).fetch = vi.fn();
-  });
-
-  afterEach(() => {
-    (globalThis as any).fetch = originalFetch;
-    vi.restoreAllMocks();
-  });
+  const fetchMock = mockFetch();
 
   it('calls /v1/predict with correct query params and returns parsed response on success', async () => {
-    const mockResponse: PredictorServicePredictResponse = {
-      home_team: 'NYK',
-      away_team: 'BOS',
-      as_of: '2025-02-01',
-      features: {
-        delta_off: 1.2,
-        delta_def: -0.3,
-        delta_rest: 0.5,
-        delta_elo: 15.7,
-      },
-      prob_home_win: 0.63,
-    };
-
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => mockResponse,
+      json: async () => predictorResponse,
     });
-
-    (globalThis as any).fetch = mockFetch;
 
     const client = createPredictorServiceClient({ baseUrl: BASE_URL });
 
@@ -51,8 +29,8 @@ describe('createPredictorServiceClient', () => {
 
     const result = await client.predict(query);
 
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    const calledUrl = new URL((mockFetch.mock.calls[0] as [string])[0]);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
     expect(calledUrl.origin + calledUrl.pathname).toBe(
       `${BASE_URL}/v1/predict`,
     );
@@ -60,17 +38,48 @@ describe('createPredictorServiceClient', () => {
     expect(calledUrl.searchParams.get('away')).toBe(query.away);
     expect(calledUrl.searchParams.get('date')).toBe(query.date);
 
+    expect(result).toEqual(predictorResponse);
+  });
+
+  it('omits date when not provided and URL-encodes params', async () => {
+    const mockResponse: PredictorServicePredictResponse = {
+      home_team: 'NY Knicks',
+      away_team: 'BOS',
+      as_of: null,
+      features: {
+        delta_off: 0.5,
+        delta_def: 0.1,
+      },
+      prob_home_win: 0.55,
+    };
+
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockResponse,
+    });
+
+    const client = createPredictorServiceClient({ baseUrl: BASE_URL });
+
+    const query: PredictorServicePredictQuery = {
+      home: 'NY Knicks',
+      away: 'BOS',
+    };
+
+    const result = await client.predict(query);
+
+    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
+    expect(calledUrl.searchParams.get('date')).toBeNull();
+    expect(calledUrl.searchParams.get('home')).toBe('NY Knicks');
     expect(result).toEqual(mockResponse);
   });
 
   it('throws a descriptive error when the predictor service returns 422 with detail', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       status: 422,
       json: async () => ({ detail: 'Unknown team code' }),
     });
-
-    (globalThis as any).fetch = mockFetch;
 
     const client = createPredictorServiceClient({ baseUrl: BASE_URL });
 
@@ -85,14 +94,26 @@ describe('createPredictorServiceClient', () => {
     );
   });
 
+  it('throws a generic 422 error when detail is missing or unparsable', async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 422,
+      json: async () => ({}),
+    });
+
+    const client = createPredictorServiceClient({ baseUrl: BASE_URL });
+
+    await expect(
+      client.predict({ home: 'NYK', away: 'BOS' }),
+    ).rejects.toThrow('Predictor service returned 422: Unprocessable predictor request');
+  });
+
   it('throws a descriptive error when the predictor service returns non-OK', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       status: 503,
       json: async () => ({}),
     });
-
-    (globalThis as any).fetch = mockFetch;
 
     const client = createPredictorServiceClient({ baseUrl: BASE_URL });
 

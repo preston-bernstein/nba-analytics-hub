@@ -1,58 +1,26 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { Game } from '@nba-analytics-hub/types';
+import { describe, it, expect } from 'vitest';
 import { createGamesClient } from './gamesClient';
+import { mockFetch } from '../../test-files/helpers';
+import { mockGames } from '../../test-files/fixtures';
 
 const BASE_URL = 'https://example.com';
 
 describe('createGamesClient', () => {
-  const originalFetch = globalThis.fetch;
-
-  beforeEach(() => {
-    (globalThis as any).fetch = vi.fn();
-  });
-
-  afterEach(() => {
-    (globalThis as any).fetch = originalFetch;
-  });
+  const fetchMock = mockFetch();
 
   it('fetches upcoming games and returns them as typed data', async () => {
-    const mockGames: Game[] = [
-      {
-        id: 'game-1',
-        provider: 'mock-provider',
-        homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-        awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
-        startTime: '2025-01-01T00:00:00Z',
-        status: 'SCHEDULED',
-        score: { home: 0, away: 0 },
-        meta: { season: '2024-2025', upstreamGameId: 1111 },
-      },
-      {
-        id: 'game-2',
-        provider: 'mock-provider',
-        homeTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
-        awayTeam: { id: 'GSW', name: 'Golden State Warriors', externalId: 10 },
-        startTime: '2025-01-02T02:00:00Z',
-        status: 'SCHEDULED',
-        score: { home: 0, away: 0 },
-        meta: { season: '2024-2025', upstreamGameId: 2222 },
-      },
-    ];
-
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => mockGames,
     });
 
-    (globalThis as any).fetch = mockFetch;
-
     const client = createGamesClient({ baseUrl: BASE_URL });
 
     const result = await client.getUpcomingGames();
 
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    const urlArg = mockFetch.mock.calls[0][0] as string;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlArg = fetchMock.mock.calls[0][0] as string;
     const calledUrl = new URL(urlArg);
 
     expect(calledUrl.origin + calledUrl.pathname).toBe(
@@ -63,18 +31,24 @@ describe('createGamesClient', () => {
   });
 
   it('throws a descriptive error when the API returns a non-OK status', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: false,
       status: 502,
       json: async () => ({}),
     });
-
-    (globalThis as any).fetch = mockFetch;
 
     const client = createGamesClient({ baseUrl: BASE_URL });
 
     await expect(client.getUpcomingGames()).rejects.toThrow(
       'Games request failed with status 502',
     );
+  });
+
+  it('propagates fetch rejections (network errors)', async () => {
+    fetchMock.mockRejectedValue(new Error('network down'));
+
+    const client = createGamesClient({ baseUrl: BASE_URL });
+
+    await expect(client.getUpcomingGames()).rejects.toThrow('network down');
   });
 });
