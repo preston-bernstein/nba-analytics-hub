@@ -4,6 +4,7 @@ import type {
   GamesServiceHealthResponse,
   GamesServiceTodayResponse,
 } from '@nba-analytics-hub/types';
+import { fetchJson } from '../http';
 
 export interface GamesServiceClientOptions {
   baseUrl: string;
@@ -20,28 +21,20 @@ export function createGamesServiceClient(
 ): GamesServiceClient {
   const { baseUrl } = options;
 
-  async function fetchJson<T>(url: URL): Promise<T> {
-    const res = await fetch(url.toString());
-    if (!res.ok) {
-      throw new Error(`Games service request failed with status ${res.status}`);
-    }
-    return (await res.json()) as T;
-  }
-
   return {
     async checkHealth(): Promise<GamesServiceHealthResponse> {
       const url = new URL('/health', baseUrl);
-      return fetchJson<GamesServiceHealthResponse>(url);
+      return fetchJson<GamesServiceHealthResponse>(baseUrl, url, 'Games service');
     },
 
     async getTodayGames(): Promise<GamesServiceTodayResponse> {
       const url = new URL('/games/today', baseUrl);
-      return fetchJson<GamesServiceTodayResponse>(url);
+      return fetchJson<GamesServiceTodayResponse>(baseUrl, url, 'Games service');
     },
 
     async getGameById(gameId: string): Promise<GamesServiceGame> {
       const url = new URL(`/games/${encodeURIComponent(gameId)}`, baseUrl);
-      return fetchJson<GamesServiceGame>(url);
+      return fetchJson<GamesServiceGame>(baseUrl, url, 'Games service');
     },
   };
 }

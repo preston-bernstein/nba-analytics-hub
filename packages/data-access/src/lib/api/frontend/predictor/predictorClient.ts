@@ -1,4 +1,5 @@
 import type { PredictionRequest, PredictionResponse } from '@nba-analytics-hub/types';
+import { fetchJson } from '../http';
 
 export interface PredictorClientOptions {
   baseUrl: string;
@@ -18,13 +19,7 @@ export function createPredictorClient(options: PredictorClientOptions): Predicto
       url.searchParams.set('away_team', req.awayTeamId);
       url.searchParams.set('game_date', req.gameDate);
 
-      const res = await fetch(url.toString());
-      if (!res.ok) {
-        throw new Error(`Predictor request failed with status ${res.status}`);
-      }
-
-      const data = (await res.json()) as PredictionResponse;
-      return data;
+      return fetchJson<PredictionResponse>(baseUrl, url, 'Predictor');
     },
   };
 }
