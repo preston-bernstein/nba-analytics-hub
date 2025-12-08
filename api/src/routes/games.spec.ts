@@ -11,8 +11,12 @@ describe('GET /games/upcoming', () => {
 
     const game = res.body[0];
     expect(game).toHaveProperty('id');
-    expect(game).toHaveProperty('homeTeamId');
-    expect(game).toHaveProperty('awayTeamId');
-    expect(game).toHaveProperty('startTimeUtc');
+    expect(game).toHaveProperty('provider');
+    expect(game).toHaveProperty('homeTeam.id');
+    expect(game).toHaveProperty('awayTeam.id');
+    expect(game).toHaveProperty('startTime');
+    expect(game).toHaveProperty('status');
+    expect(game).toHaveProperty('score.home');
+    expect(game).toHaveProperty('meta.upstreamGameId');
   });
 });

@@ -1,5 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Game, HealthCheckResponse } from '@nba-analytics-hub/types';
+import type {
+  GamesServiceGame,
+  GamesServiceHealthResponse,
+  GamesServiceTodayResponse,
+} from '@nba-analytics-hub/types';
 import { createGamesServiceClient } from './gamesServiceClient';
 
 const BASE_URL = 'https://games-service.example.com';
@@ -17,7 +21,7 @@ describe('createGamesServiceClient', () => {
   });
 
   it('calls /health and returns parsed health response on success', async () => {
-    const mockHealth: HealthCheckResponse = { status: 'ok' };
+    const mockHealth: GamesServiceHealthResponse = { status: 'ok' };
 
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -37,19 +41,26 @@ describe('createGamesServiceClient', () => {
   });
 
   it('calls /games/today and returns parsed games on success', async () => {
-    const mockGames: Game[] = [
-      {
-        id: 'game-1',
-        homeTeamId: 'ATL',
-        awayTeamId: 'BOS',
-        startTimeUtc: '2025-01-01T00:00:00Z',
-      },
-    ];
+    const mockResponse: GamesServiceTodayResponse = {
+      date: '2025-01-01',
+      games: [
+        {
+          id: 'game-1',
+          provider: 'ball_dont_lie',
+          homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
+          awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+          startTime: '2025-01-01T00:00:00Z',
+          status: 'SCHEDULED',
+          score: { home: 0, away: 0 },
+          meta: { season: '2024-2025', upstreamGameId: 12345 },
+        },
+      ],
+    };
 
     const mockFetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-      json: async () => mockGames,
+      json: async () => mockResponse,
     });
 
     (globalThis as any).fetch = mockFetch;
@@ -62,15 +73,19 @@ describe('createGamesServiceClient', () => {
     expect(calledUrl.origin + calledUrl.pathname).toBe(
       `${BASE_URL}/games/today`,
     );
-    expect(result).toEqual(mockGames);
+    expect(result).toEqual(mockResponse);
   });
 
   it('calls /games/:id and returns parsed game on success', async () => {
-    const mockGame: Game = {
+    const mockGame: GamesServiceGame = {
       id: 'game-2',
-      homeTeamId: 'NYK',
-      awayTeamId: 'MIA',
-      startTimeUtc: '2025-01-02T01:00:00Z',
+      provider: 'ball_dont_lie',
+      homeTeam: { id: 'NYK', name: 'New York Knicks', externalId: 9 },
+      awayTeam: { id: 'MIA', name: 'Miami Heat', externalId: 6 },
+      startTime: '2025-01-02T01:00:00Z',
+      status: 'IN_PROGRESS',
+      score: { home: 75, away: 72 },
+      meta: { season: '2024-2025', upstreamGameId: 54321 },
     };
 
     const mockFetch = vi.fn().mockResolvedValue({

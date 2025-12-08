@@ -1,13 +1,18 @@
-import type { Game, HealthCheckResponse } from '@nba-analytics-hub/types';
+import type {
+  GamesServiceGame,
+  GamesServiceGameDetailResponse,
+  GamesServiceHealthResponse,
+  GamesServiceTodayResponse,
+} from '@nba-analytics-hub/types';
 
 export interface GamesServiceClientOptions {
   baseUrl: string;
 }
 
 export interface GamesServiceClient {
-  checkHealth(): Promise<HealthCheckResponse>;
-  getTodayGames(): Promise<Game[]>;
-  getGameById(gameId: string): Promise<Game>;
+  checkHealth(): Promise<GamesServiceHealthResponse>;
+  getTodayGames(): Promise<GamesServiceTodayResponse>;
+  getGameById(gameId: string): Promise<GamesServiceGameDetailResponse>;
 }
 
 export function createGamesServiceClient(
@@ -24,19 +29,19 @@ export function createGamesServiceClient(
   }
 
   return {
-    async checkHealth(): Promise<HealthCheckResponse> {
+    async checkHealth(): Promise<GamesServiceHealthResponse> {
       const url = new URL('/health', baseUrl);
-      return fetchJson<HealthCheckResponse>(url);
+      return fetchJson<GamesServiceHealthResponse>(url);
     },
 
-    async getTodayGames(): Promise<Game[]> {
+    async getTodayGames(): Promise<GamesServiceTodayResponse> {
       const url = new URL('/games/today', baseUrl);
-      return fetchJson<Game[]>(url);
+      return fetchJson<GamesServiceTodayResponse>(url);
     },
 
-    async getGameById(gameId: string): Promise<Game> {
+    async getGameById(gameId: string): Promise<GamesServiceGame> {
       const url = new URL(`/games/${encodeURIComponent(gameId)}`, baseUrl);
-      return fetchJson<Game>(url);
+      return fetchJson<GamesServiceGame>(url);
     },
   };
 }

@@ -1,3 +1,2 @@
-export * from './predictor';
-export * from './games';
-export * from './gamesService';
+export * from './frontend';
+export * from './services';

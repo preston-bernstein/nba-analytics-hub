@@ -6,9 +6,13 @@ import { GameCard } from './GameCard';
 describe('GameCard', () => {
   const game: Game = {
     id: '1',
-    homeTeamId: 'ATL',
-    awayTeamId: 'LAL',
-    startTimeUtc: '2025-01-15T18:30:00.000Z',
+    provider: 'mock-provider',
+    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
+    awayTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
+    startTime: '2025-01-15T18:30:00.000Z',
+    status: 'SCHEDULED',
+    score: { home: 0, away: 0 },
+    meta: { season: '2024-2025', upstreamGameId: 1234 },
   };
 
   it('should render matchup text', () => {

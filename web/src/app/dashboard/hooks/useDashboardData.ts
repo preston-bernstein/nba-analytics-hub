@@ -72,9 +72,9 @@ export function useDashboardData(): DashboardDataState {
             try {
                 const requests = games.map(async (game) => {
                     const req = {
-                        homeTeamId: game.homeTeamId,
-                        awayTeamId: game.awayTeamId,
-                        gameDate: toGameDate(game.startTimeUtc),
+                        homeTeamId: game.homeTeam.id,
+                        awayTeamId: game.awayTeam.id,
+                        gameDate: toGameDate(game.startTime),
                     };
 
                     const prediction = await predictorClient.predict(req);
