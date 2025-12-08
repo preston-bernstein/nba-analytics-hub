@@ -3,7 +3,16 @@
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
-    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+    "noEmit": false,
+    "composite": true,
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "paths": {
+      "@nba-analytics-hub/types": ["../packages/types/dist/src/index.d.ts"],
+      "@nba-analytics-hub/testing": ["../packages/testing/dist/src/index.d.ts"],
+      "@nba-analytics-hub/data-access": ["../packages/data-access/dist/src/index.d.ts"]
+    },
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": ["src/**/*.ts"],
   "exclude": [
@@ -16,6 +25,12 @@
   "references": [
     {
       "path": "../packages/types/tsconfig.lib.json"
+    },
+    {
+      "path": "../packages/testing/tsconfig.lib.json"
+    },
+    {
+      "path": "../packages/data-access/tsconfig.lib.json"
     }
   ]
 }

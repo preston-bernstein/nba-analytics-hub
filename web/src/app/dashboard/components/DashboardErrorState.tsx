@@ -1,4 +1,4 @@
-import { DashboardErrorStateProps } from '../types';
+import { DashboardErrorStateProps } from '../types.ts';
 
 export function DashboardErrorState({ message }: DashboardErrorStateProps) {
     return (

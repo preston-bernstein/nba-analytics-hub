@@ -4,6 +4,12 @@
   "include": [],
   "references": [
     {
+      "path": "../packages/testing"
+    },
+    {
+      "path": "../packages/data-access"
+    },
+    {
       "path": "./tsconfig.app.json"
     },
     {

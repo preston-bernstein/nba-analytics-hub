@@ -3,24 +3,42 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "@nba-analytics-hub/source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
+    ".": "./dist/src/index.js",
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@nba-analytics-hub/types": "0.0.1"
+    "@nba-analytics-hub/types": "0.0.1",
+    "vite-tsconfig-paths": "^5.1.4"
   },
-    "nx": {
+  "nx": {
     "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "dependsOn": [
+          "@nba-analytics-hub/types:build",
+          "@nba-analytics-hub/testing:build"
+        ],
+        "options": {
+          "tsConfig": "packages/domain/tsconfig.lib.json",
+          "main": "packages/domain/src/index.ts",
+          "outputPath": "packages/domain/dist",
+          "format": ["esm"]
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": [
+            "packages/domain/**/*.ts",
+            "packages/domain/**/*.tsx"
+          ]
+        }
+      },
       "test": {
         "executor": "nx:run-commands",
         "options": {

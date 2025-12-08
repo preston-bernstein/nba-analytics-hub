@@ -1,5 +1,5 @@
 import type { PredictionResponse } from '@nba-analytics-hub/types';
-import { getPredictionDisplay } from '@nba-analytics-hub/domain'
+import { getPredictionDisplay } from '@nba-analytics-hub/domain';
 export interface PredictionBadgeProps {
   prediction: PredictionResponse;
 }
@@ -13,10 +13,12 @@ export function PredictionBadge({ prediction }: PredictionBadgeProps) {
       aria-label="prediction-badge"
       className="rounded-md border border-gray-700 bg-gray-900 p-3 text-sm text-gray-100 shadow-sm"
     >
-      <div className="flex justify-between mb-2">
+      <div className="mb-2 flex justify-between">
         <span className="text-gray-400">Prediction</span>
         {prediction.modelVersion && (
-          <span className="text-xs text-gray-500">Model {prediction.modelVersion}</span>
+          <span className="text-xs text-gray-500">
+            Model: {prediction.modelVersion}
+          </span>
         )}
       </div>
 
@@ -28,8 +30,7 @@ export function PredictionBadge({ prediction }: PredictionBadgeProps) {
               : 'bg-gray-800/40 text-gray-300 border border-gray-700'
           }`}
         >
-          <div className="text-xs font-medium">{prediction.homeTeamId}</div>
-          <div className="text-lg">{homePct}%</div>
+          <div className="text-lg">{`${prediction.homeTeamId}: ${homePct}%`}</div>
         </div>
 
         <div
@@ -39,19 +40,17 @@ export function PredictionBadge({ prediction }: PredictionBadgeProps) {
               : 'bg-gray-800/40 text-gray-300 border border-gray-700'
           }`}
         >
-          <div className="text-xs font-medium">{prediction.awayTeamId}</div>
-          <div className="text-lg">{awayPct}%</div>
+          <div className="text-lg">{`${prediction.awayTeamId}: ${awayPct}%`}</div>
         </div>
       </div>
 
-      <div className="mt-3 text-center text-xs text-gray-400">
-        Favorite:{' '}
+      <div className="mt-3 text-center text-xs">
         <span
           className={`font-bold ${
             favoriteLabel === 'EVEN' ? 'text-yellow-300' : 'text-indigo-300'
           }`}
         >
-          {favoriteLabel}
+          {`Favorite: ${favoriteLabel}`}
         </span>
       </div>
     </div>

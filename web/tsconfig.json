@@ -3,6 +3,9 @@
   "include": [],
   "references": [
     {
+      "path": "../packages/data-access"
+    },
+    {
       "path": "./tsconfig.app.json"
     },
     {

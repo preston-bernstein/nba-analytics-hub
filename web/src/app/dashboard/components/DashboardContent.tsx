@@ -1,4 +1,5 @@
 import { DashboardContentProps } from "../types";
+import { GameCard, PredictionBadge } from "@nba-analytics-hub/ui";
 
 export function DashboardContent ({
     games,
@@ -6,8 +7,27 @@ export function DashboardContent ({
     loadingPredictions
 }: DashboardContentProps) {
     return (
-        <div>
-            <h1>Dashboard Content</h1>
-        </div>
+        <section aria-label="upcoming-games">
+            <header>
+                <h1>Upcoming Games</h1>
+                {loadingPredictions && <p>Loading predictions...</p>}
+            </header>
+
+            <div>
+                {games.map((game) => {
+                    const prediction = predictions[game.id];
+                    return (
+                        <article key={game.id}>
+                            <GameCard game={game} />
+                            {prediction ? (
+                                <PredictionBadge prediction={prediction} />
+                            ) : (
+                                <p>Prediction pending...</p>
+                            )}
+                        </article>
+                    );
+                })}
+            </div>
+        </section>
     )
 }
