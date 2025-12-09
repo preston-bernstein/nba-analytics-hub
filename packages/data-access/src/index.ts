@@ -1,3 +1,2 @@
-export * from './lib';
-
-export * as dataAccess from './lib';
+export * from './lib/index.js';
+export * as dataAccess from './lib/index.js';

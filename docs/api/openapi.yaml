@@ -1,0 +1,211 @@
+openapi: 3.1.0
+info:
+  title: NBA Analytics Hub API
+  version: 0.1.0
+  description: HTTP API surface exposed by the Node BFF for games and predictions.
+servers:
+  - url: http://localhost:3000
+    description: Local BFF
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: ok
+  /games/today:
+    get:
+      summary: List games scheduled for today
+      responses:
+        '200':
+          description: Array of games scheduled for today
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+  /games/upcoming:
+    get:
+      summary: List upcoming games
+      responses:
+        '200':
+          description: Array of upcoming games
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Game'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+  /predict:
+    get:
+      summary: Get win probability prediction for a matchup
+      parameters:
+        - in: query
+          name: home_team
+          required: true
+          schema:
+            type: string
+          description: Home team ID (e.g., ATL)
+        - in: query
+          name: away_team
+          required: true
+          schema:
+            type: string
+          description: Away team ID (e.g., BOS)
+        - in: query
+          name: game_date
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Game date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Prediction for the requested matchup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredictionResponse'
+        '400':
+          description: Missing required parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '502':
+          $ref: '#/components/responses/UpstreamError'
+components:
+  responses:
+    UpstreamError:
+      description: Upstream service error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          example: game-1
+        provider:
+          type: string
+          example: ball_dont_lie
+        homeTeam:
+          $ref: '#/components/schemas/Team'
+        awayTeam:
+          $ref: '#/components/schemas/Team'
+        startTime:
+          type: string
+          format: date-time
+          example: 2025-01-01T00:00:00Z
+        status:
+          $ref: '#/components/schemas/GameStatus'
+        score:
+          $ref: '#/components/schemas/Score'
+        meta:
+          $ref: '#/components/schemas/GameMeta'
+      required:
+        - id
+        - provider
+        - homeTeam
+        - awayTeam
+        - startTime
+        - status
+        - score
+        - meta
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ATL
+        name:
+          type: string
+          example: Atlanta Hawks
+        externalId:
+          type: integer
+          example: 14
+      required:
+        - id
+        - name
+        - externalId
+    Score:
+      type: object
+      properties:
+        home:
+          type: integer
+          example: 102
+        away:
+          type: integer
+          example: 97
+      required:
+        - home
+        - away
+    GameMeta:
+      type: object
+      properties:
+        season:
+          type: string
+          example: '2024-2025'
+        upstreamGameId:
+          type: integer
+          example: 12345
+      required:
+        - season
+        - upstreamGameId
+    GameStatus:
+      type: string
+      enum:
+        - SCHEDULED
+        - IN_PROGRESS
+        - FINAL
+        - POSTPONED
+        - CANCELED
+    PredictionResponse:
+      type: object
+      properties:
+        homeTeamId:
+          type: string
+          example: ATL
+        awayTeamId:
+          type: string
+          example: BOS
+        homeWinProbability:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          example: 0.62
+        awayWinProbability:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          example: 0.38
+        modelVersion:
+          type: string
+          example: predictor-service
+      required:
+        - homeTeamId
+        - awayTeamId
+        - homeWinProbability
+        - awayWinProbability

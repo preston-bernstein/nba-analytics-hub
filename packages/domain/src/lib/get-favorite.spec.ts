@@ -1,5 +1,5 @@
 import { mockGames } from '@nba-analytics-hub/testing';
-import { getFavorite } from './get-favorite';
+import { getFavorite } from './get-favorite.js';
 
 describe('getFavorite', () => {
   const baseGame = mockGames[0] ?? (() => {

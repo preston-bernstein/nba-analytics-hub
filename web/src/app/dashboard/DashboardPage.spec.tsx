@@ -3,7 +3,7 @@ import { describe, it, beforeAll, afterEach, afterAll } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
-import { DashboardPage } from './DashboardPage';
+import { DashboardPage } from './DashboardPage.tsx';
 
 const API_BASE_URL = 'http://localhost:3000';
 
@@ -83,10 +83,12 @@ describe('DashboardPage', () => {
     expect(screen.getByText(/BOS @ ATL/)).toBeInTheDocument();
     expect(screen.getByText(/GSW @ LAL/)).toBeInTheDocument();
 
-    // predictions rendered via PredictionBadge
-    expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
-    expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
+    // predictions rendered via PredictionBadge (async after games)
+    await waitFor(() => {
+      expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
+      expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
+    });
   });
 
   it('shows an error message when the API fails', async () => {

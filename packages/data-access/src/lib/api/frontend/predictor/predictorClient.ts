@@ -1,5 +1,5 @@
 import type { PredictionRequest, PredictionResponse } from '@nba-analytics-hub/types';
-import { fetchJson } from '../http';
+import { fetchJson } from '../http.js';
 
 export interface PredictorClientOptions {
   baseUrl: string;

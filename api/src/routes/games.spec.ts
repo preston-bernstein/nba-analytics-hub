@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import { vi } from 'vitest';
-import { registerGamesRoutes } from './games';
+import { registerGamesRoutes } from './games.js';
 import type { GamesServiceClient } from '@nba-analytics-hub/data-access';
 import { mockGames } from '@nba-analytics-hub/testing';
 

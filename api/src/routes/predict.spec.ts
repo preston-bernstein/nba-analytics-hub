@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import { vi } from 'vitest';
-import { registerPredictRoutes } from './predict';
+import { registerPredictRoutes } from './predict.js';
 import type { PredictorServiceClient } from '@nba-analytics-hub/data-access';
 import { mockPredictorServiceResponse } from '@nba-analytics-hub/testing';
 

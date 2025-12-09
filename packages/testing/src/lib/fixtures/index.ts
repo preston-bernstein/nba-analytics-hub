@@ -1,2 +1,2 @@
-export * from './games';
-export * from './predictions';
+export * from './games.js';
+export * from './predictions.js';

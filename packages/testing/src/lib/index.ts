@@ -1,2 +1,1 @@
-export * from './test-utils';
-export * from './fixtures';
+export * from './fixtures/index.js';

@@ -1,5 +1,5 @@
-import type { HealthCheckResponse } from '../health';
-import type { GamesServiceGame } from './game';
+import type { HealthCheckResponse } from '../health/index.js';
+import type { GamesServiceGame } from './game.js';
 
 export interface GamesServiceTodayResponse {
   date: string;

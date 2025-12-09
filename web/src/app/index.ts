@@ -1,2 +1,2 @@
-export * from './app';
-export * from './layouts/RootLayout';
+export * from './app.tsx';
+export * from './layouts/RootLayout.tsx';

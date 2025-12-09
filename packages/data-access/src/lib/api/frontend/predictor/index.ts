@@ -1,1 +1,1 @@
-export * from './predictorClient';
+export * from './predictorClient.js';

@@ -1,1 +1,1 @@
-export * from './gamesServiceClient';
+export * from './gamesServiceClient.js';

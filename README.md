@@ -107,16 +107,13 @@ Storybook (UI components)
 npx nx storybook ui
 ```
 
-Prereqs:
-
-- Node 20+ (using `nvm` is recommended)
-- npm
-
-Install dependencies:
-
-```sh
-npm install
-```
+### Prereqs & Run
+- `nvm use 22` (or `nvm install 22 && nvm use 22`)
+- Install deps: `npm install`
+- Serve API: `nx run @nba-analytics-hub/api:serve`
+- Serve Web: `nx run @nba-analytics-hub/web:serve`
+- Lint everything: `nx run-many -t lint --all`
+- Test everything: `nx run-many -t test --all`
 
 ## Project Philosophy
 

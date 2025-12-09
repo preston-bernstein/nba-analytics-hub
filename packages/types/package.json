@@ -2,23 +2,34 @@
   "name": "@nba-analytics-hub/types",
   "version": "0.0.1",
   "private": true,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "@nba-analytics-hub/source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
+    ".": "./dist/src/index.js",
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "tslib": "^2.3.0"
   },
   "nx": {
     "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "options": {
+          "tsConfig": "packages/types/tsconfig.lib.json",
+          "main": "packages/types/src/index.ts",
+          "outputPath": "packages/types/dist",
+          "format": ["esm"]
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": ["packages/types/**/*.ts", "packages/types/**/*.tsx"]
+        }
+      },
       "test": {
         "executor": "nx:noop",
         "options": {}
