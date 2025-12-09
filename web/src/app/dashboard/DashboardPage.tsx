@@ -30,9 +30,9 @@ export function DashboardPage() {
 
   return (
     <DashboardContent
-      games={[]}
-      predictions={{}}
-      loadingPredictions={false}
+      games={games}
+      predictions={predictions}
+      loadingPredictions={loadingPredictions}
     />
   )
 }

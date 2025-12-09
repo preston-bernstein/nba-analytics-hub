@@ -110,18 +110,16 @@ describe('createGamesServiceClient', () => {
       meta: { season: '2024-2025', upstreamGameId: 54321 },
     };
 
-    const mockFetch = vi.fn().mockResolvedValue({
+    fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => mockGame,
     });
 
-    (globalThis as any).fetch = mockFetch;
-
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
     await client.getGameById(mockGame.id);
 
-    const calledUrl = new URL((mockFetch.mock.calls[0] as [string])[0]);
+    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
     expect(calledUrl.pathname).toBe(
       `/games/${encodeURIComponent(mockGame.id)}`,
     );

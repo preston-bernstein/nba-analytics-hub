@@ -36,8 +36,15 @@ const server = setupServer(
   }),
   http.get(`${API_BASE_URL}/predict`, ({ request }) => {
     const url = new URL(request.url);
-    const homeTeam = url.searchParams.get('home_team')!;
-    const awayTeam = url.searchParams.get('away_team')!;
+    const homeTeam = url.searchParams.get('home_team');
+    const awayTeam = url.searchParams.get('away_team');
+
+    if (!homeTeam || !awayTeam) {
+      return HttpResponse.json(
+        { error: 'missing teams' },
+        { status: 400 },
+      );
+    }
 
     const prediction: PredictionResponse = {
       homeTeamId: homeTeam,
@@ -58,8 +65,9 @@ afterAll(() => server.close());
 describe('DashboardPage', () => {
   it('renders upcoming games and their predictions', async () => {
     // Force the same base URL as the component fallback to keep things aligned
-    (import.meta as any).env = {
-      ...(import.meta as any).env,
+    const meta = import.meta as unknown as { env: Record<string, unknown> };
+    meta.env = {
+      ...meta.env,
       VITE_API_BASE_URL: API_BASE_URL,
     };
 

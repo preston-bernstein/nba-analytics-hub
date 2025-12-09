@@ -1,17 +1,10 @@
-import type { Game } from '@nba-analytics-hub/types';
+import { mockGames } from '@nba-analytics-hub/testing';
 import { getFavorite } from './get-favorite';
 
 describe('getFavorite', () => {
-  const baseGame: Game = {
-    id: 'game-1',
-    provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-    awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
-    startTime: '2025-01-01T00:00:00Z',
-    status: 'SCHEDULED',
-    score: { home: 0, away: 0 },
-    meta: { season: '2024-2025', upstreamGameId: 1111 },
-  };
+  const baseGame = mockGames[0] ?? (() => {
+    throw new Error('mockGames fixture is missing');
+  })();
 
   it('returns the home team as the favorite for now', () => {
     const favorite = getFavorite(baseGame);

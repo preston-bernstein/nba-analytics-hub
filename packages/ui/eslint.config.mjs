@@ -10,6 +10,13 @@ export default [
     rules: {},
   },
   {
-    ignores: ['**/out-tsc'],
+    ignores: [
+      '**/out-tsc',
+      '**/dist',
+      '**/storybook-static',
+      '**/debug-storybook.log',
+      '**/test-output',
+      '**/node_modules',
+    ],
   },
 ];

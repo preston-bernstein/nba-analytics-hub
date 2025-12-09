@@ -1,15 +1,20 @@
 import { afterEach, beforeEach, vi } from 'vitest';
 
 export function mockFetch() {
-  const originalFetch = globalThis.fetch;
+  const originalFetch = globalThis.fetch as typeof fetch | undefined;
   const mock = vi.fn();
+  const globalWithFetch = globalThis as typeof globalThis & {
+    fetch: typeof fetch;
+  };
 
   beforeEach(() => {
-    (globalThis as any).fetch = mock;
+    globalWithFetch.fetch = mock as unknown as typeof fetch;
   });
 
   afterEach(() => {
-    (globalThis as any).fetch = originalFetch;
+    if (originalFetch) {
+      globalWithFetch.fetch = originalFetch;
+    }
     vi.restoreAllMocks();
     mock.mockReset();
   });

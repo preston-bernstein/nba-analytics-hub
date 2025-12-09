@@ -1,1 +1,1 @@
-export * from './predict';
+export * from './types';

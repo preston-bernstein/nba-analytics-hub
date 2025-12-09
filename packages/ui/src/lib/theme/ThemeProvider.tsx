@@ -9,5 +9,5 @@ export interface ThemeProviderProps {
  * For now it just renders children.
  */
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  return <>{children}</>;
+  return children as JSX.Element;
 }
