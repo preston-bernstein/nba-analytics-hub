@@ -13,7 +13,7 @@ const BASE_URL = 'https://games-service.example.com';
 describe('createGamesServiceClient', () => {
   const fetchMock = mockFetch();
 
-  it('calls /health and returns parsed health response on success', async () => {
+  it('calls /health and forwards request id', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
@@ -21,15 +21,34 @@ describe('createGamesServiceClient', () => {
     });
 
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
-    const result = await client.checkHealth();
+    const result = await client.checkHealth({ requestId: 'req-123' });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
+    const [urlArg, init] = fetchMock.mock.calls[0] as [string, Record<string, unknown>];
+    const calledUrl = new URL(urlArg);
     expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/health`);
+    expect(init?.headers).toMatchObject({ 'X-Request-ID': 'req-123' });
     expect(result).toEqual(healthOk);
   });
 
-  it('calls /games/today and returns parsed games on success', async () => {
+  it('calls /games with date and tz params', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => todayResponse,
+    });
+
+    const client = createGamesServiceClient({ baseUrl: BASE_URL });
+    await client.getGames({ date: '2025-01-02', tz: 'America/New_York' });
+
+    const [urlArg] = fetchMock.mock.calls[0] as [string];
+    const calledUrl = new URL(urlArg);
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/games`);
+    expect(calledUrl.searchParams.get('date')).toBe('2025-01-02');
+    expect(calledUrl.searchParams.get('tz')).toBe('America/New_York');
+  });
+
+  it('calls /games (today) when no params are provided', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
@@ -39,15 +58,14 @@ describe('createGamesServiceClient', () => {
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
     const result = await client.getTodayGames();
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
-    expect(calledUrl.origin + calledUrl.pathname).toBe(
-      `${BASE_URL}/games/today`,
-    );
+    const [urlArg] = fetchMock.mock.calls[0] as [string];
+    const calledUrl = new URL(urlArg);
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/games`);
+    expect(calledUrl.search).toBe('');
     expect(result).toEqual(todayResponse);
   });
 
-  it('calls /games/:id and returns parsed game on success', async () => {
+  it('calls /games/:id with request id and returns parsed game', async () => {
     const mockGame: GamesServiceGame = {
       ...gameDetail,
       id: 'game-2',
@@ -60,13 +78,17 @@ describe('createGamesServiceClient', () => {
     });
 
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
-    const result = await client.getGameById(mockGame.id);
+    const result = await client.getGameById(mockGame.id, {
+      requestId: 'req-456',
+    });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
+    const [urlArg, init] = fetchMock.mock.calls[0] as [string, Record<string, unknown>];
+    const calledUrl = new URL(urlArg);
     expect(calledUrl.origin + calledUrl.pathname).toBe(
       `${BASE_URL}/games/${mockGame.id}`,
     );
+    expect(init?.headers).toMatchObject({ 'X-Request-ID': 'req-456' });
     expect(result).toEqual(mockGame);
   });
 
@@ -119,7 +141,8 @@ describe('createGamesServiceClient', () => {
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
     await client.getGameById(mockGame.id);
 
-    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
+    const [urlArg] = fetchMock.mock.calls[0] as [string];
+    const calledUrl = new URL(urlArg);
     expect(calledUrl.pathname).toBe(
       `/games/${encodeURIComponent(mockGame.id)}`,
     );

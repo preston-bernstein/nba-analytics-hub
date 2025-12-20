@@ -76,6 +76,6 @@ Shared UI library (@nba-analytics-hub/ui) available for use.
 
 #### Planned:
 
-Dashboard page that calls /games/upcoming and /predict.
+Dashboard page that calls /games (with optional date/tz) and /predict.
 
 MSW-backed tests for data-loading states and error handling.
