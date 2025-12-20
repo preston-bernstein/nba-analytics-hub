@@ -35,9 +35,15 @@ This API is intentionally simple and focused on the vertical slice.
 - `/health`  
   Basic heartbeat endpoint for monitoring.
 
+- `/games` (and `/games/today`)  
+  Returns a list of NBA games for a given date (defaults to today) using shared `Game` types.  
+  Forwards `X-Request-ID` to the Go games service for tracing.
+
 - `/games/upcoming`  
-  Returns a list of mock upcoming NBA games using shared `Game` types.  
-  (Later replaced by real data ingestion.)
+  Compatibility alias to `/games` that falls back to mocks if the upstream list is empty.
+
+- `/games/:id`  
+  Returns a single game detail by id.
 
 - `/predict`  
   Returns deterministic mock predictions for now.  
@@ -101,7 +107,7 @@ Express app scaffolded
 
 #### Planned:
 
-/games/upcoming route + Supertest coverage
+/games/upcoming route + Supertest coverage (compatibility)
 
 /predict route + validation + deterministic mock logic
 

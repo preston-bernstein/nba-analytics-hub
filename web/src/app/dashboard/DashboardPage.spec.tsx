@@ -31,9 +31,7 @@ const mockGames: Game[] = [
 ];
 
 const server = setupServer(
-  http.get(`${API_BASE_URL}/games/upcoming`, () => {
-    return HttpResponse.json(mockGames);
-  }),
+  http.get(`${API_BASE_URL}/games`, () => HttpResponse.json(mockGames)),
   http.get(`${API_BASE_URL}/predict`, ({ request }) => {
     const url = new URL(request.url);
     const homeTeam = url.searchParams.get('home_team');
@@ -93,7 +91,7 @@ describe('DashboardPage', () => {
 
   it('shows an error message when the API fails', async () => {
     server.use(
-      http.get(`${API_BASE_URL}/games/upcoming`, () =>
+      http.get(`${API_BASE_URL}/games`, () =>
         HttpResponse.json({ error: 'Server down' }, { status: 500 }),
       ),
     );

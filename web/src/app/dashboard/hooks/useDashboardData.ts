@@ -36,7 +36,7 @@ export function useDashboardData(): DashboardDataState {
             setError(null);
 
             try {
-                const upcoming = await gamesClient.getUpcomingGames();
+                const upcoming = await gamesClient.getGames();
                 if (!cancelled) {
                     setGames(upcoming);
                 }

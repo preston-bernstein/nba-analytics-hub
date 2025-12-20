@@ -8,7 +8,31 @@ const BASE_URL = 'https://example.com';
 describe('createGamesClient', () => {
   const fetchMock = mockFetch();
 
-  it('fetches upcoming games and returns them as typed data', async () => {
+  it('fetches games with optional date/tz filters', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockGames,
+    });
+
+    const client = createGamesClient({ baseUrl: BASE_URL });
+
+    const result = await client.getGames({
+      date: '2025-02-03',
+      tz: 'America/Chicago',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const urlArg = fetchMock.mock.calls[0][0] as string;
+    const calledUrl = new URL(urlArg);
+
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/games`);
+    expect(calledUrl.searchParams.get('date')).toBe('2025-02-03');
+    expect(calledUrl.searchParams.get('tz')).toBe('America/Chicago');
+    expect(result).toEqual(mockGames);
+  });
+
+  it('fetches upcoming games via /games without params', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
@@ -19,14 +43,10 @@ describe('createGamesClient', () => {
 
     const result = await client.getUpcomingGames();
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
     const urlArg = fetchMock.mock.calls[0][0] as string;
     const calledUrl = new URL(urlArg);
-
-    expect(calledUrl.origin + calledUrl.pathname).toBe(
-      `${BASE_URL}/games/upcoming`,
-    );
-
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/games`);
+    expect(calledUrl.search).toBe('');
     expect(result).toEqual(mockGames);
   });
 
