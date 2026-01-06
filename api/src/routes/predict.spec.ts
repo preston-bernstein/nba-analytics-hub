@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { registerPredictRoutes } from './predict.js';
 import type { PredictorServiceClient } from '@nba-analytics-hub/data-access';
 import { mockPredictorServiceResponse } from '@nba-analytics-hub/testing';
+import { describeIfSockets } from '../test-utils/describeIfSockets.js';
 
 const app = express();
 
@@ -13,7 +14,7 @@ const predictorServiceMock: PredictorServiceClient = {
 
 registerPredictRoutes(app, { predictorService: predictorServiceMock, logger: console });
 
-describe('GET /predict', () => {
+describeIfSockets('GET /predict', () => {
   it('returns a prediction for valid query params', async () => {
     const res = await request(app)
       .get('/predict')
