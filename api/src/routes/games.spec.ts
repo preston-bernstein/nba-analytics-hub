@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import { registerGamesRoutes } from './games.js';
 import type { GamesServiceClient } from '@nba-analytics-hub/data-access';
 import { mockGames } from '@nba-analytics-hub/testing';
+import { describeIfSockets } from '../test-utils/describeIfSockets.js';
 
 const gamesResponse = { date: '2025-01-01', games: mockGames };
 
@@ -21,7 +22,7 @@ function createTestContext(overrides?: Partial<GamesServiceClient>) {
   return { app, gamesServiceMock };
 }
 
-describe('games routes', () => {
+describeIfSockets('games routes', () => {
   it('returns games with date/tz params and echoes request id', async () => {
     const { app, gamesServiceMock } = createTestContext();
 
