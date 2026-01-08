@@ -54,6 +54,7 @@ npm run lint:all
 # test
 npm run test:all
 # API route specs run by default; set ALLOW_SOCKET_TESTS=false only in sandboxes that block sockets
+# API Vitest resolves workspace packages directly (no prebuild step required)
 ```
 
 ---
@@ -75,6 +76,7 @@ npm run test:all
 
 ## Testing Stack
 - Vitest across frontend, backend, and libs.
+- API Vitest resolves workspace packages via source aliases; set `ALLOW_SOCKET_TESTS=false` on runners that block `0.0.0.0` binds.
 - React Testing Library for UI.
 - Supertest for API routes (requires socket-friendly env if enabled).
 - Coverage thresholds enforced in core libs.
