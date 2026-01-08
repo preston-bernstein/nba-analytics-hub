@@ -12,6 +12,12 @@ export default defineConfig({
     dts({
       entryRoot: 'src',
       tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
+      exclude: [
+        'src/**/*.spec.ts',
+        'src/**/*.spec.tsx',
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+      ],
     }),
   ],
   build: {
@@ -28,7 +34,13 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        '@nba-analytics-hub/domain',
+        '@nba-analytics-hub/types',
+      ],
     },
   },
 });

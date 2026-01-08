@@ -1,15 +1,21 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "composite": true,
+    "noEmit": false,
     "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
-    "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],
   "references": [
+    {
+      "path": "../testing/tsconfig.lib.json"
+    },
     {
       "path": "../types/tsconfig.lib.json"
     }

@@ -8,14 +8,13 @@
     "test:ui": "nx test ui",
     "test:api": "nx test api",
     "test:domain": "nx test domain",
-    "test:web":" nx test web",
+    "test:web": " nx test web",
     "test:data-access": "nx test data-access",
     "serve:web": "nx serve web",
     "serve:api": "nx serve api"
   },
   "private": true,
   "devDependencies": {
-    "msw": "^2.6.0",
     "@babel/core": "^7.14.5",
     "@babel/preset-react": "^7.14.5",
     "@eslint/js": "^9.8.0",
@@ -37,6 +36,7 @@
     "@swc/cli": "~0.6.0",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@tailwindcss/postcss": "^4.1.17",
     "@testing-library/dom": "10.4.0",
     "@testing-library/react": "16.3.0",
     "@types/express": "^4.17.21",
@@ -48,6 +48,8 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.0.0",
     "ajv": "^8.0.0",
+    "autoprefixer": "^10.4.22",
+    "empathic": "^2.0.0",
     "esbuild": "^0.19.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
@@ -59,10 +61,14 @@
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
     "jsonc-eslint-parser": "^2.1.0",
+    "msw": "^2.6.0",
     "nx": "22.0.4",
+    "postcss": "^8.5.6",
     "prettier": "^2.6.2",
+    "shadcn": "^3.5.1",
     "storybook": "9.1.16",
     "supertest": "^7.1.4",
+    "tailwindcss": "^4.1.17",
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
@@ -81,9 +87,12 @@
     "packages"
   ],
   "dependencies": {
+    "clsx": "^2.1.1",
     "express": "^4.21.2",
+    "lucide-react": "^0.555.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "6.29.0"
+    "react-router-dom": "6.29.0",
+    "tailwind-merge": "^3.4.0"
   }
 }

@@ -19,20 +19,22 @@
           "platform": "node",
           "outputPath": "api/dist",
           "format": [
-            "cjs"
+            "esm"
           ],
           "bundle": false,
           "main": "api/src/main.ts",
           "tsConfig": "api/tsconfig.app.json",
           "assets": [
-            "api/src/assets"
+            "api/src/assets",
+            "docs/api/openapi.yaml"
           ],
           "esbuildOptions": {
             "sourcemap": true,
             "outExtension": {
               ".js": ".js"
             }
-          }
+          },
+          "generatePackageJson": false
         },
         "configurations": {
           "development": {},
@@ -82,23 +84,11 @@
         "executor": "nx:noop"
       },
       "serve": {
-        "continuous": true,
         "executor": "@nx/js:node",
-        "defaultConfiguration": "development",
-        "dependsOn": [
-          "build"
-        ],
+        "dependsOn": ["build"],
         "options": {
-          "buildTarget": "@nba-analytics-hub/api:build",
-          "runBuildTargetDependencies": false
-        },
-        "configurations": {
-          "development": {
-            "buildTarget": "@nba-analytics-hub/api:build:development"
-          },
-          "production": {
-            "buildTarget": "@nba-analytics-hub/api:build:production"
-          }
+          "buildTarget": "@nba-analytics-hub/api:build:development",
+          "watch": false
         }
       },
       "docker:build": {
@@ -117,6 +107,15 @@
     }
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "@nba-analytics-hub/data-access": "0.0.1",
+    "@nba-analytics-hub/testing": "0.0.1",
+    "@types/swagger-ui-express": "^4.1.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
   }
 }

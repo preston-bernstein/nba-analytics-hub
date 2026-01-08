@@ -1,0 +1,206 @@
+{
+  "info": {
+    "name": "NBA Node API (BFF)",
+    "description": "Postman collection for the Node BFF. Defaults to http://localhost:3000 and forwards X-Request-ID when enabled.",
+    "_postman_id": "11111111-2222-4333-8444-555555555555",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Games - Today (alias)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/games/today",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "games",
+            "today"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Games - By Date",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/games?date={{date}}&tz={{tz}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "games"
+          ],
+          "query": [
+            {
+              "key": "date",
+              "value": "{{date}}",
+              "description": "YYYY-MM-DD"
+            },
+            {
+              "key": "tz",
+              "value": "{{tz}}",
+              "description": "IANA timezone (optional)"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Games - Upcoming (alias)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/games/upcoming",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "games",
+            "upcoming"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Games - By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/games/{{gameId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "games",
+            "{{gameId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Predict",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Request-ID",
+            "value": "{{requestId}}",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/predict?home_team={{homeTeam}}&away_team={{awayTeam}}&game_date={{gameDate}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "predict"
+          ],
+          "query": [
+            {
+              "key": "home_team",
+              "value": "{{homeTeam}}"
+            },
+            {
+              "key": "away_team",
+              "value": "{{awayTeam}}"
+            },
+            {
+              "key": "game_date",
+              "value": "{{gameDate}}",
+              "description": "YYYY-MM-DD"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "date",
+      "value": "2025-01-01"
+    },
+    {
+      "key": "tz",
+      "value": "America/New_York"
+    },
+    {
+      "key": "gameId",
+      "value": "game-1"
+    },
+    {
+      "key": "homeTeam",
+      "value": "ATL"
+    },
+    {
+      "key": "awayTeam",
+      "value": "BOS"
+    },
+    {
+      "key": "gameDate",
+      "value": "2025-01-01"
+    },
+    {
+      "key": "requestId",
+      "value": ""
+    }
+  ]
+}

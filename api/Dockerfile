@@ -17,6 +17,8 @@ COPY dist .
 # You can remove this install step if you build with `--bundle` option.
 # The bundled output will include external dependencies.
 
-RUN npm --omit=dev -f install
+# Install runtime deps and link local workspace modules copied into dist
+RUN npm --omit=dev -f install \
+  && npm install --no-save ./workspace_modules/@nba-analytics-hub/data-access ./workspace_modules/@nba-analytics-hub/testing
 
 CMD [ "node", "main.js" ]

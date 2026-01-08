@@ -1,7 +1,15 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "types": [
       "node",
       "@nx/react/typings/cssmodule.d.ts",
@@ -9,34 +17,27 @@
       "vite/client"
     ],
     "jsx": "react-jsx",
-    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo"
+
+    // for shadcn-style "@/..." imports inside ui
+    "baseUrl": "./src",
+    "paths": {
+      "@/lib/*": ["lib/*"],
+      "@/components/*": ["lib/components/*"]
+    }
   },
   "exclude": [
     "out-tsc",
     "dist",
-    "**/*.spec.ts",
-    "**/*.test.ts",
-    "**/*.spec.tsx",
-    "**/*.test.tsx",
-    "**/*.spec.js",
-    "**/*.test.js",
-    "**/*.spec.jsx",
-    "**/*.test.jsx",
-    "vite.config.ts",
-    "vite.config.mts",
-    "vitest.config.ts",
-    "vitest.config.mts",
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.tsx",
-    "src/**/*.spec.tsx",
-    "src/**/*.test.js",
-    "src/**/*.spec.js",
-    "src/**/*.test.jsx",
-    "src/**/*.spec.jsx",
-    "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test.js",
+    "**/*.test.jsx",
     "**/*.stories.ts",
     "**/*.stories.js",
     "**/*.stories.jsx",
@@ -44,6 +45,9 @@
   ],
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
+    {
+      "path": "../domain/tsconfig.lib.json"
+    },
     {
       "path": "../types/tsconfig.lib.json"
     }

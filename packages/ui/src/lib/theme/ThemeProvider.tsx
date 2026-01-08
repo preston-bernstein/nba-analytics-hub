@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 export interface ThemeProviderProps {
   children: ReactNode;
@@ -8,6 +8,6 @@ export interface ThemeProviderProps {
  * Thin wrapper for future global theming (e.g. MUI, Tailwind, Chakra).
  * For now it just renders children.
  */
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  return <>{children}</>;
+export function ThemeProvider({ children }: ThemeProviderProps): ReactElement | null {
+  return children as ReactElement | null;
 }

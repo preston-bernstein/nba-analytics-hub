@@ -87,3 +87,10 @@ They can be safely used anywhere in the monorepo, including frontend, backend, a
   - Expanded domain types
   - API schemas for new routes
   - Player/team metadata types
+
+## Layout
+
+- `games/` – shared game/team/status/score types used by BFF + frontend.
+- `games-service/` – upstream service contracts (what Go returns to Node).
+- `prediction/` – prediction request/response/display shapes.
+- `health/` – health check status/response.

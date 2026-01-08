@@ -5,9 +5,9 @@ export function GameCard({ game }: { game: Game }) {
   return (
     <div>
       <div>
-        {game.awayTeamId} @ {game.homeTeamId}
+        {game.awayTeam.id} @ {game.homeTeam.id}
       </div>
-      <div>{formatDateTime(game.startTimeUtc)}</div>
+      <div>{formatDateTime(game.startTime)}</div>
     </div>
   );
 }

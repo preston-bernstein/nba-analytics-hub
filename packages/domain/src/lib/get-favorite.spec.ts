@@ -1,17 +1,14 @@
-import type { Game } from '@nba-analytics-hub/types';
-import { getFavorite } from './get-favorite';
+import { mockGames } from '@nba-analytics-hub/testing';
+import { getFavorite } from './get-favorite.js';
 
 describe('getFavorite', () => {
-  const baseGame: Game = {
-    id: 'game-1',
-    homeTeamId: 'ATL',
-    awayTeamId: 'BOS',
-    startTimeUtc: '2025-01-01T00:00:00Z',
-  };
+  const baseGame = mockGames[0] ?? (() => {
+    throw new Error('mockGames fixture is missing');
+  })();
 
   it('returns the home team as the favorite for now', () => {
     const favorite = getFavorite(baseGame);
-    expect(favorite).toBe(baseGame.homeTeamId);
+    expect(favorite).toBe(baseGame.homeTeam.id);
   });
 
   it('is deterministic for the same game input', () => {

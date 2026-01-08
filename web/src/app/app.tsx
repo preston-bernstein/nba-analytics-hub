@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { AppShell } from '@nba-analytics-hub/ui';
-import { DashboardPage } from './dashboard/DashboardPage';
+import { DashboardPage } from './dashboard/DashboardPage.tsx';
 
 export function App() {
   return (
