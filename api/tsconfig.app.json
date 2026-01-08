@@ -20,7 +20,8 @@
     "eslint.config.cjs",
     "eslint.config.mjs",
     "**/*.spec.ts",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "src/test-utils/**"
   ],
   "references": [
     {

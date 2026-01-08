@@ -3,7 +3,8 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-const workspaceRoot = fileURLToPath(new URL('..', import.meta.url));
+// Move two levels up from packages/ui to reach the workspace root
+const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
 
 export default defineConfig({
   resolve: {
