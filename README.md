@@ -1,133 +1,80 @@
 # NBA Analytics Hub
 
-NBA Analytics Hub is an Nx monorepo that hosts a small but realistic NBA analytics stack:
+[![Node](https://img.shields.io/badge/node-20.x-blue)](#)
+[![Nx](https://img.shields.io/badge/monorepo-nx-informational)](#)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-- A React dashboard (`web`) for browsing upcoming games and model outputs
-- An Express API BFF (`api`) that fronts a future Python predictor service
-- Shared libraries for UI, domain logic, data access, config, and types
+Nx monorepo for the user-facing stack of an NBA analytics system.
 
----
+- `web` – React/Vite dashboard for games and model outputs.
+- `api` – Node/Express BFF that fronts the Go games service and Python predictor.
+- `packages/*` – shared TS libs (`types`, `domain`, `data-access`, `ui`, `config`, `testing`).
 
-## Goals
-
-- Clear separation of concerns between apps and libraries
-- Strong testing discipline (Vitest + Testing Library + Supertest)
-- Good type sharing across backend, frontend, and Python-facing clients
-- Simple DevOps (Docker + CI later)
-
-Current focus is **v1**:
-
-- List upcoming games
-- Display a prediction per game (mocked for now)
-- Exercise shared libs across the stack
+External services (separate repos):
+- `nba-data-service` (Go) – realtime games feed.
+- `nba-predictor` (Python) – prediction API.
+- Frontend calls only the Node API; Node calls Go/Python via `@nba-analytics-hub/data-access`.
 
 ---
 
-## Architecture
-
-The repository uses a package-based Nx monorepo with isolated apps and shared libraries:
-
+## Data Flow
 ```
-nba-analytics-hub/
-  apps/
-    api/        → Express BFF (REST API)
-    web/        → React dashboard (Vite)
-  packages/
-    ui/         → Shared component library + Storybook
-    domain/     → Pure business logic and helpers
-    data-access/→ API clients and HTTP wrappers
-    types/      → Shared TypeScript types
-    testing/    → Shared test utilities (future expansion)
+web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ```
-
-Each package is version-able, testable, and buildable in isolation.
-All apps consume these libraries through workspace imports (@nba-analytics-hub/...).
-
-**Apps**
-
-- `web` – React + Vite dashboard, consumes the API
-- `api` – Express API BFF that will call the Python predictor
-
-**Libraries**
-
-- `@nba-analytics-hub/ui` – shared React components, hooks, theme, Storybook
-- `@nba-analytics-hub/domain` – pure domain helpers (e.g. selecting a favorite)
-- `@nba-analytics-hub/data-access` – HTTP clients for API + predictor
-- `@nba-analytics-hub/config` – environment loading and runtime config
-- `@nba-analytics-hub/types` – shared TypeScript types across the monorepo
-- `@nba-analytics-hub/testing` – shared test utilities (reserved for future use)
-
-Nx layout:
-
-- Apps live under `apps/`
-- Libraries live under `packages/`
+- Node API routes are root-mounted: `/games`, `/games/today`, `/games/upcoming`, `/games/:id`, `/predict`, `/health`.
+- Types are canonical in `packages/types` and flow through all layers.
 
 ---
 
-## Tech stack
-
-- **Workspace**: Nx (package-based layout)
-- **Frontend**: React, Vite, React Router
-- **Backend**: Express
-- **Types / build**: TypeScript, Vite library builds
-- **Testing**:
-  - Vitest
-  - React Testing Library
-  - Supertest
-  - Coverage thresholds enforced (>= 80% lines/functions/statements, >= 70% branches in core libs)
-- **UI docs**: Storybook 9 (Vite)
+## Projects
+- `web/` – React + Vite frontend.
+- `api/` – Express BFF.
+- `packages/types` – canonical models (Game, Prediction, etc.).
+- `packages/domain` – pure domain helpers.
+- `packages/data-access` – HTTP clients (frontend ↔ api; api ↔ Go/Python).
+- `packages/ui` – shared React components.
+- `packages/config` – env loading.
+- `packages/testing` – test utilities.
 
 ---
 
-## Getting started
-
-### Local Development
-Install dependencies
+## Local Development
 ```sh
+# setup
+nvm use 20 || nvm install 20 && nvm use 20
 npm install
-```
 
-Run all tests
-```sh
-npx nx test --all
-```
-
-Run the API (Express)
-```sh
+# serve
 npx nx serve api
-```
-
-Run the Web App (React)
-```sh
 npx nx serve web
+
+# lint
+npm run lint:all
+
+# test
+npm run test:all
+# API route specs run by default; set ALLOW_SOCKET_TESTS=false only in sandboxes that block sockets
 ```
 
-Storybook (UI components)
-```sh
-npx nx storybook ui
-```
+---
 
-### Prereqs & Run
-- `nvm use 22` (or `nvm install 22 && nvm use 22`)
-- Install deps: `npm install`
-- Serve API: `nx run @nba-analytics-hub/api:serve`
-- Serve Web: `nx run @nba-analytics-hub/web:serve`
-- Lint everything: `nx run-many -t lint --all`
-- Test everything: `nx run-many -t test --all`
+## Contracts & Types
+- Node API: root routes listed above; see `docs-internal/SERVICE_CONTRACTS.md`.
+- Types: single source in `packages/types`; see `docs-internal/DATA_MODEL.md`.
+- No direct frontend → Go/Python calls; all traffic goes through the BFF.
 
-## Project Philosophy
+---
 
-### Modular design
-Each concern lives in its own library, with clear boundaries.
+## Repo Conventions
+- Package-based Nx layout (apps: `web`, `api`; libs under `packages/*`).
+- Keep `tsconfig.base.json` NodeNext settings; no `apps/` migration or `project.json` additions.
+- Respect layering: apps depend on libs; libs never depend on apps; UI imports domain/data-access, not api internals.
+- Shared types live only in `packages/types`; do not duplicate.
 
-### Type safety everywhere
-Shared TypeScript types flow from domain → data-access → API → frontend.
+---
 
-### Testing discipline
-Every layer has meaningful tests and coverage thresholds.
-
-### Predictor as a separate service
-The TypeScript BFF integrates with the Python predictor repo without coupling.
-
-### Production-style structure
-CI-ready test configs, stable build steps, clean separation of responsibilities.
+## Testing Stack
+- Vitest across frontend, backend, and libs.
+- React Testing Library for UI.
+- Supertest for API routes (requires socket-friendly env if enabled).
+- Coverage thresholds enforced in core libs.
