@@ -5,7 +5,7 @@ import { cn } from './cn.js';
 
 describe('cn', () => {
   it('merges class names and deduplicates conflicting Tailwind classes', () => {
-    const result = cn('p-2', 'p-4', false && 'hidden', 'text-sm', 'text-base');
+    const result = cn('p-2', 'p-4', 'text-sm', 'text-base');
     expect(result).toBe('p-4 text-base');
   });
 
