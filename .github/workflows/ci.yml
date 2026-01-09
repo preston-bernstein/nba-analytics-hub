@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint:all
+        run: npm run lint:all -- --verbose
 
       - name: Test
         run: npm run test:all -- --coverage
