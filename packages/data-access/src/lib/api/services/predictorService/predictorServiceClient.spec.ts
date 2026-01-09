@@ -108,6 +108,22 @@ describe('createPredictorServiceClient', () => {
     ).rejects.toThrow('Predictor service returned 422: Unprocessable predictor request');
   });
 
+  it('throws a generic 422 error when parsing the body fails', async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 422,
+      json: async () => {
+        throw new Error('boom');
+      },
+    });
+
+    const client = createPredictorServiceClient({ baseUrl: BASE_URL });
+
+    await expect(
+      client.predict({ home: 'NYK', away: 'BOS' }),
+    ).rejects.toThrow('Predictor service returned 422: Unprocessable predictor request');
+  });
+
   it('throws a descriptive error when the predictor service returns non-OK', async () => {
     fetchMock.mockResolvedValue({
       ok: false,

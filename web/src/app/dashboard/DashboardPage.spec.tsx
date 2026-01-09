@@ -62,7 +62,6 @@ afterAll(() => server.close());
 
 describe('DashboardPage', () => {
   it('renders upcoming games and their predictions', async () => {
-    // Force the same base URL as the component fallback to keep things aligned
     const meta = import.meta as unknown as { env: Record<string, unknown> };
     meta.env = {
       ...meta.env,
@@ -77,11 +76,9 @@ describe('DashboardPage', () => {
       expect(screen.getByLabelText('upcoming-games')).toBeInTheDocument();
     });
 
-    // games rendered via GameCard
     expect(screen.getByText(/BOS @ ATL/)).toBeInTheDocument();
     expect(screen.getByText(/GSW @ LAL/)).toBeInTheDocument();
 
-    // predictions rendered via PredictionBadge (async after games)
     await waitFor(() => {
       expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
       expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
@@ -89,7 +86,7 @@ describe('DashboardPage', () => {
     });
   });
 
-  it('shows an error message when the API fails', async () => {
+  it('shows an error message when the games API fails', async () => {
     server.use(
       http.get(`${API_BASE_URL}/games`, () =>
         HttpResponse.json({ error: 'Server down' }, { status: 500 }),
@@ -104,6 +101,24 @@ describe('DashboardPage', () => {
 
     expect(
       screen.getByText(/Failed to load dashboard:/i),
+    ).toBeInTheDocument();
+  });
+
+  it('shows an error message when predictions fail', async () => {
+    server.use(
+      http.get(`${API_BASE_URL}/predict`, () =>
+        HttpResponse.json({ error: 'Predictor down' }, { status: 500 }),
+      ),
+    );
+
+    render(<DashboardPage />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+    });
+
+    expect(
+      screen.getByText(/Failed to load dashboard: Predictor request failed with status 500/i),
     ).toBeInTheDocument();
   });
 });
