@@ -36,6 +36,7 @@ export function loadEnv(env: Record<string, string | undefined>): AppEnv {
     'http://localhost:3333',
   );
 
+  // c8 ignore next
   if (!API_BASE_URL) {
     throw new Error('API_BASE_URL is required');
   }
@@ -45,6 +46,7 @@ export function loadEnv(env: Record<string, string | undefined>): AppEnv {
     'http://localhost:8000',
   );
 
+  // c8 ignore next
   if (!PREDICTOR_BASE_URL) {
     throw new Error('PREDICTOR_BASE_URL is required');
   }

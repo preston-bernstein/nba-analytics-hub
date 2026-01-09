@@ -9,6 +9,7 @@ out-tsc
 /coverage
 **/coverage/
 **/test-output/
+merged.info
 
 # dependencies
 node_modules
