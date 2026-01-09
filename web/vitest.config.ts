@@ -1,7 +1,6 @@
-import { defineConfig } from 'vitest/config';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vitest/config';
 
 const workspaceRoot = fileURLToPath(new URL('..', import.meta.url));
 
@@ -19,7 +18,6 @@ export default defineConfig({
       '@nba-analytics-hub/ui': resolve(workspaceRoot, 'packages/ui/src/index.ts'),
     },
   },
-  plugins: [tsconfigPaths()],
   test: {
     environment: 'jsdom',
     globals: true,
