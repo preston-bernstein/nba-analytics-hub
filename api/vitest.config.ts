@@ -27,7 +27,9 @@ export default defineConfig({
     include: socketsAvailable ? ['src/**/*.spec.ts'] : [],
     passWithNoTests: true,
     coverage: {
-      reporter: ['text', 'html'],
+      reporter: ['text', 'lcov', 'html'],
+      reportsDirectory: './coverage',
+      exclude: ['dist/**', 'coverage/**'],
     },
   },
 });

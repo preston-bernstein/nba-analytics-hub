@@ -37,8 +37,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            packages/**/coverage/lcov.info
-            packages/**/test-output/vitest/coverage/lcov.info
+            **/coverage/lcov.info
           fail_ci_if_error: true
 
   build:
