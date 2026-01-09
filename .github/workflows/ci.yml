@@ -27,7 +27,7 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint:all
+        run: npm run lint:all -- --verbose
 
       - name: Test
         run: npm run test:all -- --coverage
@@ -37,8 +37,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
-            packages/**/coverage/lcov.info
-            packages/**/test-output/vitest/coverage/lcov.info
+            **/coverage/lcov.info
           fail_ci_if_error: true
 
   build:
