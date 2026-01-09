@@ -30,8 +30,13 @@ jobs:
         run: npm run lint:all
 
       - name: Test
-        run: npm run test:all
+        run: npm run test:all -- --coverage
 
       - name: Build (libs and API)
         run: |
           npx nx run-many -t build --projects=@nba-analytics-hub/types,@nba-analytics-hub/domain,@nba-analytics-hub/config,@nba-analytics-hub/data-access,@nba-analytics-hub/testing,@nba-analytics-hub/ui,@nba-analytics-hub/api --parallel=2
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true
