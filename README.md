@@ -1,5 +1,7 @@
 # NBA Analytics Hub
 
+[![CI](https://github.com/preston-bernstein/nba-analytics-hub/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/preston-bernstein/nba-analytics-hub/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/preston-bernstein/nba-analytics-hub/branch/main/graph/badge.svg)](https://codecov.io/gh/preston-bernstein/nba-analytics-hub)
 [![Node](https://img.shields.io/badge/node-20.x-blue)](#)
 [![Nx](https://img.shields.io/badge/monorepo-nx-informational)](#)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
