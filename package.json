@@ -11,7 +11,8 @@
     "test:web": " nx test web",
     "test:data-access": "nx test data-access",
     "serve:web": "nx serve web",
-    "serve:api": "nx serve api"
+    "serve:api": "nx serve api",
+    "coverage:summary": "node tools/coverage-summary.js"
   },
   "private": true,
   "devDependencies": {
