@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
@@ -23,24 +23,27 @@ describe('App', () => {
       originalFetch;
   });
 
-  it('should render successfully', () => {
+  it('should render successfully', async () => {
     const { baseElement } = render(
       <BrowserRouter>
         <App />
       </BrowserRouter>,
     );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('app-title')).toBeInTheDocument();
+    });
     expect(baseElement).toBeTruthy();
   });
 
-  it('should render the app shell title', () => {
+  it('should render the app shell title', async () => {
     render(
       <BrowserRouter>
         <App />
       </BrowserRouter>,
     );
 
-    expect(
-      screen.getByTestId('app-title'),
-    ).toHaveTextContent('NBA Analytics Hub');
+    const title = await screen.findByTestId('app-title');
+    expect(title).toHaveTextContent('NBA Analytics Hub');
   });
 });

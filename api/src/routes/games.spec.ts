@@ -87,6 +87,8 @@ describeIfSockets('games routes', () => {
       getGames: vi.fn().mockRejectedValue(new Error('service down')),
     });
 
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
     const res = await request(app).get('/games');
 
     expect(res.status).toBe(502);
@@ -95,5 +97,7 @@ describeIfSockets('games routes', () => {
       requestId: expect.any(String),
     });
     expect(res.headers['x-request-id']).toBeDefined();
+
+    consoleError.mockRestore();
   });
 });

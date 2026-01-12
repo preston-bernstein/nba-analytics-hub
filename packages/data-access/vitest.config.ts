@@ -6,8 +6,8 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
-      reportsDirectory: './test-output/vitest/coverage',
+      reporter: ['text', 'lcov', 'html'],
+      reportsDirectory: './coverage',
       lines: 80,
       functions: 80,
       statements: 80,
@@ -16,6 +16,7 @@ export default defineConfig({
         'vite.config.ts',
         'vitest.config.ts',
         'dist/**',
+        'coverage/**',
         'src/**/index.ts',
         // tooling / config
         'eslint.config.mjs',

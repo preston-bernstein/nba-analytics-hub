@@ -7,7 +7,9 @@ out-tsc
 /.vitest
 /vitest-temp
 /coverage
+**/coverage/
 **/test-output/
+merged.info
 
 # dependencies
 node_modules

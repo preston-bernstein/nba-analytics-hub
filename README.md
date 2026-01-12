@@ -1,5 +1,7 @@
 # NBA Analytics Hub
 
+[![CI](https://github.com/preston-bernstein/nba-analytics-hub/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/preston-bernstein/nba-analytics-hub/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/preston-bernstein/nba-analytics-hub/branch/main/graph/badge.svg)](https://codecov.io/gh/preston-bernstein/nba-analytics-hub)
 [![Node](https://img.shields.io/badge/node-20.x-blue)](#)
 [![Nx](https://img.shields.io/badge/monorepo-nx-informational)](#)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -9,6 +11,10 @@ Nx monorepo for the user-facing stack of an NBA analytics system.
 - `web` – React/Vite dashboard for games and model outputs.
 - `api` – Node/Express BFF that fronts the Go games service and Python predictor.
 - `packages/*` – shared TS libs (`types`, `domain`, `data-access`, `ui`, `config`, `testing`).
+
+---
+## ⚠️ Status
+Pre–v1 and still being built out. Core flows work, but features and polish are in progress; expect incomplete surfaces while we march toward the first stable release.
 
 External services (separate repos):
 - `nba-data-service` (Go) – realtime games feed.
@@ -54,6 +60,7 @@ npm run lint:all
 # test
 npm run test:all
 # API route specs run by default; set ALLOW_SOCKET_TESTS=false only in sandboxes that block sockets
+# API Vitest resolves workspace packages directly (no prebuild step required)
 ```
 
 ---
@@ -75,6 +82,7 @@ npm run test:all
 
 ## Testing Stack
 - Vitest across frontend, backend, and libs.
+- API Vitest resolves workspace packages via source aliases; set `ALLOW_SOCKET_TESTS=false` on runners that block `0.0.0.0` binds.
 - React Testing Library for UI.
 - Supertest for API routes (requires socket-friendly env if enabled).
 - Coverage thresholds enforced in core libs.
