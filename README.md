@@ -12,6 +12,10 @@ Nx monorepo for the user-facing stack of an NBA analytics system.
 - `api` – Node/Express BFF that fronts the Go games service and Python predictor.
 - `packages/*` – shared TS libs (`types`, `domain`, `data-access`, `ui`, `config`, `testing`).
 
+---
+## ⚠️ Status
+Pre–v1 and still being built out. Core flows work, but features and polish are in progress; expect incomplete surfaces while we march toward the first stable release.
+
 External services (separate repos):
 - `nba-data-service` (Go) – realtime games feed.
 - `nba-predictor` (Python) – prediction API.
