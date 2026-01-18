@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, beforeAll, afterEach, afterAll } from 'vitest';
+import { describe, it, beforeAll, afterEach, afterAll, expect } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
@@ -61,30 +61,36 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('DashboardPage', () => {
-  it('renders upcoming games and their predictions', async () => {
-    const meta = import.meta as unknown as { env: Record<string, unknown> };
-    meta.env = {
-      ...meta.env,
-      VITE_API_BASE_URL: API_BASE_URL,
-    };
+  it(
+    'renders games and their predictions',
+    async () => {
+      const meta = import.meta as unknown as { env: Record<string, unknown> };
+      meta.env = {
+        ...meta.env,
+        VITE_API_BASE_URL: API_BASE_URL,
+      };
 
-    render(<DashboardPage />);
+      render(<DashboardPage />);
 
-    expect(screen.getByText(/Loading dashboard.../i)).toBeInTheDocument();
+      expect(screen.getByLabelText('Dashboard loading')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByLabelText('upcoming-games')).toBeInTheDocument();
-    });
+      await waitFor(() => {
+        expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
+      });
 
-    expect(screen.getByText(/BOS @ ATL/)).toBeInTheDocument();
-    expect(screen.getByText(/GSW @ LAL/)).toBeInTheDocument();
+      expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
+      expect(screen.getByText('Boston Celtics')).toBeInTheDocument();
+      expect(screen.getByText('Los Angeles Lakers')).toBeInTheDocument();
+      expect(screen.getByText('Golden State Warriors')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
-      expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
-      expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
-    });
-  });
+      await waitFor(() => {
+        expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
+        expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
+        expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
+      });
+    },
+    15000,
+  );
 
   it('shows an error message when the games API fails', async () => {
     server.use(

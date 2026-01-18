@@ -1,5 +1,39 @@
 {
   "name": "@nba-analytics-hub/web",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/vite:build",
+        "outputs": ["{options.outputPath}"],
+        "options": {
+          "outputPath": "web/dist"
+        }
+      },
+      "serve": {
+        "executor": "@nx/vite:dev-server",
+        "options": {
+          "buildTarget": "@nba-analytics-hub/web:build"
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": ["web/**/*.ts", "web/**/*.tsx"]
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest",
+          "cwd": "web"
+        }
+      }
+    }
+  }
 }
