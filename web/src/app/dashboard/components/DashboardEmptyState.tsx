@@ -1,5 +1,5 @@
-import { DateNavigation } from '@nba-analytics-hub/ui';
-import { formatDisplayDate, isToday } from '../../../utils/date';
+import { DateNavigation, formatDisplayDate } from '@nba-analytics-hub/ui';
+import { isToday } from '@nba-analytics-hub/domain';
 
 interface DashboardEmptyStateProps {
   selectedDate: string;

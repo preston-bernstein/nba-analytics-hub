@@ -1,3 +1,5 @@
+import { buttonSecondary, buttonSecondaryMuted } from '../../styles';
+
 export interface DateNavigationProps {
   displayDate: string;
   showTodayButton: boolean;
@@ -17,7 +19,7 @@ export function DateNavigation({
     <div className="flex items-center gap-3">
       <button
         onClick={onPreviousDay}
-        className="rounded-md border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-gray-100"
+        className={buttonSecondary}
         aria-label="Previous day"
       >
         ←
@@ -29,17 +31,14 @@ export function DateNavigation({
 
       <button
         onClick={onNextDay}
-        className="rounded-md border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-gray-100"
+        className={buttonSecondary}
         aria-label="Next day"
       >
         →
       </button>
 
       {showTodayButton && (
-        <button
-          onClick={onToday}
-          className="ml-2 rounded-md border border-gray-600 bg-gray-800 px-3 py-1.5 text-sm text-gray-400 hover:bg-gray-700 hover:text-gray-100"
-        >
+        <button onClick={onToday} className={`ml-2 ${buttonSecondaryMuted}`}>
           Today
         </button>
       )}

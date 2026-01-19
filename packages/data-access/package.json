@@ -22,8 +22,7 @@
         "options": {
           "tsConfig": "packages/data-access/tsconfig.lib.json",
           "main": "packages/data-access/src/index.ts",
-          "outputPath": "packages/data-access/dist",
-          "format": ["esm"]
+          "outputPath": "packages/data-access/dist"
         }
       },
       "lint": {

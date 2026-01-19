@@ -22,8 +22,7 @@
         "options": {
           "tsConfig": "packages/testing/tsconfig.lib.json",
           "main": "packages/testing/src/index.ts",
-          "outputPath": "packages/testing/dist",
-          "format": ["esm"]
+          "outputPath": "packages/testing/dist"
         }
       },
       "lint": {

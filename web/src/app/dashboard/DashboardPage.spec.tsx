@@ -120,11 +120,15 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toBeInTheDocument();
+      expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
     });
 
-    expect(
-      screen.getByText(/Failed to load dashboard: Predictor request failed with status 500/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(/Predictions unavailable:/i)).toBeInTheDocument();
+    });
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

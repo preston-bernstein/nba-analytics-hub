@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { getTodayDate, addDays, isToday, formatDisplayDate } from './date';
+import { describe, it, expect } from 'vitest';
+import { getTodayDate, addDays, isToday } from './date-utils.js';
 
 describe('date utilities', () => {
   describe('getTodayDate', () => {
@@ -38,36 +38,6 @@ describe('date utilities', () => {
 
     it('returns false for future dates', () => {
       expect(isToday('2099-12-31')).toBe(false);
-    });
-  });
-
-  describe('formatDisplayDate', () => {
-    beforeEach(() => {
-      vi.useFakeTimers();
-      vi.setSystemTime(new Date('2025-06-15T12:00:00'));
-    });
-
-    afterEach(() => {
-      vi.useRealTimers();
-    });
-
-    it('returns "Today" for today date', () => {
-      expect(formatDisplayDate('2025-06-15')).toBe('Today');
-    });
-
-    it('returns "Tomorrow" for tomorrow date', () => {
-      expect(formatDisplayDate('2025-06-16')).toBe('Tomorrow');
-    });
-
-    it('returns "Yesterday" for yesterday date', () => {
-      expect(formatDisplayDate('2025-06-14')).toBe('Yesterday');
-    });
-
-    it('returns formatted date for other dates', () => {
-      const result = formatDisplayDate('2025-06-20');
-      expect(result).toContain('Fri');
-      expect(result).toContain('Jun');
-      expect(result).toContain('20');
     });
   });
 });

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Game } from '@nba-analytics-hub/types';
+import { getTodayDate, addDays } from '@nba-analytics-hub/domain';
 import { DashboardDataState, PredictionsByGameId } from '../types';
 import {
   createGamesClient,
@@ -13,23 +14,14 @@ function toGameDate(dateIso: string): string {
   return new Date(dateIso).toISOString().slice(0, 10);
 }
 
-function getTodayDate(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function addDays(dateStr: string, days: number): string {
-  const date = new Date(dateStr);
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
-}
-
 export function useDashboardData(): DashboardDataState {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDate());
   const [games, setGames] = useState<Game[]>([]);
   const [predictions, setPredictions] = useState<PredictionsByGameId>({});
   const [loadingGames, setLoadingGames] = useState<boolean>(true);
   const [loadingPredictions, setLoadingPredictions] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [gamesError, setGamesError] = useState<string | null>(null);
+  const [predictionError, setPredictionError] = useState<string | null>(null);
 
   const gamesClient = useMemo(
     () =>
@@ -65,8 +57,9 @@ export function useDashboardData(): DashboardDataState {
 
     async function loadGames() {
       setLoadingGames(true);
-      setError(null);
+      setGamesError(null);
       setPredictions({});
+      setPredictionError(null);
 
       try {
         const upcoming = await gamesClient.getGames({ date: selectedDate });
@@ -77,7 +70,7 @@ export function useDashboardData(): DashboardDataState {
         if (!cancelled) {
           const message =
             err instanceof Error ? err.message : 'Unknown error loading games.';
-          setError(`Failed to load dashboard: ${message}`);
+          setGamesError(`Failed to load dashboard: ${message}`);
         }
       } finally {
         if (!cancelled) {
@@ -101,7 +94,7 @@ export function useDashboardData(): DashboardDataState {
 
     async function loadPredictions() {
       setLoadingPredictions(true);
-      setError(null);
+      setPredictionError(null);
 
       try {
         const requests = games.map(async (game) => {
@@ -130,7 +123,7 @@ export function useDashboardData(): DashboardDataState {
             err instanceof Error
               ? err.message
               : 'Unknown error loading predictions.';
-          setError(`Failed to load dashboard: ${message}`);
+          setPredictionError(`Failed to load predictions: ${message}`);
         }
       } finally {
         if (!cancelled) {
@@ -151,7 +144,8 @@ export function useDashboardData(): DashboardDataState {
     predictions,
     loadingGames,
     loadingPredictions,
-    error,
+    gamesError,
+    predictionError,
     selectedDate,
     goToPreviousDay,
     goToNextDay,

@@ -4,6 +4,7 @@ import {
   type PredictorServiceClient,
   createPredictorServiceClient,
 } from '@nba-analytics-hub/data-access';
+import { sendError } from './shared/routeUtils.js';
 
 interface PredictRouteDeps {
   predictorService?: PredictorServiceClient;
@@ -54,7 +55,7 @@ export function registerPredictRoutes(
       return res.status(200).json(prediction);
     } catch (err) {
       logger.error('Failed to fetch prediction', err);
-      return res.status(502).json({ error: 'Unable to fetch prediction' });
+      return sendError(res, { error: 'Unable to fetch prediction' });
     }
   });
 }

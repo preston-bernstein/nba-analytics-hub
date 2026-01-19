@@ -10,7 +10,8 @@ export function DashboardPage() {
     predictions,
     loadingGames,
     loadingPredictions,
-    error,
+    gamesError,
+    predictionError,
     selectedDate,
     goToPreviousDay,
     goToNextDay,
@@ -20,8 +21,8 @@ export function DashboardPage() {
   const hasGames = games.length > 0;
   const isInitialLoading = loadingGames && !hasGames;
 
-  if (error) {
-    return <DashboardErrorState message={error} />;
+  if (gamesError) {
+    return <DashboardErrorState message={gamesError} />;
   }
 
   if (isInitialLoading) {
@@ -44,6 +45,7 @@ export function DashboardPage() {
       games={games}
       predictions={predictions}
       loadingPredictions={loadingPredictions}
+      predictionError={predictionError}
       selectedDate={selectedDate}
       onPreviousDay={goToPreviousDay}
       onNextDay={goToNextDay}

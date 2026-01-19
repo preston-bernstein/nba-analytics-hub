@@ -1,5 +1,7 @@
 import type { PredictionResponse } from '@nba-analytics-hub/types';
 import { getPredictionDisplay } from '@nba-analytics-hub/domain';
+import { cardContainer } from '../../styles';
+
 export interface PredictionBadgeProps {
   prediction: PredictionResponse;
 }
@@ -9,10 +11,7 @@ export function PredictionBadge({ prediction }: PredictionBadgeProps) {
     getPredictionDisplay(prediction);
 
   return (
-    <div
-      aria-label="prediction-badge"
-      className="rounded-md border border-gray-700 bg-gray-900 p-3 text-sm text-gray-100 shadow-sm"
-    >
+    <div aria-label="prediction-badge" className={`${cardContainer} text-gray-100`}>
       <div className="mb-2 flex justify-between">
         <span className="text-gray-400">Prediction</span>
         {prediction.modelVersion && (

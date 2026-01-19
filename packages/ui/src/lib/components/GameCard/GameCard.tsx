@@ -1,5 +1,6 @@
 import type { Game, GameStatus } from '@nba-analytics-hub/types';
 import { formatDateTime } from '../../utils/formatDateTime';
+import { statusBadge, teamRow, teamRowDefault, teamRowWinner } from '../../styles';
 
 export interface GameCardProps {
   game: Game;
@@ -54,9 +55,7 @@ export function GameCard({ game }: GameCardProps) {
     >
       {/* Status Badge */}
       <div className="mb-3 flex items-center justify-between">
-        <span
-          className={`rounded px-2 py-0.5 text-xs font-semibold ${config.className}`}
-        >
+        <span className={`${statusBadge} ${config.className}`}>
           {config.label}
         </span>
         <span className="text-xs text-gray-500">{formatDateTime(startTime)}</span>
@@ -65,11 +64,7 @@ export function GameCard({ game }: GameCardProps) {
       {/* Teams and Scores */}
       <div className="space-y-2">
         {/* Away Team */}
-        <div
-          className={`flex items-center justify-between rounded px-2 py-1.5 ${
-            awayWins ? 'bg-green-900/30 border border-green-800' : 'bg-gray-800/50'
-          }`}
-        >
+        <div className={`${teamRow} ${awayWins ? teamRowWinner : teamRowDefault}`}>
           <span
             className={`font-medium ${
               awayWins ? 'text-green-300' : 'text-gray-200'
@@ -89,11 +84,7 @@ export function GameCard({ game }: GameCardProps) {
         </div>
 
         {/* Home Team */}
-        <div
-          className={`flex items-center justify-between rounded px-2 py-1.5 ${
-            homeWins ? 'bg-green-900/30 border border-green-800' : 'bg-gray-800/50'
-          }`}
-        >
+        <div className={`${teamRow} ${homeWins ? teamRowWinner : teamRowDefault}`}>
           <span
             className={`font-medium ${
               homeWins ? 'text-green-300' : 'text-gray-200'

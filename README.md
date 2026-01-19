@@ -75,6 +75,9 @@ npm run test:all
 # API route specs run by default; set ALLOW_SOCKET_TESTS=false only in sandboxes that block sockets
 # API Vitest resolves workspace packages directly (no prebuild step required)
 ```
+- API base URL:
+  - Default `.env` points at infra stack (Caddy on :80): `http://localhost`
+  - If you run the API directly with Nx (`nx serve api`), set `VITE_API_BASE_URL=http://localhost:3000`
 
 ---
 

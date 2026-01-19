@@ -37,8 +37,7 @@
         "options": {
           "tsConfig": "packages/ui/tsconfig.lib.json",
           "main": "packages/ui/src/index.ts",
-          "outputPath": "packages/ui/dist",
-          "format": ["esm"]
+          "outputPath": "packages/ui/dist"
         }
       },
       "lint": {

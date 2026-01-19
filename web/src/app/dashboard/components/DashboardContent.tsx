@@ -1,11 +1,18 @@
 import { DashboardContentProps } from '../types';
-import { GameCard, PredictionBadge, DateNavigation } from '@nba-analytics-hub/ui';
-import { formatDisplayDate, isToday } from '../../../utils/date';
+import {
+  GameCard,
+  PredictionBadge,
+  DateNavigation,
+  cardContainer,
+  formatDisplayDate,
+} from '@nba-analytics-hub/ui';
+import { isToday } from '@nba-analytics-hub/domain';
 
 export function DashboardContent({
   games,
   predictions,
   loadingPredictions,
+  predictionError,
   selectedDate,
   onPreviousDay,
   onNextDay,
@@ -37,19 +44,33 @@ export function DashboardContent({
         <p className="mt-3 text-sm text-gray-500">
           {games.length} {games.length === 1 ? 'game' : 'games'} scheduled
         </p>
+
+        {predictionError && (
+          <div
+            role="status"
+            className="mt-3 rounded-md border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-sm text-amber-200"
+          >
+            Predictions unavailable: {predictionError}
+          </div>
+        )}
       </header>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {games.map((game) => {
           const prediction = predictions[game.id];
+          const fallbackMessage = predictionError
+            ? 'Prediction unavailable'
+            : loadingPredictions
+              ? 'Loading prediction...'
+              : 'No prediction available';
           return (
             <article key={game.id} className="flex flex-col gap-3">
               <GameCard game={game} />
               {prediction ? (
                 <PredictionBadge prediction={prediction} />
               ) : (
-                <div className="rounded-md border border-gray-700 bg-gray-900 p-3 text-center text-sm text-gray-500">
-                  {loadingPredictions ? 'Loading prediction...' : 'No prediction available'}
+                <div className={`${cardContainer} text-center text-gray-500`}>
+                  {fallbackMessage}
                 </div>
               )}
             </article>
