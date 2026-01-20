@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { Game } from '@nba-analytics-hub/types';
+import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
 import { GameCard } from './GameCard';
 
 describe('GameCard', () => {
@@ -27,9 +27,9 @@ describe('GameCard', () => {
     expect(text).toBeInTheDocument();
   });
 
-  it('should render Scheduled status badge for SCHEDULED games', () => {
+  it('should render Upcoming status badge for SCHEDULED games', () => {
     render(<GameCard game={baseGame} />);
-    expect(screen.getByText('Scheduled')).toBeInTheDocument();
+    expect(screen.getByText('Upcoming')).toBeInTheDocument();
   });
 
   it('should not show scores for SCHEDULED games', () => {
@@ -37,14 +37,14 @@ describe('GameCard', () => {
     expect(screen.queryByText('0')).not.toBeInTheDocument();
   });
 
-  it('should render LIVE badge and scores for IN_PROGRESS games', () => {
+  it('should render Live badge and scores for IN_PROGRESS games', () => {
     const liveGame: Game = {
       ...baseGame,
       status: 'IN_PROGRESS',
       score: { home: 45, away: 52 },
     };
     render(<GameCard game={liveGame} />);
-    expect(screen.getByText('LIVE')).toBeInTheDocument();
+    expect(screen.getByText('Live')).toBeInTheDocument();
     expect(screen.getByText('45')).toBeInTheDocument();
     expect(screen.getByText('52')).toBeInTheDocument();
   });
@@ -71,6 +71,23 @@ describe('GameCard', () => {
     const canceledGame: Game = { ...baseGame, status: 'CANCELED' };
     render(<GameCard game={canceledGame} />);
     expect(screen.getByText('Canceled')).toBeInTheDocument();
+  });
+
+  it('should render prediction row and percentages when provided', () => {
+    const prediction: PredictionResponse = {
+      homeTeamId: 'ATL',
+      awayTeamId: 'LAL',
+      homeWinProbability: 0.62,
+      awayWinProbability: 0.38,
+      modelVersion: 'mock-v1',
+    };
+
+    render(<GameCard game={baseGame} prediction={prediction} />);
+
+    expect(screen.getByText('Prediction')).toBeInTheDocument();
+    expect(screen.getByText('ATL')).toBeInTheDocument();
+    expect(screen.getByText('62%')).toBeInTheDocument();
+    expect(screen.getByText('38%')).toBeInTheDocument();
   });
 
   it('should have game-card aria label', () => {

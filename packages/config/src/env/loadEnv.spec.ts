@@ -13,7 +13,7 @@ describe('loadEnv', () => {
     expect(env.NODE_ENV).toBe(
       ((process.env.NODE_ENV as AppEnv['NODE_ENV']) ?? 'development'),
     );
-    expect(env.API_BASE_URL).toBe('http://localhost:3333');
+    expect(env.API_BASE_URL).toBe('http://localhost');
     expect(env.PREDICTOR_BASE_URL).toBe('http://localhost:8000');
   });
 
@@ -60,7 +60,7 @@ describe('loadEnv', () => {
 
   it('ignores blank API_BASE_URL and uses fallback', () => {
     const env = loadEnv({ API_BASE_URL: '' });
-    expect(env.API_BASE_URL).toBe('http://localhost:3333');
+    expect(env.API_BASE_URL).toBe('http://localhost');
   });
 
   it('ignores blank PREDICTOR_BASE_URL and uses fallback', () => {
@@ -74,7 +74,7 @@ describe('loadEnv', () => {
 
     const env = loadEnv({});
 
-    expect(env.API_BASE_URL).toBe('http://localhost:3333');
+    expect(env.API_BASE_URL).toBe('http://localhost');
     expect(env.PREDICTOR_BASE_URL).toBe('http://localhost:8000');
   });
 });

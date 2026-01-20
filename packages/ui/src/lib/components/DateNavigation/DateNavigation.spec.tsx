@@ -59,4 +59,42 @@ describe('DateNavigation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Today' }));
     expect(onToday).toHaveBeenCalled();
   });
+
+  it('disables previous button when disablePrevious is true', () => {
+    render(<DateNavigation {...defaultProps} disablePrevious={true} />);
+
+    const prevButton = screen.getByLabelText('Previous day');
+    expect(prevButton).toBeDisabled();
+  });
+
+  it('disables next button when disableNext is true', () => {
+    render(<DateNavigation {...defaultProps} disableNext={true} />);
+
+    const nextButton = screen.getByLabelText('Next day');
+    expect(nextButton).toBeDisabled();
+  });
+
+  it('does not call onPreviousDay when previous button is disabled', () => {
+    const onPreviousDay = vi.fn();
+    render(
+      <DateNavigation
+        {...defaultProps}
+        disablePrevious={true}
+        onPreviousDay={onPreviousDay}
+      />,
+    );
+
+    fireEvent.click(screen.getByLabelText('Previous day'));
+    expect(onPreviousDay).not.toHaveBeenCalled();
+  });
+
+  it('does not call onNextDay when next button is disabled', () => {
+    const onNextDay = vi.fn();
+    render(
+      <DateNavigation {...defaultProps} disableNext={true} onNextDay={onNextDay} />,
+    );
+
+    fireEvent.click(screen.getByLabelText('Next day'));
+    expect(onNextDay).not.toHaveBeenCalled();
+  });
 });

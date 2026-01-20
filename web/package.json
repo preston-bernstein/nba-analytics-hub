@@ -17,6 +17,7 @@
       },
       "serve": {
         "executor": "@nx/vite:dev-server",
+        "dependsOn": ["clean-api-dist"],
         "options": {
           "buildTarget": "@nba-analytics-hub/web:build"
         }
@@ -31,6 +32,29 @@
         "executor": "nx:run-commands",
         "options": {
           "command": "vitest",
+          "cwd": "web"
+        }
+      },
+      "clean-api-dist": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "node ../tools/clean-api-dist.mjs",
+          "cwd": "web"
+        }
+      },
+      "dev": {
+        "executor": "nx:run-commands",
+        "dependsOn": ["clean-api-dist"],
+        "options": {
+          "command": "vite",
+          "cwd": "web"
+        }
+      },
+      "preview": {
+        "executor": "nx:run-commands",
+        "dependsOn": ["clean-api-dist", "build"],
+        "options": {
+          "command": "vite preview",
           "cwd": "web"
         }
       }

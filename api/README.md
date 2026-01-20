@@ -1,7 +1,7 @@
 # API (`apps/api`)
 
 The `api` app is the backend for NBA Analytics Hub.  
-It exposes a lightweight Express-based REST API that serves upcoming games and prediction data to the frontend.
+It exposes a lightweight Express-based REST API that serves games by date and prediction data to the frontend.
 
 ---
 
@@ -35,14 +35,11 @@ This API is intentionally simple and focused on the vertical slice.
 - `/health`  
   Basic heartbeat endpoint for monitoring.
 
-- `/games` (and `/games/today`)  
+- `/games`  
   Returns a list of NBA games for a given date (defaults to today) using shared `Game` types.  
   Forwards `X-Request-ID` to the Go games service for tracing.
 
-- `/games/upcoming`  
-  Compatibility alias to `/games` that falls back to mocks if the upstream list is empty.
-
-- `/games/:id`  
+- `/games/:id`
   Returns a single game detail by id.
 
 - `/predict`  
@@ -107,7 +104,7 @@ Express app scaffolded
 
 #### Planned:
 
-/games/upcoming route + Supertest coverage (compatibility)
+Removed `/games/upcoming` route and coverage (deprecated)
 
 /predict route + validation + deterministic mock logic
 

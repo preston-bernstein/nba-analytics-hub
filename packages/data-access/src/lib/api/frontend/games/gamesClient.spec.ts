@@ -32,7 +32,7 @@ describe('createGamesClient', () => {
     expect(result).toEqual(mockGames);
   });
 
-  it('fetches upcoming games via /games without params', async () => {
+  it('fetches games via /games without params', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
@@ -41,7 +41,7 @@ describe('createGamesClient', () => {
 
     const client = createGamesClient({ baseUrl: BASE_URL });
 
-    const result = await client.getUpcomingGames();
+    const result = await client.getGames();
 
     const urlArg = fetchMock.mock.calls[0][0] as string;
     const calledUrl = new URL(urlArg);
@@ -59,7 +59,7 @@ describe('createGamesClient', () => {
 
     const client = createGamesClient({ baseUrl: BASE_URL });
 
-    await expect(client.getUpcomingGames()).rejects.toThrow(
+    await expect(client.getGames()).rejects.toThrow(
       'Games request failed with status 502',
     );
   });
@@ -69,6 +69,6 @@ describe('createGamesClient', () => {
 
     const client = createGamesClient({ baseUrl: BASE_URL });
 
-    await expect(client.getUpcomingGames()).rejects.toThrow('network down');
+    await expect(client.getGames()).rejects.toThrow('network down');
   });
 });

@@ -5,8 +5,6 @@ import { setupServer } from 'msw/node';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
 import { DashboardPage } from './DashboardPage.tsx';
 
-const API_BASE_URL = 'http://localhost:3000';
-
 const mockGames: Game[] = [
   {
     id: 'game-1',
@@ -30,9 +28,19 @@ const mockGames: Game[] = [
   },
 ];
 
+// Use wildcard to match any host (localhost:3000 or localhost:80)
 const server = setupServer(
-  http.get(`${API_BASE_URL}/games`, () => HttpResponse.json(mockGames)),
-  http.get(`${API_BASE_URL}/predict`, ({ request }) => {
+  http.get('*/games', ({ request }) => {
+    const url = new URL(request.url);
+    if (!url.searchParams.get('date')) {
+      return HttpResponse.json({ error: 'missing date' }, { status: 400 });
+    }
+    if (!url.searchParams.get('tz')) {
+      return HttpResponse.json({ error: 'missing tz' }, { status: 400 });
+    }
+    return HttpResponse.json(mockGames);
+  }),
+  http.get('*/predict', ({ request }) => {
     const url = new URL(request.url);
     const homeTeam = url.searchParams.get('home_team');
     const awayTeam = url.searchParams.get('away_team');
@@ -64,27 +72,21 @@ describe('DashboardPage', () => {
   it(
     'renders games and their predictions',
     async () => {
-      const meta = import.meta as unknown as { env: Record<string, unknown> };
-      meta.env = {
-        ...meta.env,
-        VITE_API_BASE_URL: API_BASE_URL,
-      };
-
       render(<DashboardPage />);
 
-      expect(screen.getByLabelText('Dashboard loading')).toBeInTheDocument();
+      // Header and date navigation should always be visible
+      expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
+      expect(screen.getByText('Games')).toBeInTheDocument();
 
       await waitFor(() => {
-        expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
+        expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
       });
 
-      expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
       expect(screen.getByText('Boston Celtics')).toBeInTheDocument();
       expect(screen.getByText('Los Angeles Lakers')).toBeInTheDocument();
       expect(screen.getByText('Golden State Warriors')).toBeInTheDocument();
 
       await waitFor(() => {
-        expect(screen.getAllByLabelText('prediction-badge').length).toBe(2);
         expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
         expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
       });
@@ -92,14 +94,19 @@ describe('DashboardPage', () => {
     15000,
   );
 
-  it('shows an error message when the games API fails', async () => {
+  it('shows an error message when the games API fails but keeps header visible', async () => {
     server.use(
-      http.get(`${API_BASE_URL}/games`, () =>
+      http.get('*/games', () =>
         HttpResponse.json({ error: 'Server down' }, { status: 500 }),
       ),
     );
 
     render(<DashboardPage />);
+
+    // Header should always be visible even on error
+    expect(screen.getByText('Games')).toBeInTheDocument();
+    expect(screen.getByLabelText('Previous day')).toBeInTheDocument();
+    expect(screen.getByLabelText('Next day')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
@@ -112,7 +119,7 @@ describe('DashboardPage', () => {
 
   it('shows an error message when predictions fail', async () => {
     server.use(
-      http.get(`${API_BASE_URL}/predict`, () =>
+      http.get('*/predict', () =>
         HttpResponse.json({ error: 'Predictor down' }, { status: 500 }),
       ),
     );
@@ -120,15 +127,14 @@ describe('DashboardPage', () => {
     render(<DashboardPage />);
 
     await waitFor(() => {
-      expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
+      expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText(/Predictions unavailable:/i)).toBeInTheDocument();
     });
 
+    // Games error shows alert role, prediction error doesn't
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

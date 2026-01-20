@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Game } from '@nba-analytics-hub/types';
+import { getLocalTimeZone } from '@nba-analytics-hub/config';
 import { getTodayDate, addDays } from '@nba-analytics-hub/domain';
 import { DashboardDataState, PredictionsByGameId } from '../types';
 import {
@@ -30,6 +31,8 @@ export function useDashboardData(): DashboardDataState {
       }),
     [],
   );
+
+  const localTimeZone = useMemo(getLocalTimeZone, []);
 
   const predictorClient = useMemo(
     () =>
@@ -62,7 +65,8 @@ export function useDashboardData(): DashboardDataState {
       setPredictionError(null);
 
       try {
-        const upcoming = await gamesClient.getGames({ date: selectedDate });
+        const tz = localTimeZone;
+        const upcoming = await gamesClient.getGames({ date: selectedDate, tz });
         if (!cancelled) {
           setGames(upcoming);
         }
@@ -84,7 +88,7 @@ export function useDashboardData(): DashboardDataState {
     return () => {
       cancelled = true;
     };
-  }, [gamesClient, selectedDate]);
+  }, [gamesClient, localTimeZone, selectedDate]);
 
   // Load predictions after games available
   useEffect(() => {

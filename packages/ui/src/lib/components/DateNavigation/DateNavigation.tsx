@@ -1,8 +1,14 @@
-import { buttonSecondary, buttonSecondaryMuted } from '../../styles';
+import {
+  buttonSecondary,
+  buttonSecondaryDisabled,
+  buttonSecondaryMuted,
+} from '../../styles';
 
 export interface DateNavigationProps {
   displayDate: string;
   showTodayButton: boolean;
+  disablePrevious?: boolean;
+  disableNext?: boolean;
   onPreviousDay: () => void;
   onNextDay: () => void;
   onToday: () => void;
@@ -11,6 +17,8 @@ export interface DateNavigationProps {
 export function DateNavigation({
   displayDate,
   showTodayButton,
+  disablePrevious = false,
+  disableNext = false,
   onPreviousDay,
   onNextDay,
   onToday,
@@ -19,19 +27,21 @@ export function DateNavigation({
     <div className="flex items-center gap-3">
       <button
         onClick={onPreviousDay}
-        className={buttonSecondary}
+        disabled={disablePrevious}
+        className={disablePrevious ? buttonSecondaryDisabled : buttonSecondary}
         aria-label="Previous day"
       >
         ←
       </button>
 
-      <span className="min-w-[120px] text-center text-lg font-medium text-gray-200">
+      <span className="min-w-[140px] text-center text-lg font-semibold text-foreground">
         {displayDate}
       </span>
 
       <button
         onClick={onNextDay}
-        className={buttonSecondary}
+        disabled={disableNext}
+        className={disableNext ? buttonSecondaryDisabled : buttonSecondary}
         aria-label="Next day"
       >
         →

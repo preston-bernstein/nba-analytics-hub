@@ -1,104 +1,71 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
 import { DashboardContent } from './DashboardContent';
 
-const games: Game[] = [
-  {
-    id: 'game-1',
-    provider: 'mock',
-    homeTeam: { id: 'HOME', name: 'Home Team', externalId: 1 },
-    awayTeam: { id: 'AWAY', name: 'Away Team', externalId: 2 },
-    startTime: '2025-01-01T00:00:00Z',
-    status: 'SCHEDULED',
-    score: { home: 0, away: 0 },
-    meta: { season: '2024', upstreamGameId: 1 },
-  },
-];
-
-const prediction: PredictionResponse = {
-  homeTeamId: 'HOME',
-  awayTeamId: 'AWAY',
-  homeWinProbability: 0.6,
-  awayWinProbability: 0.4,
+const game: Game = {
+  id: 'game-1',
+  provider: 'mock-provider',
+  homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
+  awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+  startTime: '2025-01-15T18:30:00.000Z',
+  status: 'SCHEDULED',
+  score: { home: 0, away: 0 },
+  meta: { season: '2024-2025', upstreamGameId: 1234 },
 };
 
-const defaultProps = {
-  games,
-  predictions: {},
-  loadingPredictions: false,
-  selectedDate: '2025-01-15',
-  onPreviousDay: vi.fn(),
-  onNextDay: vi.fn(),
-  onToday: vi.fn(),
+const prediction: PredictionResponse = {
+  homeTeamId: 'ATL',
+  awayTeamId: 'BOS',
+  homeWinProbability: 0.62,
+  awayWinProbability: 0.38,
+  modelVersion: 'mock-v1',
 };
 
 describe('DashboardContent', () => {
-  it('shows loading state when predictions are loading', () => {
-    render(
-      <DashboardContent
-        {...defaultProps}
-        loadingPredictions={true}
-      />,
-    );
+  const defaultProps = {
+    games: [game],
+    predictions: {},
+    loadingPredictions: false,
+    predictionError: null,
+  };
 
-    expect(screen.getByText('Loading predictions...')).toBeInTheDocument();
-    expect(screen.getByText('Loading prediction...')).toBeInTheDocument();
+  it('renders game cards', () => {
+    render(<DashboardContent {...defaultProps} />);
+    expect(screen.getByLabelText('game-card')).toBeInTheDocument();
   });
 
-  it('renders prediction badges when predictions are available', () => {
+  it('renders prediction winner inside game card when available', () => {
     render(
       <DashboardContent
         {...defaultProps}
-        predictions={{ 'game-1': prediction }}
+        predictions={{ [game.id]: prediction }}
       />,
     );
 
-    expect(screen.getByLabelText('prediction-badge')).toBeInTheDocument();
+    expect(screen.getByText('Prediction')).toBeInTheDocument();
+    expect(screen.getByText('ATL')).toBeInTheDocument();
+  });
+
+  it('shows loading prediction message when predictions are loading', () => {
+    render(<DashboardContent {...defaultProps} loadingPredictions={true} />);
+    expect(screen.getByText('Loading prediction...')).toBeInTheDocument();
   });
 
   it('shows no prediction message when not loading and no prediction', () => {
     render(<DashboardContent {...defaultProps} />);
-
-    expect(screen.queryByText(/Loading predictions/i)).toBeNull();
     expect(screen.getByText(/No prediction available/i)).toBeInTheDocument();
   });
 
-  it('renders game count in header', () => {
-    render(<DashboardContent {...defaultProps} />);
-
-    expect(screen.getByText(/1 game scheduled/i)).toBeInTheDocument();
-  });
-
-  it('renders games-dashboard section', () => {
-    render(<DashboardContent {...defaultProps} />);
-
-    expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
-  });
-
-  it('renders date navigation buttons', () => {
-    render(<DashboardContent {...defaultProps} />);
-
-    expect(screen.getByLabelText('Previous day')).toBeInTheDocument();
-    expect(screen.getByLabelText('Next day')).toBeInTheDocument();
-  });
-
-  it('calls navigation handlers when buttons clicked', () => {
-    const onPreviousDay = vi.fn();
-    const onNextDay = vi.fn();
-
+  it('shows prediction unavailable when there is a prediction error', () => {
     render(
       <DashboardContent
         {...defaultProps}
-        onPreviousDay={onPreviousDay}
-        onNextDay={onNextDay}
+        predictionError="Service unavailable"
       />,
     );
 
-    fireEvent.click(screen.getByLabelText('Previous day'));
-    expect(onPreviousDay).toHaveBeenCalled();
-
-    fireEvent.click(screen.getByLabelText('Next day'));
-    expect(onNextDay).toHaveBeenCalled();
+    expect(screen.getByText(/Predictions unavailable:/i)).toBeInTheDocument();
+    expect(screen.getByText('Prediction unavailable')).toBeInTheDocument();
   });
 });

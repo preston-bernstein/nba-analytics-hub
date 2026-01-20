@@ -61,30 +61,6 @@ export function registerGamesRoutes(
     ),
   );
 
-  app.get('/games/today', async (req: Request, res: Response) =>
-    sendGames(
-      async (requestId) => {
-        const { games } = await gamesService.getTodayGames({ requestId });
-        return games;
-      },
-      req,
-      res,
-      'Failed to fetch games for today',
-    ),
-  );
-
-  app.get('/games/upcoming', async (req: Request, res: Response) =>
-    sendGames(
-      async (requestId) => {
-        const { games } = await gamesService.getGames({ requestId });
-        return games;
-      },
-      req,
-      res,
-      'Failed to fetch upcoming games',
-    ),
-  );
-
   app.get('/games/:id', async (req: Request, res: Response) => {
     const requestId = resolveRequestId(req);
     try {

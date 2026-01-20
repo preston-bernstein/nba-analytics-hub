@@ -20,10 +20,6 @@ export interface DashboardContentProps {
   predictions: Record<string, PredictionResponse>;
   loadingPredictions: boolean;
   predictionError: string | null;
-  selectedDate: string;
-  onPreviousDay: () => void;
-  onNextDay: () => void;
-  onToday: () => void;
 }
 
 export interface DashboardErrorStateProps {

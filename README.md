@@ -40,7 +40,7 @@ Pre-v1. Core flows work; features and polish are in progress.
 ```
 web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ```
-- Node API routes are root-mounted: `/games`, `/games/today`, `/games/upcoming`, `/games/:id`, `/predict`, `/health`.
+- Node API routes are root-mounted: `/games`, `/games/:id`, `/predict`, `/health`.
 - Types are canonical in `packages/types` and flow through all layers.
 
 ---

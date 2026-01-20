@@ -59,7 +59,7 @@ Basic Playwright scaffolding is in place.
 
 App boot and health checks.
 
-Dashboard rendering for upcoming games.
+Dashboard rendering for games by date.
 
 Prediction display once the vertical slice is complete.
 
