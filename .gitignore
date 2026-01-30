@@ -50,4 +50,6 @@ Thumbs.db
 .env.*.local
 
 AGENTS.md
+CLAUDE.md
 docs-internal/
+debug-storybook.log

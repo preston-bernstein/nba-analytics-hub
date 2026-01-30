@@ -1,19 +1,15 @@
-import { DashboardErrorStateProps } from '../types.ts';
+import { DashboardErrorStateProps } from '../types';
 
 export function DashboardErrorState({ message }: DashboardErrorStateProps) {
-    return (
-        <section aria-label="Dashboard error state">
-            <div
-                role="alert"
-                style={{
-                    padding: '1rem 1.25rem',
-                    borderRadius: '0.5rem',
-                    backgroundColor: 'rgba(248, 113, 113, 0.12)',
-                    border: '1px solid rgba(248, 113, 113, 0.4)'
-                }}
-            >
-                {message}
-            </div>
-        </section>
-    );
+  return (
+    <div
+      role="alert"
+      className="rounded-lg border border-rose-200 bg-rose-50 px-5 py-4 text-rose-800"
+    >
+      <div className="flex items-center gap-3">
+        <span className="text-xl" role="img" aria-label="warning">⚠️</span>
+        <span className="font-semibold">{message}</span>
+      </div>
+    </div>
+  );
 }

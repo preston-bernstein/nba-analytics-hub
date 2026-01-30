@@ -7,8 +7,8 @@
     "composite": true,
     "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "types": ["node"],
     "noEmit": false
   },

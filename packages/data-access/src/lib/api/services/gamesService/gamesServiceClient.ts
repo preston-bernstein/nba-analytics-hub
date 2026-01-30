@@ -4,6 +4,7 @@ import type {
   GamesServiceHealthResponse,
   GamesServiceTodayResponse,
 } from '@nba-analytics-hub/types';
+import { applyGamesQueryParams, type GamesQueryParams } from '../../shared/gamesQuery.js';
 import { fetchJson } from '../http.js';
 
 export interface GamesServiceClientOptions {
@@ -14,15 +15,13 @@ export interface GamesServiceRequestOptions {
   requestId?: string;
 }
 
-export interface GetGamesParams extends GamesServiceRequestOptions {
-  date?: string;
-  tz?: string;
-}
+export interface GetGamesParams
+  extends GamesServiceRequestOptions,
+    GamesQueryParams {}
 
 export interface GamesServiceClient {
   checkHealth(options?: GamesServiceRequestOptions): Promise<GamesServiceHealthResponse>;
   getGames(params?: GetGamesParams): Promise<GamesServiceTodayResponse>;
-  getTodayGames(options?: GamesServiceRequestOptions): Promise<GamesServiceTodayResponse>;
   getGameById(
     gameId: string,
     options?: GamesServiceRequestOptions,
@@ -41,12 +40,7 @@ export function createGamesServiceClient(
     params?: GetGamesParams,
   ): Promise<GamesServiceTodayResponse> => {
     const url = new URL('/games', baseUrl);
-    if (params?.date) {
-      url.searchParams.set('date', params.date);
-    }
-    if (params?.tz) {
-      url.searchParams.set('tz', params.tz);
-    }
+    applyGamesQueryParams(url, params);
 
     return fetchJson<GamesServiceTodayResponse>(baseUrl, url, 'Games service', {
       headers: buildHeaders(params?.requestId),
@@ -65,12 +59,6 @@ export function createGamesServiceClient(
 
     async getGames(params?: GetGamesParams): Promise<GamesServiceTodayResponse> {
       return fetchGames(params);
-    },
-
-    async getTodayGames(
-      options?: GamesServiceRequestOptions,
-    ): Promise<GamesServiceTodayResponse> {
-      return fetchGames(options);
     },
 
     async getGameById(

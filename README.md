@@ -13,13 +13,26 @@ Nx monorepo for the user-facing stack of an NBA analytics system.
 - `packages/*` – shared TS libs (`types`, `domain`, `data-access`, `ui`, `config`, `testing`).
 
 ---
-## ⚠️ Status
-Pre–v1 and still being built out. Core flows work, but features and polish are in progress; expect incomplete surfaces while we march toward the first stable release.
 
-External services (separate repos):
-- `nba-data-service` (Go) – realtime games feed.
-- `nba-predictor` (Python) – prediction API.
-- Frontend calls only the Node API; Node calls Go/Python via `@nba-analytics-hub/data-access`.
+## Skills Demonstrated
+
+This project applies production patterns at portfolio scale:
+
+- **Monorepo architecture** – Nx workspace with enforced dependency boundaries between apps and libs.
+- **Backend-for-frontend pattern** – Node API aggregates Go and Python services; frontend never calls them directly.
+- **Shared type system** – Single source of truth in `packages/types` flows through all layers.
+- **Test discipline** – Vitest across the stack with >95% coverage enforced in CI.
+- **Layered design** – Domain logic isolated from UI; data-access clients decoupled from transport.
+
+Related repositories:
+- [nba-data-service](https://github.com/preston-bernstein/nba-data-service) (Go) – realtime games feed.
+- [nba-predictor](https://github.com/preston-bernstein/nba-predictor) (Python) – prediction API.
+- [nba-infra](https://github.com/preston-bernstein/nba-infra) (Docker/Compose) – deployment config, proxy, and ops docs.
+
+---
+
+## Status
+Pre-v1. Core flows work; features and polish are in progress.
 
 ---
 
@@ -27,7 +40,7 @@ External services (separate repos):
 ```
 web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ```
-- Node API routes are root-mounted: `/games`, `/games/today`, `/games/upcoming`, `/games/:id`, `/predict`, `/health`.
+- Node API routes are root-mounted: `/games`, `/games/:id`, `/predict`, `/health`.
 - Types are canonical in `packages/types` and flow through all layers.
 
 ---
@@ -62,6 +75,9 @@ npm run test:all
 # API route specs run by default; set ALLOW_SOCKET_TESTS=false only in sandboxes that block sockets
 # API Vitest resolves workspace packages directly (no prebuild step required)
 ```
+- API base URL:
+  - Default `.env` points at infra stack (Caddy on :80): `http://localhost`
+  - If you run the API directly with Nx (`nx serve api`), set `VITE_API_BASE_URL=http://localhost:3000`
 
 ---
 

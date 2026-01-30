@@ -1,18 +1,15 @@
 import type { Game } from '@nba-analytics-hub/types';
+import { applyGamesQueryParams, type GamesQueryParams } from '../../shared/gamesQuery.js';
 import { fetchJson } from '../http.js';
 
 export interface GamesClientOptions {
   baseUrl: string;
 }
 
-export interface GetGamesOptions {
-  date?: string;
-  tz?: string;
-}
+export type GetGamesOptions = GamesQueryParams;
 
 export interface GamesClient {
   getGames(options?: GetGamesOptions): Promise<Game[]>;
-  getUpcomingGames(): Promise<Game[]>;
 }
 
 export function createGamesClient(options: GamesClientOptions): GamesClient {
@@ -20,21 +17,12 @@ export function createGamesClient(options: GamesClientOptions): GamesClient {
 
   const fetchGames = async (params?: GetGamesOptions): Promise<Game[]> => {
     const url = new URL('/games', baseUrl);
-
-    if (params?.date) {
-      url.searchParams.set('date', params.date);
-    }
-    if (params?.tz) {
-      url.searchParams.set('tz', params.tz);
-    }
+    applyGamesQueryParams(url, params);
 
     return fetchJson<Game[]>(baseUrl, url, 'Games');
   };
 
   return {
     getGames: fetchGames,
-    async getUpcomingGames(): Promise<Game[]> {
-      return fetchGames();
-    },
   };
 }

@@ -36,20 +36,22 @@ export function loadEnv(env: Record<string, string | undefined>): AppEnv {
     'http://localhost:3333',
   );
 
-  // c8 ignore next
+  /* c8 ignore start - defensive: pickFirst always returns fallback */
   if (!API_BASE_URL) {
     throw new Error('API_BASE_URL is required');
   }
+  /* c8 ignore stop */
 
   const PREDICTOR_BASE_URL = pickFirst(
     [env.PREDICTOR_BASE_URL, process.env.PREDICTOR_BASE_URL],
     'http://localhost:8000',
   );
 
-  // c8 ignore next
+  /* c8 ignore start - defensive: pickFirst always returns fallback */
   if (!PREDICTOR_BASE_URL) {
     throw new Error('PREDICTOR_BASE_URL is required');
   }
+  /* c8 ignore stop */
 
   return { NODE_ENV, API_BASE_URL, PREDICTOR_BASE_URL };
 }

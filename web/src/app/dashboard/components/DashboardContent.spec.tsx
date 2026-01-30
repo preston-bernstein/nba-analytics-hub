@@ -1,64 +1,71 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
 import { DashboardContent } from './DashboardContent';
 
-const games: Game[] = [
-  {
-    id: 'game-1',
-    provider: 'mock',
-    homeTeam: { id: 'HOME', name: 'Home', externalId: 1 },
-    awayTeam: { id: 'AWAY', name: 'Away', externalId: 2 },
-    startTime: '2025-01-01T00:00:00Z',
-    status: 'SCHEDULED',
-    score: { home: 0, away: 0 },
-    meta: { season: '2024', upstreamGameId: 1 },
-  },
-];
+const game: Game = {
+  id: 'game-1',
+  provider: 'mock-provider',
+  homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
+  awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+  startTime: '2025-01-15T18:30:00.000Z',
+  status: 'SCHEDULED',
+  score: { home: 0, away: 0 },
+  meta: { season: '2024-2025', upstreamGameId: 1234 },
+};
 
 const prediction: PredictionResponse = {
-  homeTeamId: 'HOME',
-  awayTeamId: 'AWAY',
-  homeWinProbability: 0.6,
-  awayWinProbability: 0.4,
+  homeTeamId: 'ATL',
+  awayTeamId: 'BOS',
+  homeWinProbability: 0.62,
+  awayWinProbability: 0.38,
+  modelVersion: 'mock-v1',
 };
 
 describe('DashboardContent', () => {
-  it('shows loading state when predictions are loading', () => {
-    render(
-      <DashboardContent
-        games={games}
-        predictions={{}}
-        loadingPredictions={true}
-      />,
-    );
+  const defaultProps = {
+    games: [game],
+    predictions: {},
+    loadingPredictions: false,
+    predictionError: null,
+  };
 
-    expect(screen.getByText(/Loading predictions/i)).toBeInTheDocument();
-    expect(screen.getByText(/Prediction pending/i)).toBeInTheDocument();
+  it('renders game cards', () => {
+    render(<DashboardContent {...defaultProps} />);
+    expect(screen.getByLabelText('game-card')).toBeInTheDocument();
   });
 
-  it('renders prediction badges when predictions are available', () => {
+  it('renders prediction winner inside game card when available', () => {
     render(
       <DashboardContent
-        games={games}
-        predictions={{ 'game-1': prediction }}
-        loadingPredictions={false}
+        {...defaultProps}
+        predictions={{ [game.id]: prediction }}
       />,
     );
 
-    expect(screen.getByLabelText('prediction-badge')).toBeInTheDocument();
+    expect(screen.getByText('Prediction')).toBeInTheDocument();
+    expect(screen.getByText('ATL')).toBeInTheDocument();
   });
 
-  it('hides loading text when predictions are not loading', () => {
+  it('shows loading prediction message when predictions are loading', () => {
+    render(<DashboardContent {...defaultProps} loadingPredictions={true} />);
+    expect(screen.getByText('Loading prediction...')).toBeInTheDocument();
+  });
+
+  it('shows no prediction message when not loading and no prediction', () => {
+    render(<DashboardContent {...defaultProps} />);
+    expect(screen.getByText(/No prediction available/i)).toBeInTheDocument();
+  });
+
+  it('shows prediction unavailable when there is a prediction error', () => {
     render(
       <DashboardContent
-        games={games}
-        predictions={{}}
-        loadingPredictions={false}
+        {...defaultProps}
+        predictionError="Service unavailable"
       />,
     );
 
-    expect(screen.queryByText(/Loading predictions/i)).toBeNull();
-    expect(screen.getByText(/Prediction pending/i)).toBeInTheDocument();
+    expect(screen.getByText(/Predictions unavailable:/i)).toBeInTheDocument();
+    expect(screen.getByText('Prediction unavailable')).toBeInTheDocument();
   });
 });
