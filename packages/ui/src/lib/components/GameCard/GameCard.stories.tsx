@@ -36,6 +36,17 @@ export const Scheduled: Story = {
   },
 };
 
+export const InProgressDetailed: Story = {
+  args: {
+    game: {
+      ...baseGame,
+      status: 'Q3 05:12',
+      statusKind: 'IN_PROGRESS',
+      score: { home: 61, away: 58 },
+    },
+  },
+};
+
 export const InProgress: Story = {
   args: {
     game: {

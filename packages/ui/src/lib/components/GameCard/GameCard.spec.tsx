@@ -108,6 +108,56 @@ describe('GameCard', () => {
     expect(screen.getByText('Postponed')).toBeInTheDocument();
   });
 
+  it('keeps scheduled time when status is an ISO string and scores are zero', () => {
+    const scheduledGame: Game = {
+      ...baseGame,
+      status: '2025-01-15T18:30:00Z',
+      statusKind: 'SCHEDULED',
+      score: { home: 0, away: 0 },
+    };
+    render(<GameCard game={scheduledGame} />);
+    expect(screen.getByText('1:30 PM ET')).toBeInTheDocument();
+  });
+
+  it('infers live when status is an ISO string but scores are present', () => {
+    const liveGame: Game = {
+      ...baseGame,
+      status: '2025-01-15T18:30:00Z',
+      statusKind: 'SCHEDULED',
+      score: { home: 61, away: 58 },
+    };
+    render(<GameCard game={liveGame} />);
+    expect(screen.getByText('Live')).toBeInTheDocument();
+    expect(screen.getByText('61')).toBeInTheDocument();
+    expect(screen.getByText('58')).toBeInTheDocument();
+  });
+
+  it('infers live when score is present and status text is generic', () => {
+    const liveGame: Game = {
+      ...baseGame,
+      status: 'Warmup',
+      statusKind: 'SCHEDULED',
+      score: { home: 49, away: 47 },
+    };
+    render(<GameCard game={liveGame} />);
+    expect(screen.getByText('Warmup')).toBeInTheDocument();
+    expect(screen.getByText('49')).toBeInTheDocument();
+    expect(screen.getByText('47')).toBeInTheDocument();
+  });
+
+  it('shows live scores when statusKind is scheduled but status indicates live play', () => {
+    const liveGame: Game = {
+      ...baseGame,
+      status: 'Q2 05:12',
+      statusKind: 'SCHEDULED',
+      score: { home: 55, away: 52 },
+    };
+    render(<GameCard game={liveGame} />);
+    expect(screen.getByText('Q2 05:12')).toBeInTheDocument();
+    expect(screen.getByText('55')).toBeInTheDocument();
+    expect(screen.getByText('52')).toBeInTheDocument();
+  });
+
   it('should render Canceled badge for CANCELED games', () => {
     const canceledGame: Game = {
       ...baseGame,
