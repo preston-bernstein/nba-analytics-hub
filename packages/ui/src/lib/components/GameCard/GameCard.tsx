@@ -39,6 +39,41 @@ const statusConfig: Record<
   },
 };
 
+const LIVE_STATUS_PATTERN = /\b(q[1-4]|ot|halftime|half|end of|end of period|in progress)\b/i;
+const FINAL_STATUS_PATTERN = /\b(final|ended)\b/i;
+const POSTPONED_STATUS_PATTERN = /\bpostponed\b/i;
+const CANCELED_STATUS_PATTERN = /\b(cancelled|canceled)\b/i;
+const ISO_STATUS_PATTERN = /^\d{4}-\d{2}-\d{2}t/i;
+
+function normalizeStatusText(status: string): string {
+  const trimmed = status.trim();
+  if (!trimmed) return '';
+  if (ISO_STATUS_PATTERN.test(trimmed)) return '';
+  return trimmed;
+}
+
+function inferStatusKind(
+  statusKind: GameStatus,
+  rawStatus: string,
+  score: Game['score'],
+): GameStatus {
+  if (statusKind !== 'SCHEDULED') {
+    return statusKind;
+  }
+
+  if (!rawStatus) {
+    return score.home > 0 || score.away > 0 ? 'IN_PROGRESS' : statusKind;
+  }
+
+  const normalized = rawStatus.toLowerCase();
+  if (FINAL_STATUS_PATTERN.test(normalized)) return 'FINAL';
+  if (POSTPONED_STATUS_PATTERN.test(normalized)) return 'POSTPONED';
+  if (CANCELED_STATUS_PATTERN.test(normalized)) return 'CANCELED';
+  if (LIVE_STATUS_PATTERN.test(normalized)) return 'IN_PROGRESS';
+
+  return score.home > 0 || score.away > 0 ? 'IN_PROGRESS' : statusKind;
+}
+
 function getTeamInitials(name: string) {
   const parts = name.trim().split(' ');
   /* c8 ignore next 2 - defensive fallbacks for edge cases */
@@ -91,11 +126,17 @@ function TeamSection({ team, score, isWinner, showScore }: TeamSectionProps) {
 }
 
 export function GameCard({ game, prediction }: GameCardProps) {
-  const { homeTeam, awayTeam, startTime, status, score } = game;
-  const config = statusConfig[status];
-  const isLive = status === 'IN_PROGRESS';
-  const isFinal = status === 'FINAL';
-  const isScheduled = status === 'SCHEDULED';
+  const { homeTeam, awayTeam, startTime, status, statusKind, score } = game;
+  const cleanedStatus = normalizeStatusText(status);
+  const displayStatusKind = inferStatusKind(statusKind, cleanedStatus, score);
+  const config = statusConfig[displayStatusKind];
+  const isLive = displayStatusKind === 'IN_PROGRESS';
+  const isFinal = displayStatusKind === 'FINAL';
+  const isScheduled = displayStatusKind === 'SCHEDULED';
+  const badgeLabel =
+    isLive && cleanedStatus && cleanedStatus.toLowerCase() !== 'in progress'
+      ? cleanedStatus
+      : config.label;
 
   const homeWins = isFinal && score.home > score.away;
   const awayWins = isFinal && score.away > score.home;
@@ -124,7 +165,7 @@ export function GameCard({ game, prediction }: GameCardProps) {
         />
 
         {/* Center - Time/Status */}
-        {status === 'FINAL' ? (
+        {isFinal ? (
           <span className="justify-self-center text-[11px] font-semibold uppercase tracking-wide text-neutral-900">
             {awayWins && <span className="mr-1">◀</span>}
             FINAL
@@ -141,7 +182,7 @@ export function GameCard({ game, prediction }: GameCardProps) {
           <span
             className={`${statusBadge} ${config.className} justify-self-center whitespace-nowrap px-2 py-0.5 text-[10px] tracking-normal`}
           >
-            {config.label}
+            {badgeLabel}
           </span>
         )}
 

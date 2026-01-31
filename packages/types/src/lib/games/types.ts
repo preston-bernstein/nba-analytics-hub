@@ -27,7 +27,8 @@ export interface Game {
   homeTeam: Team;
   awayTeam: Team;
   startTime: string;
-  status: GameStatus;
+  status: string;
+  statusKind: GameStatus;
   score: Score;
   meta: GameMeta;
 }
