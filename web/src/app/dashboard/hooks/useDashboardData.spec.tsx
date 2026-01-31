@@ -97,6 +97,19 @@ describe('resolveApiConfig', () => {
     expect(config.basePath).toBe('/api');
   });
 
+  it('treats whitespace-only explicit base URLs as empty', () => {
+    const config = resolveApiConfig(
+      {
+        DEV: false,
+        VITE_API_BASE_URL: '   ',
+      } as ImportMetaEnv,
+      'https://app.example.com',
+    );
+
+    expect(config.baseUrl).toBe('https://app.example.com');
+    expect(config.basePath).toBe('/api');
+  });
+
   it('falls back to localhost when no window origin is available', () => {
     const config = resolveApiConfig(
       {

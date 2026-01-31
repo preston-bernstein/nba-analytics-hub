@@ -81,6 +81,28 @@ describe('createPredictorClient', () => {
     expect(result).toEqual(mockPredictionResponse);
   });
 
+  it('adds a leading slash when the basePath lacks one', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockPredictionResponse,
+    });
+
+    const client = createPredictorClient({ baseUrl: BASE_URL, basePath: 'api' });
+
+    const req: PredictionRequest = {
+      homeTeamId: 'ATL',
+      awayTeamId: 'BOS',
+      gameDate: '2025-01-01',
+    };
+
+    const result = await client.predict(req);
+
+    const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/api/predict`);
+    expect(result).toEqual(mockPredictionResponse);
+  });
+
   it('ignores basePath values that are only whitespace', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
