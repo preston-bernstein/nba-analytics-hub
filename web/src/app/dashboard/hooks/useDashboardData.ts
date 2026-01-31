@@ -8,8 +8,22 @@ import {
   createPredictorClient,
 } from '@nba-analytics-hub/data-access';
 
+const EXPLICIT_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const FALLBACK_API_BASE_URL = import.meta.env.DEV
+  ? 'http://localhost:3000'
+  : typeof window !== 'undefined'
+    ? window.location.origin
+    : 'http://localhost:3000';
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+  EXPLICIT_API_BASE_URL && EXPLICIT_API_BASE_URL.trim()
+    ? EXPLICIT_API_BASE_URL
+    : FALLBACK_API_BASE_URL;
+const API_BASE_PATH =
+  EXPLICIT_API_BASE_URL && EXPLICIT_API_BASE_URL.trim()
+    ? ''
+    : import.meta.env.DEV
+      ? ''
+      : '/api';
 
 function toGameDate(dateIso: string): string {
   return new Date(dateIso).toISOString().slice(0, 10);
@@ -28,6 +42,7 @@ export function useDashboardData(): DashboardDataState {
     () =>
       createGamesClient({
         baseUrl: API_BASE_URL,
+        basePath: API_BASE_PATH,
       }),
     [],
   );
@@ -38,6 +53,7 @@ export function useDashboardData(): DashboardDataState {
     () =>
       createPredictorClient({
         baseUrl: API_BASE_URL,
+        basePath: API_BASE_PATH,
       }),
     [],
   );

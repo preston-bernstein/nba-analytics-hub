@@ -50,6 +50,23 @@ describe('createGamesClient', () => {
     expect(result).toEqual(mockGames);
   });
 
+  it('prefixes requests with a normalized basePath', async () => {
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      json: async () => mockGames,
+    });
+
+    const client = createGamesClient({ baseUrl: BASE_URL, basePath: 'api/' });
+
+    const result = await client.getGames();
+
+    const urlArg = fetchMock.mock.calls[0][0] as string;
+    const calledUrl = new URL(urlArg);
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/api/games`);
+    expect(result).toEqual(mockGames);
+  });
+
   it('throws a descriptive error when the API returns a non-OK status', async () => {
     fetchMock.mockResolvedValue({
       ok: false,
