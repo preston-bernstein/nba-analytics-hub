@@ -8,22 +8,31 @@ import {
   createPredictorClient,
 } from '@nba-analytics-hub/data-access';
 
-const EXPLICIT_API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const FALLBACK_API_BASE_URL = import.meta.env.DEV
-  ? 'http://localhost:3000'
-  : typeof window !== 'undefined'
-    ? window.location.origin
-    : 'http://localhost:3000';
-const API_BASE_URL =
-  EXPLICIT_API_BASE_URL && EXPLICIT_API_BASE_URL.trim()
-    ? EXPLICIT_API_BASE_URL
-    : FALLBACK_API_BASE_URL;
-const API_BASE_PATH =
-  EXPLICIT_API_BASE_URL && EXPLICIT_API_BASE_URL.trim()
-    ? ''
-    : import.meta.env.DEV
-      ? ''
-      : '/api';
+export interface ApiConfig {
+  baseUrl: string;
+  basePath: string;
+}
+
+export function resolveApiConfig(
+  env: ImportMetaEnv,
+  locationOrigin?: string,
+): ApiConfig {
+  const explicitBaseUrl = env.VITE_API_BASE_URL;
+  const hasExplicit = Boolean(explicitBaseUrl && explicitBaseUrl.trim());
+  const fallbackBaseUrl = env.DEV
+    ? 'http://localhost:3000'
+    : locationOrigin ?? 'http://localhost:3000';
+
+  return {
+    baseUrl: hasExplicit ? explicitBaseUrl : fallbackBaseUrl,
+    basePath: hasExplicit ? '' : env.DEV ? '' : '/api',
+  };
+}
+
+const { baseUrl: API_BASE_URL, basePath: API_BASE_PATH } = resolveApiConfig(
+  import.meta.env,
+  typeof window !== 'undefined' ? window.location.origin : undefined,
+);
 
 function toGameDate(dateIso: string): string {
   return new Date(dateIso).toISOString().slice(0, 10);

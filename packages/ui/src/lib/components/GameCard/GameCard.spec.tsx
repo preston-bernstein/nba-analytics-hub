@@ -27,6 +27,17 @@ describe('GameCard', () => {
     expect(screen.getByText('1:30 PM ET')).toBeInTheDocument();
   });
 
+  it('treats empty status text as scheduled', () => {
+    const scheduledGame: Game = {
+      ...baseGame,
+      status: '   ',
+      statusKind: 'SCHEDULED',
+      score: { home: 0, away: 0 },
+    };
+    render(<GameCard game={scheduledGame} />);
+    expect(screen.getByText('1:30 PM ET')).toBeInTheDocument();
+  });
+
   it('should not show scores for SCHEDULED games', () => {
     render(<GameCard game={baseGame} />);
     expect(screen.queryByText('0')).not.toBeInTheDocument();
@@ -58,6 +69,19 @@ describe('GameCard', () => {
     expect(screen.getByText('105')).toBeInTheDocument();
     // Away team wins, so left arrow should be present
     expect(screen.getByText('◀')).toBeInTheDocument();
+  });
+
+  it('infers Final when status text indicates final while scheduled', () => {
+    const finalGame: Game = {
+      ...baseGame,
+      status: 'Final',
+      statusKind: 'SCHEDULED',
+      score: { home: 98, away: 90 },
+    };
+    render(<GameCard game={finalGame} />);
+    expect(screen.getByText('FINAL')).toBeInTheDocument();
+    expect(screen.getByText('98')).toBeInTheDocument();
+    expect(screen.getByText('90')).toBeInTheDocument();
   });
 
   it('should render Final badge with right arrow when home wins', () => {
@@ -103,6 +127,16 @@ describe('GameCard', () => {
       ...baseGame,
       status: 'Postponed',
       statusKind: 'POSTPONED',
+    };
+    render(<GameCard game={postponedGame} />);
+    expect(screen.getByText('Postponed')).toBeInTheDocument();
+  });
+
+  it('infers Postponed when status text indicates a delay while scheduled', () => {
+    const postponedGame: Game = {
+      ...baseGame,
+      status: 'Postponed',
+      statusKind: 'SCHEDULED',
     };
     render(<GameCard game={postponedGame} />);
     expect(screen.getByText('Postponed')).toBeInTheDocument();
@@ -163,6 +197,16 @@ describe('GameCard', () => {
       ...baseGame,
       status: 'Canceled',
       statusKind: 'CANCELED',
+    };
+    render(<GameCard game={canceledGame} />);
+    expect(screen.getByText('Canceled')).toBeInTheDocument();
+  });
+
+  it('infers Canceled when status text indicates cancellation while scheduled', () => {
+    const canceledGame: Game = {
+      ...baseGame,
+      status: 'Canceled',
+      statusKind: 'SCHEDULED',
     };
     render(<GameCard game={canceledGame} />);
     expect(screen.getByText('Canceled')).toBeInTheDocument();
