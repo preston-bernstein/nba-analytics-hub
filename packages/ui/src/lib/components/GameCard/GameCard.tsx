@@ -91,11 +91,16 @@ function TeamSection({ team, score, isWinner, showScore }: TeamSectionProps) {
 }
 
 export function GameCard({ game, prediction }: GameCardProps) {
-  const { homeTeam, awayTeam, startTime, status, score } = game;
-  const config = statusConfig[status];
-  const isLive = status === 'IN_PROGRESS';
-  const isFinal = status === 'FINAL';
-  const isScheduled = status === 'SCHEDULED';
+  const { homeTeam, awayTeam, startTime, status, statusKind, score } = game;
+  const config = statusConfig[statusKind];
+  const isLive = statusKind === 'IN_PROGRESS';
+  const isFinal = statusKind === 'FINAL';
+  const isScheduled = statusKind === 'SCHEDULED';
+  const rawStatus = status.trim();
+  const badgeLabel =
+    isLive && rawStatus && rawStatus.toLowerCase() !== 'in progress'
+      ? rawStatus
+      : config.label;
 
   const homeWins = isFinal && score.home > score.away;
   const awayWins = isFinal && score.away > score.home;
@@ -124,7 +129,7 @@ export function GameCard({ game, prediction }: GameCardProps) {
         />
 
         {/* Center - Time/Status */}
-        {status === 'FINAL' ? (
+        {isFinal ? (
           <span className="justify-self-center text-[11px] font-semibold uppercase tracking-wide text-neutral-900">
             {awayWins && <span className="mr-1">◀</span>}
             FINAL
@@ -141,7 +146,7 @@ export function GameCard({ game, prediction }: GameCardProps) {
           <span
             className={`${statusBadge} ${config.className} justify-self-center whitespace-nowrap px-2 py-0.5 text-[10px] tracking-normal`}
           >
-            {config.label}
+            {badgeLabel}
           </span>
         )}
 

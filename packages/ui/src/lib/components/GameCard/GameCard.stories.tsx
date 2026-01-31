@@ -24,7 +24,8 @@ const baseGame: Game = {
   homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
   awayTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
   startTime: new Date().toISOString(),
-  status: 'SCHEDULED',
+  status: 'Scheduled',
+  statusKind: 'SCHEDULED',
   score: { home: 0, away: 0 },
   meta: { season: '2024-2025', upstreamGameId: 9999 },
 };
@@ -39,7 +40,8 @@ export const InProgress: Story = {
   args: {
     game: {
       ...baseGame,
-      status: 'IN_PROGRESS',
+      status: 'In Progress',
+      statusKind: 'IN_PROGRESS',
       score: { home: 52, away: 48 },
     },
   },
@@ -49,7 +51,8 @@ export const FinalHomeWins: Story = {
   args: {
     game: {
       ...baseGame,
-      status: 'FINAL',
+      status: 'Final',
+      statusKind: 'FINAL',
       score: { home: 112, away: 98 },
     },
   },
@@ -59,7 +62,8 @@ export const FinalAwayWins: Story = {
   args: {
     game: {
       ...baseGame,
-      status: 'FINAL',
+      status: 'Final',
+      statusKind: 'FINAL',
       score: { home: 95, away: 108 },
     },
   },
@@ -69,7 +73,8 @@ export const Postponed: Story = {
   args: {
     game: {
       ...baseGame,
-      status: 'POSTPONED',
+      status: 'Postponed',
+      statusKind: 'POSTPONED',
     },
   },
 };
@@ -78,7 +83,8 @@ export const Canceled: Story = {
   args: {
     game: {
       ...baseGame,
-      status: 'CANCELED',
+      status: 'Canceled',
+      statusKind: 'CANCELED',
     },
   },
 };

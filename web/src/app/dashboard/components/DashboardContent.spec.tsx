@@ -9,7 +9,8 @@ const game: Game = {
   homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
   awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
   startTime: '2025-01-15T18:30:00.000Z',
-  status: 'SCHEDULED',
+  status: 'Scheduled',
+  statusKind: 'SCHEDULED',
   score: { home: 0, away: 0 },
   meta: { season: '2024-2025', upstreamGameId: 1234 },
 };

@@ -10,7 +10,8 @@ describe('GameCard', () => {
     homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
     awayTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
     startTime: '2025-01-15T18:30:00.000Z',
-    status: 'SCHEDULED',
+    status: 'Scheduled',
+    statusKind: 'SCHEDULED',
     score: { home: 0, away: 0 },
     meta: { season: '2024-2025', upstreamGameId: 1234 },
   };
@@ -34,7 +35,8 @@ describe('GameCard', () => {
   it('should render Live badge and scores for IN_PROGRESS games', () => {
     const liveGame: Game = {
       ...baseGame,
-      status: 'IN_PROGRESS',
+      status: 'In Progress',
+      statusKind: 'IN_PROGRESS',
       score: { home: 45, away: 52 },
     };
     render(<GameCard game={liveGame} />);
@@ -46,7 +48,8 @@ describe('GameCard', () => {
   it('should render Final badge and scores for FINAL games (away wins)', () => {
     const finalGame: Game = {
       ...baseGame,
-      status: 'FINAL',
+      status: 'Final',
+      statusKind: 'FINAL',
       score: { home: 98, away: 105 },
     };
     render(<GameCard game={finalGame} />);
@@ -60,7 +63,8 @@ describe('GameCard', () => {
   it('should render Final badge with right arrow when home wins', () => {
     const finalGame: Game = {
       ...baseGame,
-      status: 'FINAL',
+      status: 'Final',
+      statusKind: 'FINAL',
       score: { home: 110, away: 98 },
     };
     render(<GameCard game={finalGame} />);
@@ -95,15 +99,34 @@ describe('GameCard', () => {
   });
 
   it('should render Postponed badge for POSTPONED games', () => {
-    const postponedGame: Game = { ...baseGame, status: 'POSTPONED' };
+    const postponedGame: Game = {
+      ...baseGame,
+      status: 'Postponed',
+      statusKind: 'POSTPONED',
+    };
     render(<GameCard game={postponedGame} />);
     expect(screen.getByText('Postponed')).toBeInTheDocument();
   });
 
   it('should render Canceled badge for CANCELED games', () => {
-    const canceledGame: Game = { ...baseGame, status: 'CANCELED' };
+    const canceledGame: Game = {
+      ...baseGame,
+      status: 'Canceled',
+      statusKind: 'CANCELED',
+    };
     render(<GameCard game={canceledGame} />);
     expect(screen.getByText('Canceled')).toBeInTheDocument();
+  });
+
+  it('shows the raw status label when in-progress is more specific', () => {
+    const halftimeGame: Game = {
+      ...baseGame,
+      status: 'Halftime',
+      statusKind: 'IN_PROGRESS',
+      score: { home: 55, away: 55 },
+    };
+    render(<GameCard game={halftimeGame} />);
+    expect(screen.getByText('Halftime')).toBeInTheDocument();
   });
 
   it('should render prediction row and percentages when provided', () => {
