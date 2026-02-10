@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://nba-api.prestonbernstein.com/:path*"
+      "destination": "https://your-api-domain.example.com/:path*"
     }
   ]
 }
