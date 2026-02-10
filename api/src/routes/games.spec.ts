@@ -73,4 +73,25 @@ describeIfSockets('games routes', () => {
 
     consoleError.mockRestore();
   });
+
+  it('returns 502 when getGameById fails', async () => {
+    const { app } = createTestContext({
+      getGameById: vi.fn().mockRejectedValue(new Error('not found')),
+    });
+
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const res = await request(app)
+      .get('/games/bad-id')
+      .set('X-Request-ID', 'req-err');
+
+    expect(res.status).toBe(502);
+    expect(res.body).toMatchObject({
+      error: 'Unable to fetch game',
+      requestId: 'req-err',
+    });
+    expect(res.headers['x-request-id']).toBe('req-err');
+
+    consoleError.mockRestore();
+  });
 });

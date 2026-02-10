@@ -82,8 +82,8 @@ npm run test:all
 ---
 
 ## Contracts & Types
-- Node API: root routes listed above; see `docs-internal/SERVICE_CONTRACTS.md`.
-- Types: single source in `packages/types`; see `docs-internal/DATA_MODEL.md`.
+- Node API: root routes listed above (`/games`, `/games/:id`, `/predict`, `/health`).
+- Types: single source in `packages/types`; all layers import from there.
 - No direct frontend → Go/Python calls; all traffic goes through the BFF.
 
 ---
