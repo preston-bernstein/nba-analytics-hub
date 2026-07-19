@@ -12,7 +12,6 @@ function createTestContext(overrides?: Partial<GamesServiceClient>) {
   const gamesServiceMock: GamesServiceClient = {
     checkHealth: vi.fn(),
     getGames: vi.fn().mockResolvedValue(gamesResponse),
-    getTodayGames: vi.fn().mockResolvedValue(gamesResponse),
     getGameById: vi.fn().mockResolvedValue(mockGames[0]),
     ...overrides,
   };
@@ -38,32 +37,6 @@ describeIfSockets('games routes', () => {
       tz: 'America/New_York',
       requestId: 'client-req-1',
     });
-  });
-
-  it('returns today games and generates a request id when missing', async () => {
-    const { app, gamesServiceMock } = createTestContext();
-
-    const res = await request(app).get('/games/today');
-
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.headers['x-request-id']).toBeDefined();
-    expect(gamesServiceMock.getTodayGames).toHaveBeenCalledWith(
-      expect.objectContaining({ requestId: expect.any(String) }),
-    );
-  });
-
-  it('falls back to mock games for upcoming when upstream is empty', async () => {
-    const { app } = createTestContext({
-      getGames: vi.fn().mockResolvedValue({ date: '2025-01-01', games: [] }),
-    });
-
-    const res = await request(app).get('/games/upcoming');
-
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0]).toHaveProperty('id');
   });
 
   it('returns a single game by id and forwards request id to the service', async () => {
@@ -97,6 +70,27 @@ describeIfSockets('games routes', () => {
       requestId: expect.any(String),
     });
     expect(res.headers['x-request-id']).toBeDefined();
+
+    consoleError.mockRestore();
+  });
+
+  it('returns 502 when getGameById fails', async () => {
+    const { app } = createTestContext({
+      getGameById: vi.fn().mockRejectedValue(new Error('not found')),
+    });
+
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const res = await request(app)
+      .get('/games/bad-id')
+      .set('X-Request-ID', 'req-err');
+
+    expect(res.status).toBe(502);
+    expect(res.body).toMatchObject({
+      error: 'Unable to fetch game',
+      requestId: 'req-err',
+    });
+    expect(res.headers['x-request-id']).toBe('req-err');
 
     consoleError.mockRestore();
   });

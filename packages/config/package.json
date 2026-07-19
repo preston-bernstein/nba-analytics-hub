@@ -23,8 +23,7 @@
         "options": {
           "tsConfig": "packages/config/tsconfig.lib.json",
           "main": "packages/config/src/index.ts",
-          "outputPath": "packages/config/dist",
-          "format": ["esm"]
+          "outputPath": "packages/config/dist"
         }
       },
       "lint": {

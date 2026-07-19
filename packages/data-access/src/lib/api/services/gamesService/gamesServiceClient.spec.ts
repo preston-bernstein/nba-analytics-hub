@@ -48,7 +48,7 @@ describe('createGamesServiceClient', () => {
     expect(calledUrl.searchParams.get('tz')).toBe('America/New_York');
   });
 
-  it('calls /games (today) when no params are provided', async () => {
+  it('calls /games when no params are provided', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       status: 200,
@@ -56,7 +56,7 @@ describe('createGamesServiceClient', () => {
     });
 
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
-    const result = await client.getTodayGames();
+    const result = await client.getGames();
 
     const [urlArg] = fetchMock.mock.calls[0] as [string];
     const calledUrl = new URL(urlArg);
@@ -101,7 +101,7 @@ describe('createGamesServiceClient', () => {
 
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
 
-    await expect(client.getTodayGames()).rejects.toThrow(
+    await expect(client.getGames()).rejects.toThrow(
       'Games service request failed with status 502',
     );
   });
@@ -127,7 +127,8 @@ describe('createGamesServiceClient', () => {
       homeTeam: { id: 'NYK', name: 'New York Knicks', externalId: 9 },
       awayTeam: { id: 'MIA', name: 'Miami Heat', externalId: 6 },
       startTime: '2025-01-02T01:00:00Z',
-      status: 'IN_PROGRESS',
+      status: 'In Progress',
+      statusKind: 'IN_PROGRESS',
       score: { home: 75, away: 72 },
       meta: { season: '2024-2025', upstreamGameId: 54321 },
     };

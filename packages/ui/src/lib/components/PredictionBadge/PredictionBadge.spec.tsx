@@ -12,17 +12,18 @@ describe('PredictionBadge', () => {
     modelVersion: 'mock-v1',
   };
 
-  it('renders win probabilities for both teams as percentages', () => {
+  it('renders the prediction label and favorite', () => {
     render(<PredictionBadge prediction={basePrediction} />);
 
-    expect(screen.getByText(/BOS: 38%/)).toBeInTheDocument();
-    expect(screen.getByText(/ATL: 62%/)).toBeInTheDocument();
+    expect(screen.getByText('Prediction')).toBeInTheDocument();
+    expect(screen.getByText('ATL')).toBeInTheDocument();
   });
 
-  it('indicates the favorite based on higher probability', () => {
+  it('renders percentages for both teams', () => {
     render(<PredictionBadge prediction={basePrediction} />);
 
-    expect(screen.getByText(/Favorite: ATL/)).toBeInTheDocument();
+    expect(screen.getByText('62%')).toBeInTheDocument();
+    expect(screen.getByText('38%')).toBeInTheDocument();
   });
 
   it('shows EVEN when probabilities are equal', () => {
@@ -34,23 +35,6 @@ describe('PredictionBadge', () => {
 
     render(<PredictionBadge prediction={evenPrediction} />);
 
-    expect(screen.getByText(/Favorite: EVEN/)).toBeInTheDocument();
-  });
-
-  it('renders the model version when provided', () => {
-    render(<PredictionBadge prediction={basePrediction} />);
-
-    expect(screen.getByText(/Model: mock-v1/)).toBeInTheDocument();
-  });
-
-  it('does not render the model version line when not provided', () => {
-    const noModelPrediction: PredictionResponse = {
-      ...basePrediction,
-      modelVersion: undefined,
-    };
-
-    render(<PredictionBadge prediction={noModelPrediction} />);
-
-    expect(screen.queryByText(/Model:/)).toBeNull();
+    expect(screen.getByText('EVEN')).toBeInTheDocument();
   });
 });

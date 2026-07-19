@@ -41,4 +41,23 @@ describeIfSockets('GET /predict', () => {
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty('error');
   });
+
+  it('returns 502 when predictor service throws', async () => {
+    const failApp = express();
+    const failService: PredictorServiceClient = {
+      predict: vi.fn().mockRejectedValue(new Error('model down')),
+    };
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    registerPredictRoutes(failApp, { predictorService: failService, logger: console });
+
+    const res = await request(failApp)
+      .get('/predict')
+      .query({ home_team: 'ATL', away_team: 'BOS', game_date: '2025-01-01' });
+
+    expect(res.status).toBe(502);
+    expect(res.body).toMatchObject({ error: 'Unable to fetch prediction' });
+
+    consoleError.mockRestore();
+  });
 });

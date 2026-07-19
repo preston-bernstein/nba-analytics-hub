@@ -12,6 +12,7 @@
     "test:data-access": "nx test data-access",
     "serve:web": "nx serve web",
     "serve:api": "nx serve api",
+    "clean:api-dist": "node tools/clean-api-dist.mjs",
     "coverage:summary": "node tools/coverage-summary.js"
   },
   "private": true,

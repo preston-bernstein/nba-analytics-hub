@@ -27,9 +27,17 @@ export default defineConfig({
     include: socketsAvailable ? ['src/**/*.spec.ts'] : [],
     passWithNoTests: true,
     coverage: {
+      provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
       reportsDirectory: './coverage',
-      exclude: ['dist/**', 'coverage/**'],
+      exclude: [
+        'dist/**',
+        'coverage/**',
+        'eslint.config.mjs',
+        'vitest.config.ts',
+        'src/main.ts',
+        'src/test-utils/**',
+      ],
     },
   },
 });

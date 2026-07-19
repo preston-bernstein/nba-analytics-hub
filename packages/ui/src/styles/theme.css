@@ -1,3 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;600;700&display=swap");
+
+:root {
+  color-scheme: light;
+  --font-sans: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --background: 35 33% 97%;
+  --foreground: 215 25% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 25% 15%;
+  --muted: 30 14% 94%;
+  --muted-foreground: 215 12% 42%;
+  --border: 30 15% 85%;
+  --ring: 215 82% 56%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
 @theme {
   /* border radius tokens */
   --radius-lg: 0.5rem;
@@ -5,38 +37,38 @@
   --radius-2xl: 1rem;
 
   /* brand colors */
-  --color-brand-50:  #f5f5ff;
-  --color-brand-100: #e0e7ff;
-  --color-brand-200: #c7d2fe;
-  --color-brand-300: #a5b4fc;
-  --color-brand-400: #818cf8;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
-  --color-brand-800: #3730a3;
-  --color-brand-900: #312e81;
+  --color-brand-50:  #eff4ff;
+  --color-brand-100: #dbe7ff;
+  --color-brand-200: #bdd0ff;
+  --color-brand-300: #94b0ff;
+  --color-brand-400: #6b8cff;
+  --color-brand-500: #4368f3;
+  --color-brand-600: #2f50d6;
+  --color-brand-700: #273fb0;
+  --color-brand-800: #22348a;
+  --color-brand-900: #1c2a69;
 
-  /* brand-accent (court / highlight) */
-  --color-brand-accent-50:  #fff7ed;
-  --color-brand-accent-100: #ffedd5;
-  --color-brand-accent-200: #fed7aa;
-  --color-brand-accent-300: #fdba74;
-  --color-brand-accent-400: #fb923c;
-  --color-brand-accent-500: #f97316;
-  --color-brand-accent-600: #ea580c;
-  --color-brand-accent-700: #c2410c;
-  --color-brand-accent-800: #9a3412;
-  --color-brand-accent-900: #7c2d12;
+  /* brand-accent */
+  --color-brand-accent-50:  #fff1f2;
+  --color-brand-accent-100: #ffe4e6;
+  --color-brand-accent-200: #fecdd3;
+  --color-brand-accent-300: #fda4af;
+  --color-brand-accent-400: #fb7185;
+  --color-brand-accent-500: #f43f5e;
+  --color-brand-accent-600: #e11d48;
+  --color-brand-accent-700: #be123c;
+  --color-brand-accent-800: #9f1239;
+  --color-brand-accent-900: #881337;
 
   /* neutral UI shell */
-  --color-neutral-50:  #f9fafb;
-  --color-neutral-100: #f3f4f6;
-  --color-neutral-200: #e5e7eb;
-  --color-neutral-300: #d1d5db;
-  --color-neutral-400: #9ca3af;
-  --color-neutral-500: #6b7280;
-  --color-neutral-600: #4b5563;
-  --color-neutral-700: #374151;
-  --color-neutral-800: #1f2937;
-  --color-neutral-900: #111827;
+  --color-neutral-50:  #faf9f7;
+  --color-neutral-100: #f4f2ef;
+  --color-neutral-200: #e6e2dd;
+  --color-neutral-300: #d3cdc6;
+  --color-neutral-400: #b3aba2;
+  --color-neutral-500: #8d847b;
+  --color-neutral-600: #6b6158;
+  --color-neutral-700: #4f4740;
+  --color-neutral-800: #352f2a;
+  --color-neutral-900: #221f1c;
 }

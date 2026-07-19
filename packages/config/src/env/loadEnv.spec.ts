@@ -9,6 +9,10 @@ describe('loadEnv', () => {
   });
 
   it('defaults values when missing', () => {
+    delete process.env.VITE_API_BASE_URL;
+    delete process.env.API_BASE_URL;
+    delete process.env.PREDICTOR_BASE_URL;
+
     const env = loadEnv({});
     expect(env.NODE_ENV).toBe(
       ((process.env.NODE_ENV as AppEnv['NODE_ENV']) ?? 'development'),
@@ -59,6 +63,9 @@ describe('loadEnv', () => {
   });
 
   it('ignores blank API_BASE_URL and uses fallback', () => {
+    delete process.env.VITE_API_BASE_URL;
+    delete process.env.API_BASE_URL;
+
     const env = loadEnv({ API_BASE_URL: '' });
     expect(env.API_BASE_URL).toBe('http://localhost:3333');
   });
@@ -69,6 +76,7 @@ describe('loadEnv', () => {
   });
 
   it('ignores whitespace-only process env and uses fallback values', () => {
+    delete process.env.VITE_API_BASE_URL;
     process.env.API_BASE_URL = '   ';
     process.env.PREDICTOR_BASE_URL = '   ';
 

@@ -1,11 +1,14 @@
-import { randomUUID } from 'crypto';
 import type { Express, Request, Response } from 'express';
 import {
   type GamesServiceClient,
   createGamesServiceClient,
 } from '@nba-analytics-hub/data-access';
-import { type ErrorResponse, Game } from '@nba-analytics-hub/types';
-import { mockGames } from '@nba-analytics-hub/testing';
+import type { Game } from '@nba-analytics-hub/types';
+import {
+  resolveRequestId,
+  sendError,
+  sendSuccess,
+} from './shared/routeUtils.js';
 
 interface GamesRouteDeps {
   gamesService?: GamesServiceClient;
@@ -28,14 +31,6 @@ export function registerGamesRoutes(
   const gamesService = buildGamesService(deps);
   const logger = deps?.logger ?? console;
 
-  const resolveRequestId = (req: Request): string =>
-    req.header('x-request-id') ?? randomUUID();
-
-  const sendError = (res: Response, payload: ErrorResponse, status = 502) => {
-    res.setHeader('X-Request-ID', payload.requestId ?? '');
-    return res.status(status).json(payload);
-  };
-
   async function sendGames(
     fetcher: (requestId: string) => Promise<Game[]>,
     req: Request,
@@ -45,8 +40,7 @@ export function registerGamesRoutes(
     const requestId = resolveRequestId(req);
     try {
       const games = await fetcher(requestId);
-      res.setHeader('X-Request-ID', requestId);
-      return res.status(200).json(games);
+      return sendSuccess(res, requestId, games);
     } catch (err) {
       logger.error(errorMessage, err);
       return sendError(res, { error: 'Unable to fetch games', requestId });
@@ -67,37 +61,11 @@ export function registerGamesRoutes(
     ),
   );
 
-  app.get('/games/today', async (req: Request, res: Response) =>
-    sendGames(
-      async (requestId) => {
-        const { games } = await gamesService.getTodayGames({ requestId });
-        return games;
-      },
-      req,
-      res,
-      'Failed to fetch games for today',
-    ),
-  );
-
-  app.get('/games/upcoming', async (req: Request, res: Response) => {
-    // Until we have a dedicated upstream endpoint, reuse today's games as a mock.
-    return sendGames(
-      async (requestId) => {
-        const { games } = await gamesService.getGames({ requestId });
-        return games.length ? games : mockGames;
-      },
-      req,
-      res,
-      'Failed to fetch upcoming games',
-    );
-  });
-
   app.get('/games/:id', async (req: Request, res: Response) => {
     const requestId = resolveRequestId(req);
     try {
       const game = await gamesService.getGameById(req.params.id, { requestId });
-      res.setHeader('X-Request-ID', requestId);
-      return res.status(200).json(game);
+      return sendSuccess(res, requestId, game);
     } catch (err) {
       logger.error('Failed to fetch game by id', err);
       return sendError(res, { error: 'Unable to fetch game', requestId });

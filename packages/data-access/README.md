@@ -79,7 +79,7 @@ The data-access layer should:
 - `predictorClient` implemented and fully tested.
 - Coverage thresholds enforced.
 - Future additions:
-  - `gamesClient` to fetch upcoming games
+  - `gamesClient` to fetch games by date
   - Retry wrappers
   - API key auth support
   - MSW-backed integration tests

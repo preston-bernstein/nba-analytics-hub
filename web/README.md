@@ -32,7 +32,7 @@ It renders the analytics dashboard and consumes the backend API via shared libra
 The web app is responsible for:
 
 - Rendering the main dashboard layout using `AppShell` from `@nba-analytics-hub/ui`.
-- Displaying a list of upcoming games using shared types and components.
+- Displaying a list of games for the selected date using shared types and components.
 - Requesting predictions for games via `@nba-analytics-hub/data-access`.
 - Showing prediction output (win probabilities, favored team) visually.
 

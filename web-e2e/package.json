@@ -3,8 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "implicitDependencies": [
-      "@nba-analytics-hub/web"
-    ]
+    "implicitDependencies": ["@nba-analytics-hub/web"],
+    "targets": {
+      "e2e": {
+        "executor": "@nx/playwright:playwright",
+        "options": {
+          "config": "web-e2e/playwright.config.ts"
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": ["web-e2e/**/*.ts"]
+        }
+      }
+    }
   }
 }
