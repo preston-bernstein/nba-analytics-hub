@@ -124,8 +124,8 @@ describe('createGamesServiceClient', () => {
     const mockGame: GamesServiceGame = {
       id: 'game id with spaces',
       provider: 'ball_dont_lie',
-      homeTeam: { id: 'NYK', name: 'New York Knicks', externalId: 9 },
-      awayTeam: { id: 'MIA', name: 'Miami Heat', externalId: 6 },
+      homeTeam: { id: 'NYK', name: 'New York Knicks' },
+      awayTeam: { id: 'MIA', name: 'Miami Heat' },
       startTime: '2025-01-02T01:00:00Z',
       status: 'In Progress',
       statusKind: 'IN_PROGRESS',

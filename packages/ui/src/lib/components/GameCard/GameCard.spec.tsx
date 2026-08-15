@@ -7,8 +7,8 @@ describe('GameCard', () => {
   const baseGame: Game = {
     id: '1',
     provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-    awayTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
+    homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+    awayTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
     startTime: '2025-01-15T18:30:00.000Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',
@@ -100,8 +100,8 @@ describe('GameCard', () => {
   it('should handle single-word team names', () => {
     const singleWordGame: Game = {
       ...baseGame,
-      homeTeam: { id: 'HEAT', name: 'Heat', externalId: 15 },
-      awayTeam: { id: 'JAZZ', name: 'Jazz', externalId: 16 },
+      homeTeam: { id: 'HEAT', name: 'Heat' },
+      awayTeam: { id: 'JAZZ', name: 'Jazz' },
     };
     render(<GameCard game={singleWordGame} />);
     expect(screen.getByText('Heat')).toBeInTheDocument();
@@ -114,8 +114,8 @@ describe('GameCard', () => {
   it('should handle empty team names gracefully', () => {
     const emptyNameGame: Game = {
       ...baseGame,
-      homeTeam: { id: 'TBD', name: '', externalId: 99 },
-      awayTeam: { id: 'TBD2', name: '   ', externalId: 98 },
+      homeTeam: { id: 'TBD', name: '' },
+      awayTeam: { id: 'TBD2', name: '   ' },
     };
     render(<GameCard game={emptyNameGame} />);
     // Empty/whitespace names should render without crashing

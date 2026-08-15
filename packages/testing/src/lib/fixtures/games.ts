@@ -4,8 +4,8 @@ export const mockGames: Game[] = [
   {
     id: 'game-1',
     provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-    awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+    homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+    awayTeam: { id: 'BOS', name: 'Boston Celtics' },
     startTime: '2025-01-01T00:00:00Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',
@@ -15,8 +15,8 @@ export const mockGames: Game[] = [
   {
     id: 'game-2',
     provider: 'mock-provider',
-    homeTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
-    awayTeam: { id: 'GSW', name: 'Golden State Warriors', externalId: 10 },
+    homeTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
+    awayTeam: { id: 'GSW', name: 'Golden State Warriors' },
     startTime: '2025-01-02T02:00:00Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',

@@ -13,7 +13,9 @@
     "serve:web": "nx serve web",
     "serve:api": "nx serve api",
     "clean:api-dist": "node tools/clean-api-dist.mjs",
-    "coverage:summary": "node tools/coverage-summary.js"
+    "coverage:summary": "node tools/coverage-summary.js",
+    "refresh:openapi": "node tools/refresh-openapi-spec.mjs",
+    "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/types/src/lib/games/generated.ts"
   },
   "private": true,
   "devDependencies": {
@@ -65,6 +67,7 @@
     "jsonc-eslint-parser": "^2.1.0",
     "msw": "^2.6.0",
     "nx": "22.1.0",
+    "openapi-typescript": "^7.13.0",
     "postcss": "^8.5.6",
     "prettier": "^2.6.2",
     "shadcn": "^3.5.1",
