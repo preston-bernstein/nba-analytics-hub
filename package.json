@@ -15,7 +15,8 @@
     "clean:api-dist": "node tools/clean-api-dist.mjs",
     "coverage:summary": "node tools/coverage-summary.js",
     "refresh:openapi": "node tools/refresh-openapi-spec.mjs",
-    "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/types/src/lib/games/generated.ts"
+    "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/types/src/lib/games/generated.ts",
+    "knip": "knip"
   },
   "private": true,
   "devDependencies": {
@@ -53,7 +54,6 @@
     "@vitest/ui": "^3.0.0",
     "ajv": "^8.0.0",
     "autoprefixer": "^10.4.22",
-    "empathic": "^2.0.0",
     "esbuild": "^0.19.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
@@ -62,9 +62,11 @@
     "eslint-plugin-playwright": "^1.6.2",
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "5.0.0",
+    "fallow": "^3.16.0",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
     "jsonc-eslint-parser": "^2.1.0",
+    "knip": "^6.32.2",
     "msw": "^2.6.0",
     "nx": "22.1.0",
     "openapi-typescript": "^7.13.0",
@@ -88,16 +90,13 @@
     "web",
     "web-e2e",
     "api",
-    "types",
-    "packages"
+    "types"
   ],
   "dependencies": {
     "clsx": "^2.1.1",
     "express": "^4.21.2",
-    "lucide-react": "^0.555.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "6.29.0",
-    "tailwind-merge": "^3.4.0"
+    "react-router-dom": "6.29.0"
   }
 }

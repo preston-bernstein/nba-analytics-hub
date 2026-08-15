@@ -1,6 +1,6 @@
 import type { Game } from '@nba-analytics-hub/types';
 import { applyGamesQueryParams, type GamesQueryParams } from '../../shared/gamesQuery.js';
-import { fetchJson } from '../http.js';
+import { fetchJson, normalizeBasePath } from '../http.js';
 
 export interface GamesClientOptions {
   baseUrl: string;
@@ -27,16 +27,4 @@ export function createGamesClient(options: GamesClientOptions): GamesClient {
   return {
     getGames: fetchGames,
   };
-}
-
-function normalizeBasePath(basePath?: string): string {
-  if (!basePath) return '';
-
-  const trimmed = basePath.trim();
-  if (!trimmed) return '';
-
-  const withLeadingSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-  return withLeadingSlash.endsWith('/')
-    ? withLeadingSlash.slice(0, -1)
-    : withLeadingSlash;
 }

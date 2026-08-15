@@ -4,7 +4,7 @@ import {
   type PredictorServiceClient,
   createPredictorServiceClient,
 } from '@nba-analytics-hub/data-access';
-import { sendError } from './shared/routeUtils.js';
+import { createRouteHandler } from './shared/routeUtils.js';
 
 interface PredictRouteDeps {
   predictorService?: PredictorServiceClient;
@@ -26,7 +26,13 @@ export function registerPredictRoutes(
   const predictorService = buildPredictorService(deps);
   const logger = deps?.logger ?? console;
 
-  app.get('/predict', async (req: Request, res: Response) => {
+  const handlePredict = createRouteHandler<PredictionResponse>(
+    logger,
+    'Failed to fetch prediction',
+    'Unable to fetch prediction',
+  );
+
+  app.get('/predict', (req: Request, res: Response) => {
     const homeTeam = req.query.home_team as string | undefined;
     const awayTeam = req.query.away_team as string | undefined;
     const gameDate = req.query.game_date as string | undefined;
@@ -37,25 +43,20 @@ export function registerPredictRoutes(
       });
     }
 
-    try {
+    return handlePredict(async () => {
       const serviceResp = await predictorService.predict({
         home: homeTeam,
         away: awayTeam,
         date: gameDate,
       });
 
-      const prediction: PredictionResponse = {
+      return {
         homeTeamId: serviceResp.home_team,
         awayTeamId: serviceResp.away_team,
         homeWinProbability: serviceResp.prob_home_win,
         awayWinProbability: 1 - serviceResp.prob_home_win,
         modelVersion: 'predictor-service',
       };
-
-      return res.status(200).json(prediction);
-    } catch (err) {
-      logger.error('Failed to fetch prediction', err);
-      return sendError(res, { error: 'Unable to fetch prediction' });
-    }
+    }, req, res);
   });
 }

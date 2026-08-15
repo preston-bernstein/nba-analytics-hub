@@ -56,3 +56,4 @@ docs-internal/
 debug-storybook.log
 **/storybook-static/
 web/vercel.json
+.fallow/
