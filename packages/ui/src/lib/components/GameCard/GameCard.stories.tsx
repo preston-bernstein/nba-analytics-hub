@@ -21,8 +21,8 @@ type Story = StoryObj<typeof GameCard>;
 const baseGame: Game = {
   id: '1',
   provider: 'mock-provider',
-  homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-  awayTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
+  homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+  awayTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
   startTime: new Date().toISOString(),
   status: 'Scheduled',
   statusKind: 'SCHEDULED',

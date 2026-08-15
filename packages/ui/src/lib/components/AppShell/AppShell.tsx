@@ -24,5 +24,3 @@ export function AppShell({ title, nav, children, footer }: AppShellProps) {
     </div>
   );
 }
-
-export default AppShell;

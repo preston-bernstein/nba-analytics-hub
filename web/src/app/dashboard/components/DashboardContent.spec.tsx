@@ -6,8 +6,8 @@ import { DashboardContent } from './DashboardContent';
 const game: Game = {
   id: 'game-1',
   provider: 'mock-provider',
-  homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-  awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+  homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+  awayTeam: { id: 'BOS', name: 'Boston Celtics' },
   startTime: '2025-01-15T18:30:00.000Z',
   status: 'Scheduled',
   statusKind: 'SCHEDULED',

@@ -1,5 +1,5 @@
 import type { PredictionRequest, PredictionResponse } from '@nba-analytics-hub/types';
-import { fetchJson } from '../http.js';
+import { fetchJson, normalizeBasePath } from '../http.js';
 
 export interface PredictorClientOptions {
   baseUrl: string;
@@ -25,16 +25,4 @@ export function createPredictorClient(options: PredictorClientOptions): Predicto
       return fetchJson<PredictionResponse>(baseUrl, url, 'Predictor');
     },
   };
-}
-
-function normalizeBasePath(basePath?: string): string {
-  if (!basePath) return '';
-
-  const trimmed = basePath.trim();
-  if (!trimmed) return '';
-
-  const withLeadingSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-  return withLeadingSlash.endsWith('/')
-    ? withLeadingSlash.slice(0, -1)
-    : withLeadingSlash;
 }

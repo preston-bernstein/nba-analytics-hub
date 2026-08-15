@@ -1,0 +1,273 @@
+openapi: 3.1.0
+info:
+  title: NBA Data Service
+  version: "1.0.0"
+  description: HTTP contract for the Go games data service consumed by the Node BFF.
+servers:
+  - url: http://localhost:4000
+paths:
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthCheckResponse"
+        "503":
+          description: Service is shutting down or unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
+  /ready:
+    get:
+      summary: Readiness probe
+      responses:
+        "200":
+          description: Service is ready to serve traffic
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadyResponse"
+        "503":
+          description: Service is not ready (poller not warmed or failing)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
+  /games:
+    get:
+      summary: Get games by date
+      parameters:
+        - name: date
+          in: query
+          required: true
+          description: YYYY-MM-DD date.
+          schema:
+            type: string
+            pattern: "^\\d{4}-\\d{2}-\\d{2}$"
+      responses:
+        "400":
+          description: Missing or invalid date format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Games for the requested date
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TodayResponse"
+        "502":
+          $ref: "#/components/responses/UpstreamError"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
+  /games/{id}:
+    get:
+      summary: Get a game by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Invalid or missing game id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: The requested game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Game"
+        "404":
+          description: Game not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "405":
+          $ref: "#/components/responses/MethodNotAllowed"
+components:
+  parameters:
+  responses:
+    UpstreamError:
+      description: Upstream provider unavailable
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+        examples:
+          unavailable:
+            value:
+              error: upstream temporarily unavailable
+              requestId: abc123
+    MethodNotAllowed:
+      description: Method not allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            default:
+              value:
+                error: method not allowed
+  schemas:
+    HealthCheckResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ok]
+      required: [status]
+    TodayResponse:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        games:
+          type: array
+          items:
+            $ref: "#/components/schemas/Game"
+      required: [date, games]
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+        provider:
+          type: string
+        homeTeam:
+          $ref: "#/components/schemas/Team"
+        awayTeam:
+          $ref: "#/components/schemas/Team"
+        startTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+        statusKind:
+          type: string
+          enum: [SCHEDULED, IN_PROGRESS, FINAL, POSTPONED, CANCELED]
+        score:
+          $ref: "#/components/schemas/Score"
+        meta:
+          $ref: "#/components/schemas/GameMeta"
+      required:
+        [id, provider, homeTeam, awayTeam, startTime, status, statusKind, score, meta]
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        fullName:
+          type: string
+        abbreviation:
+          type: string
+        city:
+          type: string
+        conference:
+          type: string
+        division:
+          type: string
+      required: [id, name]
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        position:
+          type: string
+        heightFeet:
+          type: integer
+        heightInches:
+          type: integer
+        weightPounds:
+          type: integer
+        height:
+          type: string
+        weight:
+          type: string
+        team:
+          $ref: "#/components/schemas/Team"
+        meta:
+          $ref: "#/components/schemas/PlayerMeta"
+      required: [id, firstName, lastName, team, meta]
+    PlayerMeta:
+      type: object
+      properties:
+        upstreamPlayerId:
+          type: integer
+        college:
+          type: string
+        country:
+          type: string
+        jerseyNumber:
+          type: string
+        height:
+          type: string
+        weight:
+          type: string
+        draftYear:
+          type: integer
+        draftRound:
+          type: integer
+        draftNumber:
+          type: integer
+      required: [upstreamPlayerId]
+    Score:
+      type: object
+      properties:
+        home:
+          type: integer
+        away:
+          type: integer
+      required: [home, away]
+    GameMeta:
+      type: object
+      properties:
+        season:
+          type: string
+        upstreamGameId:
+          type: integer
+        period:
+          type: integer
+        postseason:
+          type: boolean
+        time:
+          type: string
+      required: [season, upstreamGameId]
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        requestId:
+          type: string
+      required: [error]
+    ReadyResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [ready]
+      required: [status]

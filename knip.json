@@ -1,0 +1,42 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["web/src/main.tsx", "api/src/main.ts"],
+      "project": ["web/src/**/*.{ts,tsx}", "api/src/**/*.ts"],
+      "ignore": ["web/src/**/*.spec.{ts,tsx}", "api/src/**/*.spec.ts"]
+    },
+    "packages/domain": {
+      "entry": "src/index.ts",
+      "project": "src/**/*.ts",
+      "ignore": ["src/**/*.spec.ts"]
+    },
+    "packages/data-access": {
+      "entry": "src/index.ts",
+      "project": "src/**/*.ts",
+      "ignore": ["src/**/*.spec.ts"]
+    },
+    "packages/ui": {
+      "entry": "src/index.ts",
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/**/*.spec.{ts,tsx}", "src/**/*.stories.{ts,tsx}"]
+    },
+    "packages/config": {
+      "entry": "src/index.ts",
+      "project": "src/**/*.ts",
+      "ignore": ["src/**/*.spec.ts"]
+    },
+    "packages/testing": {
+      "entry": "src/index.ts",
+      "project": "src/**/*.ts",
+      "ignore": ["src/**/*.spec.ts"]
+    }
+  },
+  "ignore": [
+    "codegen/**",
+    "packages/types/**",
+    "**/*.d.ts",
+    "**/dist/**",
+    "**/out-tsc/**"
+  ]
+}

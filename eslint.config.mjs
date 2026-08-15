@@ -11,6 +11,7 @@ export default [
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
       '**/test-output',
+      'packages/types/src/lib/games/generated.ts',
     ],
   },
   {

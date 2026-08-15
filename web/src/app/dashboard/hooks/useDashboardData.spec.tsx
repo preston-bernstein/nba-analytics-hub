@@ -10,8 +10,8 @@ const mockGames: Game[] = [
   {
     id: 'game-1',
     provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-    awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+    homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+    awayTeam: { id: 'BOS', name: 'Boston Celtics' },
     startTime: '2025-01-01T00:00:00Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',

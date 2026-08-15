@@ -42,5 +42,3 @@ export function PredictionBadge({ prediction }: PredictionBadgeProps) {
     </div>
   );
 }
-
-export default PredictionBadge;

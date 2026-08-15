@@ -5,7 +5,7 @@ import type {
 } from '@nba-analytics-hub/types';
 
 export interface PredictorServiceClientOptions {
-  baseUrl: string; // Note: wire from the API env (e.g., PREDICTOR_SERVICE_URL) when integrating the BFF.
+  baseUrl: string;
 }
 
 export interface PredictorServiceClient {

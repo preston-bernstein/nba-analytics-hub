@@ -15,8 +15,8 @@ export const todayResponse: GamesServiceTodayResponse = {
     {
       id: 'game-1',
       provider: 'ball_dont_lie',
-      homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-      awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+      homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+      awayTeam: { id: 'BOS', name: 'Boston Celtics' },
       startTime: '2025-01-01T00:00:00Z',
       status: 'Scheduled',
       statusKind: 'SCHEDULED',
@@ -29,8 +29,8 @@ export const todayResponse: GamesServiceTodayResponse = {
 export const gameDetail: GamesServiceGame = {
   id: 'game-2',
   provider: 'ball_dont_lie',
-  homeTeam: { id: 'NYK', name: 'New York Knicks', externalId: 9 },
-  awayTeam: { id: 'MIA', name: 'Miami Heat', externalId: 6 },
+  homeTeam: { id: 'NYK', name: 'New York Knicks' },
+  awayTeam: { id: 'MIA', name: 'Miami Heat' },
   startTime: '2025-01-02T01:00:00Z',
   status: 'In Progress',
   statusKind: 'IN_PROGRESS',
@@ -55,8 +55,8 @@ export const mockGames: Game[] = [
   {
     id: 'game-1',
     provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks', externalId: 14 },
-    awayTeam: { id: 'BOS', name: 'Boston Celtics', externalId: 2 },
+    homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+    awayTeam: { id: 'BOS', name: 'Boston Celtics' },
     startTime: '2025-01-01T00:00:00Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',
@@ -66,8 +66,8 @@ export const mockGames: Game[] = [
   {
     id: 'game-2',
     provider: 'mock-provider',
-    homeTeam: { id: 'LAL', name: 'Los Angeles Lakers', externalId: 13 },
-    awayTeam: { id: 'GSW', name: 'Golden State Warriors', externalId: 10 },
+    homeTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
+    awayTeam: { id: 'GSW', name: 'Golden State Warriors' },
     startTime: '2025-01-02T02:00:00Z',
     status: 'Scheduled',
     statusKind: 'SCHEDULED',
