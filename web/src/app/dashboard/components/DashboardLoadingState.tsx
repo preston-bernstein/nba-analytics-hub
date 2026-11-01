@@ -1,32 +1,28 @@
+import { Card, Skeleton } from '@nba-analytics-hub/ui';
+
 function SkeletonCard() {
   return (
-    <div className="animate-pulse">
-      <div className="rounded-lg border border-border bg-card p-4 shadow-sm">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="h-6 w-20 rounded-full bg-neutral-200" />
-          <div className="h-4 w-28 rounded bg-neutral-200" />
+    <div>
+      <Card className="gap-3 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-6 w-20 rounded-full" />
+          <Skeleton className="h-4 w-28" />
         </div>
         <div className="space-y-2">
-          <div className="flex items-center justify-between rounded-md bg-neutral-100 px-3 py-2">
-            <div className="h-5 w-32 rounded bg-neutral-200" />
-            <div className="h-6 w-10 rounded bg-neutral-200" />
-          </div>
-          <div className="flex items-center justify-between rounded-md bg-neutral-100 px-3 py-2">
-            <div className="h-5 w-28 rounded bg-neutral-200" />
-            <div className="h-6 w-10 rounded bg-neutral-200" />
-          </div>
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
         </div>
-      </div>
-      <div className="mt-3 rounded-lg border border-border bg-card p-3 shadow-sm">
-        <div className="mb-3 flex justify-between">
-          <div className="h-4 w-20 rounded bg-neutral-200" />
-          <div className="h-3 w-24 rounded bg-neutral-200" />
+      </Card>
+      <Card className="mt-3 gap-3 rounded-lg p-3">
+        <div className="flex justify-between">
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-3 w-24" />
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="h-16 rounded-lg bg-neutral-100" />
-          <div className="h-16 rounded-lg bg-neutral-100" />
+          <Skeleton className="h-16 rounded-lg" />
+          <Skeleton className="h-16 rounded-lg" />
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

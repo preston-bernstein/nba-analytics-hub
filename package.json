@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "test:all": "nx run-many -t test --all",
-    "lint:all": "nx run-many -t lint --all --output-style=stream",
+    "lint:all": "oxlint --deny-warnings && nx run-many -t lint --all --output-style=stream",
     "test:ui": "nx test ui",
     "test:api": "nx test api",
     "test:domain": "nx test domain",
@@ -16,7 +16,8 @@
     "coverage:summary": "node tools/coverage-summary.js",
     "refresh:openapi": "node tools/refresh-openapi-spec.mjs",
     "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/types/src/lib/games/generated.ts",
-    "knip": "knip"
+    "knip": "knip",
+    "lint:ox": "oxlint --deny-warnings"
   },
   "private": true,
   "devDependencies": {
@@ -57,11 +58,7 @@
     "esbuild": "^0.19.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
-    "eslint-plugin-import": "2.31.0",
-    "eslint-plugin-jsx-a11y": "6.10.1",
     "eslint-plugin-playwright": "^1.6.2",
-    "eslint-plugin-react": "7.35.0",
-    "eslint-plugin-react-hooks": "5.0.0",
     "fallow": "^3.16.0",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
@@ -70,6 +67,7 @@
     "msw": "^2.6.0",
     "nx": "22.1.0",
     "openapi-typescript": "^7.13.0",
+    "oxlint": "^1.90.0",
     "postcss": "^8.5.6",
     "prettier": "^2.6.2",
     "shadcn": "^3.5.1",
