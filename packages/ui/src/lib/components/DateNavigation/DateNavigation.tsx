@@ -1,8 +1,5 @@
-import {
-  buttonSecondary,
-  buttonSecondaryDisabled,
-  buttonSecondaryMuted,
-} from '../../styles';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '../ui/button';
 
 export interface DateNavigationProps {
   displayDate: string;
@@ -25,32 +22,34 @@ export function DateNavigation({
 }: DateNavigationProps) {
   return (
     <div className="flex items-center gap-3">
-      <button
+      <Button
+        variant="outline"
+        size="icon"
         onClick={onPreviousDay}
         disabled={disablePrevious}
-        className={disablePrevious ? buttonSecondaryDisabled : buttonSecondary}
         aria-label="Previous day"
       >
-        ←
-      </button>
+        <ChevronLeft />
+      </Button>
 
       <span className="min-w-[140px] text-center text-lg font-semibold text-foreground">
         {displayDate}
       </span>
 
-      <button
+      <Button
+        variant="outline"
+        size="icon"
         onClick={onNextDay}
         disabled={disableNext}
-        className={disableNext ? buttonSecondaryDisabled : buttonSecondary}
         aria-label="Next day"
       >
-        →
-      </button>
+        <ChevronRight />
+      </Button>
 
       {showTodayButton && (
-        <button onClick={onToday} className={`ml-2 ${buttonSecondaryMuted}`}>
+        <Button variant="secondary" className="ml-2" onClick={onToday}>
           Today
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -56,7 +56,7 @@ export function useDashboardData(): DashboardDataState {
     [],
   );
 
-  const localTimeZone = useMemo(getLocalTimeZone, []);
+  const localTimeZone = useMemo(() => getLocalTimeZone(), []);
 
   const predictorClient = useMemo(
     () =>
