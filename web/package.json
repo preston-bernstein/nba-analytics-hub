@@ -73,6 +73,7 @@
     }
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.105.1",
     "lucide-react": "^1.66.0"
   }
 }
