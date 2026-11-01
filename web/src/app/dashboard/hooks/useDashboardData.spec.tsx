@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { renderWithQueryClient } from '../../../test-utils/renderWithQueryClient';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -38,12 +39,22 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 function HookHarness() {
-  const { selectedDate, goToPreviousDay, goToNextDay, goToToday } =
-    useDashboardData();
+  const {
+    selectedDate,
+    games,
+    predictions,
+    loadingGames,
+    goToPreviousDay,
+    goToNextDay,
+    goToToday,
+  } = useDashboardData();
 
   return (
     <div>
       <span data-testid="selected-date">{selectedDate}</span>
+      <span data-testid="games-count">{games.length}</span>
+      <span data-testid="predictions-count">{Object.keys(predictions).length}</span>
+      <span data-testid="loading-games">{String(loadingGames)}</span>
       <button onClick={goToPreviousDay} type="button">
         Prev
       </button>
@@ -129,7 +140,7 @@ describe('useDashboardData', () => {
     const yesterday = addDays(today, -1);
     const tomorrow = addDays(today, 1);
 
-    render(<HookHarness />);
+    renderWithQueryClient(<HookHarness />);
 
     await waitFor(() => {
       expect(screen.getByTestId('selected-date')).toHaveTextContent(today);
@@ -155,4 +166,36 @@ describe('useDashboardData', () => {
       expect(screen.getByTestId('selected-date')).toHaveTextContent(today);
     });
   });
+
+  it('serves a date it has already loaded from the cache', async () => {
+    let gamesRequests = 0;
+    let predictRequests = 0;
+    server.use(
+      http.get('*/games', () => {
+        gamesRequests += 1;
+        return HttpResponse.json(mockGames);
+      }),
+      http.get('*/predict', () => {
+        predictRequests += 1;
+        return HttpResponse.json(mockPrediction);
+      }),
+    );
+
+    renderWithQueryClient(<HookHarness />);
+    await waitFor(() => expect(screen.getByTestId('games-count')).toHaveTextContent('1'));
+    await waitFor(() => expect(screen.getByTestId('predictions-count')).toHaveTextContent('1'));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prev' }));
+    await waitFor(() => expect(gamesRequests).toBe(2));
+    await waitFor(() => expect(screen.getByTestId('loading-games')).toHaveTextContent('false'));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await waitFor(() => expect(screen.getByTestId('games-count')).toHaveTextContent('1'));
+
+    // Today was cached: no new games request, and the same matchup's
+    // prediction is not fetched again.
+    expect(gamesRequests).toBe(2);
+    expect(predictRequests).toBe(1);
+  });
 });
+

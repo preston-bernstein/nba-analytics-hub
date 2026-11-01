@@ -28,13 +28,14 @@ export interface GamesServiceClient {
   ): Promise<GamesServiceGameDetailResponse>;
 }
 
+function buildHeaders(requestId?: string): Record<string, string> | undefined {
+  return requestId ? { 'X-Request-ID': requestId } : undefined;
+}
+
 export function createGamesServiceClient(
   options: GamesServiceClientOptions,
 ): GamesServiceClient {
   const { baseUrl } = options;
-
-  const buildHeaders = (requestId?: string): Record<string, string> | undefined =>
-    requestId ? { 'X-Request-ID': requestId } : undefined;
 
   const fetchGames = async (
     params?: GetGamesParams,
@@ -49,11 +50,11 @@ export function createGamesServiceClient(
 
   return {
     async checkHealth(
-      options?: GamesServiceRequestOptions,
+      requestOptions?: GamesServiceRequestOptions,
     ): Promise<GamesServiceHealthResponse> {
       const url = new URL('/health', baseUrl);
       return fetchJson<GamesServiceHealthResponse>(baseUrl, url, 'Games service', {
-        headers: buildHeaders(options?.requestId),
+        headers: buildHeaders(requestOptions?.requestId),
       });
     },
 
@@ -63,11 +64,11 @@ export function createGamesServiceClient(
 
     async getGameById(
       gameId: string,
-      options?: GamesServiceRequestOptions,
+      requestOptions?: GamesServiceRequestOptions,
     ): Promise<GamesServiceGame> {
       const url = new URL(`/games/${encodeURIComponent(gameId)}`, baseUrl);
       return fetchJson<GamesServiceGame>(baseUrl, url, 'Games service', {
-        headers: buildHeaders(options?.requestId),
+        headers: buildHeaders(requestOptions?.requestId),
       });
     },
   };

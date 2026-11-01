@@ -1,7 +1,9 @@
 import type { Game, GameStatus, PredictionResponse } from '@nba-analytics-hub/types';
 import { getPredictionDisplay } from '@nba-analytics-hub/domain';
 import { formatEasternTime } from '../../utils/formatEasternTime';
-import { statusBadge } from '../../styles';
+import { cn } from '../../utils/cn';
+import { Badge } from '../ui/badge';
+import { Card } from '../ui/card';
 
 export interface GameCardProps {
   game: Game;
@@ -146,11 +148,12 @@ export function GameCard({ game, prediction }: GameCardProps) {
     : null;
 
   return (
-    <div
+    <Card
       aria-label="game-card"
-      className={`w-full max-w-[400px] mx-auto rounded-lg border border-border bg-card p-4 shadow-sm transition-all ${
-        isLive ? 'ring-1 ring-rose-200' : ''
-      }`}
+      className={cn(
+        'mx-auto w-full max-w-[400px] gap-0 rounded-lg p-4 transition-all',
+        isLive && 'ring-1 ring-rose-200',
+      )}
     >
       <div
         className="grid w-full items-center gap-x-4 gap-y-2"
@@ -179,11 +182,15 @@ export function GameCard({ game, prediction }: GameCardProps) {
             {formatEasternTime(startTime)}
           </span>
         ) : (
-          <span
-            className={`${statusBadge} ${config.className} justify-self-center whitespace-nowrap px-2 py-0.5 text-[10px] tracking-normal`}
+          <Badge
+            variant="outline"
+            className={cn(
+              'justify-self-center px-2 py-0.5 text-[10px] font-semibold uppercase',
+              config.className,
+            )}
           >
             {badgeLabel}
-          </span>
+          </Badge>
         )}
 
         {/* Home Team - Right Side - Stacked Vertically */}
@@ -225,6 +232,6 @@ export function GameCard({ game, prediction }: GameCardProps) {
           </span>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

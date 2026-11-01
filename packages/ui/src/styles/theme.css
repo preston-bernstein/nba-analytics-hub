@@ -1,43 +1,70 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;600;700&display=swap");
+@import "tw-animate-css";
 
+/* Tailwind scans the importing app by default. Also scan this package. */
+@source "../lib";
+
+/*
+ * Theme tokens in the shadcn/ui format for Tailwind v4.
+ * Raw values live on :root. `@theme inline` maps them to utilities
+ * (bg-card, text-muted-foreground, border-border, ...).
+ */
 :root {
   color-scheme: light;
+  --radius: 0.625rem;
+
+  --background: hsl(35 33% 97%);
+  --foreground: hsl(215 25% 15%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(215 25% 15%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(215 25% 15%);
+  --primary: #2f50d6;
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(30 14% 94%);
+  --secondary-foreground: hsl(215 25% 15%);
+  --muted: hsl(30 14% 94%);
+  --muted-foreground: hsl(215 12% 42%);
+  --accent: hsl(30 14% 91%);
+  --accent-foreground: hsl(215 25% 15%);
+  --destructive: #e11d48;
+  --border: hsl(30 15% 85%);
+  --input: hsl(30 15% 85%);
+  --ring: hsl(215 82% 56%);
+}
+
+@theme inline {
   --font-sans: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
 
-  --background: 35 33% 97%;
-  --foreground: 215 25% 15%;
-  --card: 0 0% 100%;
-  --card-foreground: 215 25% 15%;
-  --muted: 30 14% 94%;
-  --muted-foreground: 215 12% 42%;
-  --border: 30 15% 85%;
-  --ring: 215 82% 56%;
-}
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 
-body {
-  margin: 0;
-  font-family: var(--font-sans);
-  background: hsl(var(--background));
-  color: hsl(var(--foreground));
-  text-rendering: optimizeLegibility;
-}
-
-h1,
-h2,
-h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
 @theme {
-  /* border radius tokens */
-  --radius-lg: 0.5rem;
-  --radius-xl: 0.75rem;
-  --radius-2xl: 1rem;
-
   /* brand colors */
-  --color-brand-50:  #eff4ff;
+  --color-brand-50: #eff4ff;
   --color-brand-100: #dbe7ff;
   --color-brand-200: #bdd0ff;
   --color-brand-300: #94b0ff;
@@ -49,7 +76,7 @@ h3 {
   --color-brand-900: #1c2a69;
 
   /* brand-accent */
-  --color-brand-accent-50:  #fff1f2;
+  --color-brand-accent-50: #fff1f2;
   --color-brand-accent-100: #ffe4e6;
   --color-brand-accent-200: #fecdd3;
   --color-brand-accent-300: #fda4af;
@@ -61,7 +88,7 @@ h3 {
   --color-brand-accent-900: #881337;
 
   /* neutral UI shell */
-  --color-neutral-50:  #faf9f7;
+  --color-neutral-50: #faf9f7;
   --color-neutral-100: #f4f2ef;
   --color-neutral-200: #e6e2dd;
   --color-neutral-300: #d3cdc6;
@@ -71,4 +98,23 @@ h3 {
   --color-neutral-700: #4f4740;
   --color-neutral-800: #352f2a;
   --color-neutral-900: #221f1c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    margin: 0;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    letter-spacing: -0.01em;
+  }
 }

@@ -1,6 +1,8 @@
+import { Card } from '@nba-analytics-hub/ui';
+
 export function DashboardEmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-border bg-card py-16 text-center shadow-sm">
+    <Card className="items-center justify-center gap-0 rounded-lg py-16 text-center">
       <div className="mb-4 text-5xl" aria-hidden="true">
         &#127936;
       </div>
@@ -8,6 +10,6 @@ export function DashboardEmptyState() {
       <p className="mt-2 text-sm text-muted-foreground">
         Try a different date to find games.
       </p>
-    </div>
+    </Card>
   );
 }

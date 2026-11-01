@@ -1,9 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { describe, it, beforeAll, afterEach, afterAll, expect } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
 import { DashboardPage } from './DashboardPage.tsx';
+import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
 
 const mockGames: Game[] = [
   {
@@ -74,7 +75,7 @@ describe('DashboardPage', () => {
   it(
     'renders games and their predictions',
     async () => {
-      render(<DashboardPage />);
+      renderWithQueryClient(<DashboardPage />);
 
       // Header and date navigation should always be visible
       expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
@@ -103,7 +104,7 @@ describe('DashboardPage', () => {
       ),
     );
 
-    render(<DashboardPage />);
+    renderWithQueryClient(<DashboardPage />);
 
     // Header should always be visible even on error
     expect(screen.getByText('Games')).toBeInTheDocument();
@@ -126,7 +127,7 @@ describe('DashboardPage', () => {
       ),
     );
 
-    render(<DashboardPage />);
+    renderWithQueryClient(<DashboardPage />);
 
     await waitFor(() => {
       expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
@@ -143,7 +144,7 @@ describe('DashboardPage', () => {
   it('shows empty state when no games are scheduled', async () => {
     server.use(http.get('*/games', () => HttpResponse.json([])));
 
-    render(<DashboardPage />);
+    renderWithQueryClient(<DashboardPage />);
 
     await waitFor(() => {
       expect(screen.getByText(/No games scheduled/i)).toBeInTheDocument();
@@ -155,7 +156,7 @@ describe('DashboardPage', () => {
       http.get('*/games', () => HttpResponse.json([mockGames[0]])),
     );
 
-    render(<DashboardPage />);
+    renderWithQueryClient(<DashboardPage />);
 
     await waitFor(() => {
       expect(screen.getByText('1 game scheduled')).toBeInTheDocument();
@@ -177,7 +178,7 @@ describe('DashboardPage', () => {
       }),
     );
 
-    render(<DashboardPage />);
+    renderWithQueryClient(<DashboardPage />);
 
     // Wait for games to load first
     await waitFor(() => {

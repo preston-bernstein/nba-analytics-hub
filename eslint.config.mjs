@@ -1,18 +1,24 @@
 import nx from '@nx/eslint-plugin';
-import importPlugin from 'eslint-plugin-import';
+import tseslint from 'typescript-eslint';
 
+// oxlint does the general linting (see .oxlintrc.json).
+// ESLint only runs the Nx workspace rules, which oxlint does not have.
 export default [
   ...nx.configs['flat/base'],
-  ...nx.configs['flat/typescript'],
-  ...nx.configs['flat/javascript'],
   {
     ignores: [
       '**/dist',
+      '**/out-tsc',
+      '**/test-output',
+      '**/storybook-static',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
-      '**/test-output',
       'packages/types/src/lib/games/generated.ts',
     ],
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
+    languageOptions: { parser: tseslint.parser },
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
@@ -30,32 +36,6 @@ export default [
           ],
         },
       ],
-    },
-  },
-  {
-    files: [
-      '**/*.ts',
-      '**/*.tsx',
-      '**/*.cts',
-      '**/*.mts',
-      '**/*.js',
-      '**/*.jsx',
-      '**/*.cjs',
-      '**/*.mjs',
-    ],
-    plugins: {
-      import: importPlugin,
-    },
-    settings: {
-      'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'],
-        },
-      },
-    },
-    rules: {
-      // Allow extensionless imports for TS/JS in bundler projects
-      'import/extensions': 'off',
     },
   },
 ];
