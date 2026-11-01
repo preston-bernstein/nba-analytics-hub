@@ -1,0 +1,21 @@
+{
+	admin off
+}
+
+:80 {
+	encode zstd gzip
+
+	# /api/games -> API /games
+	handle_path /api/* {
+		reverse_proxy {$API_UPSTREAM}
+	}
+
+	handle {
+		root * /srv
+		# Hashed assets never change; index.html must always be fresh.
+		header /assets/* Cache-Control "public, max-age=31536000, immutable"
+		header / Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
