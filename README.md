@@ -11,6 +11,7 @@ Nx monorepo for the user-facing stack of an NBA analytics system.
 - `web` – React/Vite dashboard for games and model outputs.
 - `api` – Node/Express BFF that fronts the Go games service and Python predictor.
 - `packages/*` – shared TS libs (`types`, `domain`, `data-access`, `ui`, `config`, `testing`).
+- `infra` – AWS CDK app that deploys the API to ECS Fargate.
 
 ---
 
@@ -23,6 +24,7 @@ This project applies production patterns at portfolio scale:
 - **Shared type system** – Single source of truth in `packages/types` flows through all layers.
 - **Test discipline** – Vitest across the stack with >95% coverage enforced in CI.
 - **Layered design** – Domain logic isolated from UI; data-access clients decoupled from transport.
+- **Infrastructure as code** – AWS CDK (TypeScript) stack for the API on ECS Fargate, checked by assertion tests in CI.
 
 Related repositories:
 - [nba-data-service](https://github.com/preston-bernstein/nba-data-service) (Go) – realtime games feed.
@@ -48,6 +50,7 @@ web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ## Projects
 - `web/` – React + Vite frontend.
 - `api/` – Express BFF.
+- `infra/` – AWS CDK app (ECS Fargate + load balancer for the API).
 - `packages/types` – canonical models (Game, Prediction, etc.).
 - `packages/domain` – pure domain helpers.
 - `packages/data-access` – HTTP clients (frontend ↔ api; api ↔ Go/Python).
@@ -89,7 +92,7 @@ npm run test:all
 ---
 
 ## Repo Conventions
-- Package-based Nx layout (apps: `web`, `api`; libs under `packages/*`).
+- Package-based Nx layout (apps: `web`, `api`, `infra`; libs under `packages/*`).
 - Keep `tsconfig.base.json` NodeNext settings; no `apps/` migration or `project.json` additions.
 - Respect layering: apps depend on libs; libs never depend on apps; UI imports domain/data-access, not api internals.
 - Shared types live only in `packages/types`; do not duplicate.

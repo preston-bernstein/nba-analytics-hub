@@ -4,4 +4,5 @@ export default [
   'packages/domain/vitest.config.ts',
   'packages/data-access/vitest.config.ts',
   'packages/config/vitest.config.ts',
+  'infra/vitest.config.ts',
 ];

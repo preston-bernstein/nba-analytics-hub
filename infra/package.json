@@ -1,0 +1,64 @@
+{
+  "name": "@nba-analytics-hub/infra",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "nx": {
+    "targets": {
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npm run test",
+          "cwd": "infra"
+        }
+      },
+      "synth": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx cdk synth",
+          "cwd": "infra"
+        }
+      },
+      "diff": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx cdk diff",
+          "cwd": "infra"
+        }
+      },
+      "deploy": {
+        "executor": "nx:run-commands",
+        "dependsOn": [
+          {
+            "projects": [
+              "@nba-analytics-hub/api"
+            ],
+            "target": "prune"
+          }
+        ],
+        "options": {
+          "command": "npx cdk deploy --require-approval broadening",
+          "cwd": "infra"
+        }
+      },
+      "destroy": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "npx cdk destroy --force",
+          "cwd": "infra"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.275.0",
+    "constructs": "10.8.1"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1147.0",
+    "tsx": "^4.20.0"
+  }
+}
