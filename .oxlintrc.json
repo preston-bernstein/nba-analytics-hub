@@ -50,6 +50,23 @@
       "rules": {
         "oxc/no-async-endpoint-handlers": "off"
       }
+    },
+    {
+      "files": [
+        "infra/**/*.spec.ts"
+      ],
+      "rules": {
+        "vitest/expect-expect": [
+          "error",
+          {
+            "assertFunctionNames": [
+              "expect",
+              "*.has*",
+              "*.resourceCountIs"
+            ]
+          }
+        ]
+      }
     }
   ]
 }
