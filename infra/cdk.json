@@ -1,0 +1,7 @@
+{
+  "app": "npx tsx bin/app.ts",
+  "context": {
+    "gamesServiceUrl": "http://games.internal:4000",
+    "predictorServiceUrl": "http://predictor.internal:5000"
+  }
+}

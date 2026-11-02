@@ -88,7 +88,8 @@
     "web",
     "web-e2e",
     "api",
-    "types"
+    "types",
+    "infra"
   ],
   "dependencies": {
     "clsx": "^2.1.1",
