@@ -42,7 +42,10 @@ Pre-v1. Core flows work; features and polish are in progress.
 ```
 web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ```
-- Node API routes are root-mounted: `/games`, `/games/:id`, `/predict`, `/health`.
+- Node API routes are root-mounted: `/games`, `/games/:id`, `/games/stream`, `/predict`, `/health`.
+- Optional: when `KAFKA_BROKERS` is set, the API also reads `game.updated` from Kafka (group `bff`)
+  into an in-memory live-games read model. `GET /games/stream` serves that model as Server-Sent Events.
+  The event contract is in the nba-infra repo: `kafka/README.md`.
 - Types are canonical in `packages/types` and flow through all layers.
 
 ---
@@ -85,7 +88,7 @@ npm run test:all
 ---
 
 ## Contracts & Types
-- Node API: root routes listed above (`/games`, `/games/:id`, `/predict`, `/health`).
+- Node API: root routes listed above (`/games`, `/games/:id`, `/games/stream`, `/predict`, `/health`).
 - Types: single source in `packages/types`; all layers import from there.
 - No direct frontend → Go/Python calls; all traffic goes through the BFF.
 

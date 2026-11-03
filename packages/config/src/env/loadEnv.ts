@@ -2,6 +2,8 @@ export interface AppEnv {
   NODE_ENV: 'development' | 'test' | 'production';
   API_BASE_URL: string;
   PREDICTOR_BASE_URL: string;
+  /** Kafka broker list. Empty means Kafka is off. */
+  KAFKA_BROKERS: string[];
 }
 
 const allowedNodeEnv: AppEnv['NODE_ENV'][] = [
@@ -53,5 +55,12 @@ export function loadEnv(env: Record<string, string | undefined>): AppEnv {
   }
   /* c8 ignore stop */
 
-  return { NODE_ENV, API_BASE_URL, PREDICTOR_BASE_URL };
+  const KAFKA_BROKERS = (
+    pickFirst([env.KAFKA_BROKERS, process.env.KAFKA_BROKERS], '') ?? ''
+  )
+    .split(',')
+    .map((broker) => broker.trim())
+    .filter((broker) => broker.length > 0);
+
+  return { NODE_ENV, API_BASE_URL, PREDICTOR_BASE_URL, KAFKA_BROKERS };
 }
