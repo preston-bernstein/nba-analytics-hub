@@ -86,3 +86,34 @@ describe('loadEnv', () => {
     expect(env.PREDICTOR_BASE_URL).toBe('http://localhost:8000');
   });
 });
+
+describe('loadEnv KAFKA_BROKERS', () => {
+  const originalEnv = { ...process.env };
+
+  afterEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  it('is an empty list when unset', () => {
+    delete process.env.KAFKA_BROKERS;
+    expect(loadEnv({}).KAFKA_BROKERS).toEqual([]);
+  });
+
+  it('is an empty list when blank', () => {
+    delete process.env.KAFKA_BROKERS;
+    expect(loadEnv({ KAFKA_BROKERS: '  ' }).KAFKA_BROKERS).toEqual([]);
+  });
+
+  it('splits a comma list and trims entries', () => {
+    delete process.env.KAFKA_BROKERS;
+    expect(loadEnv({ KAFKA_BROKERS: 'a:9092, b:9092 ,' }).KAFKA_BROKERS).toEqual([
+      'a:9092',
+      'b:9092',
+    ]);
+  });
+
+  it('reads process env', () => {
+    process.env.KAFKA_BROKERS = 'kafka:9092';
+    expect(loadEnv({}).KAFKA_BROKERS).toEqual(['kafka:9092']);
+  });
+});

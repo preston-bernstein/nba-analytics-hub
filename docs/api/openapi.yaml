@@ -46,6 +46,30 @@ paths:
                   $ref: '#/components/schemas/Game'
         '502':
           $ref: '#/components/responses/UpstreamError'
+  /games/stream:
+    get:
+      summary: Live games as Server-Sent Events
+      description: |
+        Streams the in-memory live-games read model. It is fed by the
+        `game.updated` Kafka topic. When `KAFKA_BROKERS` is not set, the
+        snapshot is an empty array and no `game` events are sent.
+        The first event is `snapshot`. Each later update is a `game` event.
+        A `: heartbeat` comment line is sent every 15 seconds.
+      responses:
+        '200':
+          description: Event stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+              example: |
+                event: snapshot
+                data: [{"id":"game-1","statusKind":"IN_PROGRESS"}]
+
+                event: game
+                data: {"id":"game-1","statusKind":"FINAL"}
+
+                : heartbeat
   /predict:
     get:
       summary: Get win probability prediction for a matchup
