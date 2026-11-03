@@ -24,6 +24,7 @@ This project applies production patterns at portfolio scale:
 - **Shared type system** – Single source of truth in `packages/types` flows through all layers.
 - **Test discipline** – Vitest across the stack with >95% coverage enforced in CI.
 - **Layered design** – Domain logic isolated from UI; data-access clients decoupled from transport.
+- **Event-driven design** – Kafka consumer (group `bff`) feeds a live-games read model served over SSE. Idempotent by event id, retries with backoff, dead-letter topic for bad messages. Producer is the Go service, a second consumer is the Python predictor.
 - **Infrastructure as code** – AWS CDK (TypeScript) stack for the API on ECS Fargate, checked by assertion tests in CI.
 
 Related repositories:
@@ -42,10 +43,23 @@ Pre-v1. Core flows work; features and polish are in progress.
 ```
 web (React) → api (Node BFF) → games service (Go) + predictor (Python)
 ```
+
+Optional event path, on when `KAFKA_BROKERS` is set:
+
+```mermaid
+flowchart LR
+  G[Go games service] -- game.updated --> K[(Kafka)]
+  K -- group bff --> A[Node API<br/>read model]
+  K -- group predictor --> P[Python predictor<br/>prediction ledger]
+  A -- "SSE /games/stream" --> W[web]
+  A -. bad message .-> D[(game.updated.dlq)]
+  P -. bad message .-> D
+```
+
 - Node API routes are root-mounted: `/games`, `/games/:id`, `/games/stream`, `/predict`, `/health`.
 - Optional: when `KAFKA_BROKERS` is set, the API also reads `game.updated` from Kafka (group `bff`)
   into an in-memory live-games read model. `GET /games/stream` serves that model as Server-Sent Events.
-  The event contract is in the nba-infra repo: `kafka/README.md`.
+  The event contract is in the nba-infra repo: [kafka/README.md](https://github.com/preston-bernstein/nba-infra/blob/main/kafka/README.md).
 - Types are canonical in `packages/types` and flow through all layers.
 
 ---
