@@ -19,6 +19,6 @@ COPY dist .
 
 # Install runtime deps and link local workspace modules copied into dist
 RUN npm --omit=dev -f install \
-  && npm install --no-save ./workspace_modules/@nba-analytics-hub/data-access ./workspace_modules/@nba-analytics-hub/testing
+  && npm install --no-save ./workspace_modules/@nba-analytics-hub/data-access ./workspace_modules/@nba-analytics-hub/testing ./workspace_modules/@nba-analytics-hub/types ./workspace_modules/@nba-analytics-hub/domain ./workspace_modules/@nba-analytics-hub/config
 
 CMD [ "node", "main.js" ]

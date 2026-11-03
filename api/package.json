@@ -107,12 +107,16 @@
     }
   },
   "dependencies": {
+    "@nba-analytics-hub/config": "0.0.1",
     "@nba-analytics-hub/data-access": "0.0.1",
+    "@nba-analytics-hub/domain": "0.0.1",
     "@nba-analytics-hub/testing": "0.0.1",
+    "@nba-analytics-hub/types": "0.0.1",
     "@types/swagger-ui-express": "^4.1.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "kafkajs": "^2.2.4",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
