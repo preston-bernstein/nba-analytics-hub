@@ -21,7 +21,7 @@ This project applies production patterns at portfolio scale:
 
 - **Monorepo architecture** – Nx workspace with enforced dependency boundaries between apps and libs.
 - **Backend-for-frontend pattern** – Node API aggregates Go and Python services; frontend never calls them directly.
-- **Shared type system** – Single source of truth in `packages/types` flows through all layers.
+- **Shared type system** – Single source of truth in the domain packages (`packages/games`, `packages/prediction`) flows through all layers.
 - **Test discipline** – Vitest across the stack with >95% coverage enforced in CI.
 - **Layered design** – Domain logic isolated from UI; data-access clients decoupled from transport.
 - **Event-driven design** – Kafka consumer (group `bff`) feeds a live-games read model served over SSE. Idempotent by event id, retries with backoff, dead-letter topic for bad messages. Producer is the Go service, a second consumer is the Python predictor.
@@ -60,7 +60,7 @@ flowchart LR
 - Optional: when `KAFKA_BROKERS` is set, the API also reads `game.updated` from Kafka (group `bff`)
   into an in-memory live-games read model. `GET /games/stream` serves that model as Server-Sent Events.
   The event contract is in the nba-infra repo: [kafka/README.md](https://github.com/preston-bernstein/nba-infra/blob/main/kafka/README.md).
-- Types are canonical in `packages/types` and flow through all layers.
+- Types are canonical in the domain packages (`packages/games`, `packages/prediction`) and flow through all layers.
 
 ---
 
@@ -68,9 +68,10 @@ flowchart LR
 - `web/` – React + Vite frontend.
 - `api/` – Express BFF.
 - `infra/` – AWS CDK app (ECS Fargate + load balancer for the API).
-- `packages/types` – canonical models (Game, Prediction, etc.).
-- `packages/domain` – pure domain helpers.
-- `packages/data-access` – HTTP clients (frontend ↔ api; api ↔ Go/Python).
+- `packages/games` – games types, pure helpers, HTTP clients.
+- `packages/prediction` – prediction types, pure helpers, HTTP clients.
+- `packages/events` – `game.updated` event types and logic.
+- `packages/platform` – shared errors, health, HTTP helpers, date utils.
 - `packages/ui` – shared React components.
 - `packages/config` – env loading.
 - `packages/testing` – test utilities.
@@ -103,7 +104,7 @@ npm run test:all
 
 ## Contracts & Types
 - Node API: root routes listed above (`/games`, `/games/:id`, `/games/stream`, `/predict`, `/health`).
-- Types: single source in `packages/types`; all layers import from there.
+- Types: single source in the owning domain package; all layers import from there.
 - No direct frontend → Go/Python calls; all traffic goes through the BFF.
 
 ---
@@ -112,7 +113,7 @@ npm run test:all
 - Package-based Nx layout (apps: `web`, `api`, `infra`; libs under `packages/*`).
 - Keep `tsconfig.base.json` NodeNext settings; no `apps/` migration or `project.json` additions.
 - Respect layering: apps depend on libs; libs never depend on apps; UI imports domain/data-access, not api internals.
-- Shared types live only in `packages/types`; do not duplicate.
+- Shared types live only in their domain package; do not duplicate.
 
 ---
 

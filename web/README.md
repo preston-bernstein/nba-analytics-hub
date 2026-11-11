@@ -21,9 +21,8 @@ It renders the analytics dashboard and consumes the backend API via shared libra
 - **MSW** (planned) for API mocking in tests
 - Shared libraries:
   - `@nba-analytics-hub/ui` for layout and components
-  - `@nba-analytics-hub/data-access` for API clients
-  - `@nba-analytics-hub/domain` for pure helpers
-  - `@nba-analytics-hub/types` for shared types
+  - `@nba-analytics-hub/games` and `@nba-analytics-hub/prediction` for API clients, types, and pure helpers
+  - `@nba-analytics-hub/platform` for shared helpers (dates, HTTP)
 
 ---
 
@@ -33,7 +32,7 @@ The web app is responsible for:
 
 - Rendering the main dashboard layout using `AppShell` from `@nba-analytics-hub/ui`.
 - Displaying a list of games for the selected date using shared types and components.
-- Requesting predictions for games via `@nba-analytics-hub/data-access`.
+- Requesting predictions for games via `@nba-analytics-hub/prediction`.
 - Showing prediction output (win probabilities, favored team) visually.
 
 Back-end logic, data fetching implementation, and model integration live outside this app and are accessed only via shared libraries and the API.

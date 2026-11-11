@@ -3,13 +3,19 @@
   "include": [],
   "references": [
     {
-      "path": "../packages/data-access"
-    },
-    {
       "path": "./tsconfig.app.json"
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "../packages/games"
+    },
+    {
+      "path": "../packages/platform"
+    },
+    {
+      "path": "../packages/prediction"
     }
   ],
   "extends": "../tsconfig.base.json"

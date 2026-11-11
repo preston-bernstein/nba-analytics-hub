@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { app } from './app.js';
-import { startLiveGamesConsumer } from './kafka/liveGames.js';
+import { startLiveGamesConsumer } from './games/kafka/liveGames.js';
 
 const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;

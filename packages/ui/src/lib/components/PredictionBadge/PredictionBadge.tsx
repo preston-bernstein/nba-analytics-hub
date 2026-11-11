@@ -1,5 +1,5 @@
-import type { PredictionResponse } from '@nba-analytics-hub/types';
-import { getPredictionDisplay } from '@nba-analytics-hub/domain';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
+import { getPredictionDisplay } from '@nba-analytics-hub/prediction';
 import { Card } from '../ui/card';
 import { Progress } from '../ui/progress';
 

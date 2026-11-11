@@ -7,17 +7,17 @@
     "lint:all": "oxlint --deny-warnings && nx run-many -t lint --all --output-style=stream",
     "test:ui": "nx test ui",
     "test:api": "nx test api",
-    "test:domain": "nx test domain",
     "test:web": " nx test web",
-    "test:data-access": "nx test data-access",
     "serve:web": "nx serve web",
     "serve:api": "nx serve api",
     "clean:api-dist": "node tools/clean-api-dist.mjs",
     "coverage:summary": "node tools/coverage-summary.js",
     "refresh:openapi": "node tools/refresh-openapi-spec.mjs",
-    "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/types/src/lib/games/generated.ts",
+    "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/games/src/types/generated.ts",
     "knip": "knip",
-    "lint:ox": "oxlint --deny-warnings"
+    "lint:ox": "oxlint --deny-warnings",
+    "test:games": "nx test games",
+    "test:prediction": "nx test prediction"
   },
   "private": true,
   "devDependencies": {

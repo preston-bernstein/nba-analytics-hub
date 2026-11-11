@@ -1,5 +1,6 @@
-import type { Game, GameStatus, PredictionResponse } from '@nba-analytics-hub/types';
-import { getPredictionDisplay } from '@nba-analytics-hub/domain';
+import type { Game, GameStatus } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
+import { getPredictionDisplay } from '@nba-analytics-hub/prediction';
 import { formatEasternTime } from '../../utils/formatEasternTime';
 import { cn } from '../../utils/cn';
 import { Badge } from '../ui/badge';

@@ -82,7 +82,7 @@ UI components should:
 
 - Be presentational (no direct data fetching).
 - Receive typed props.
-- Delegate domain logic to `@nba-analytics-hub/domain` when needed.
+- Delegate domain logic to `@nba-analytics-hub/games` or `@nba-analytics-hub/prediction` when needed.
 
 ---
 

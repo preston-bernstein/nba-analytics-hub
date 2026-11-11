@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { AppShell } from '@nba-analytics-hub/ui';
-import { DashboardPage } from './dashboard/DashboardPage.tsx';
+import { DashboardPage } from './games/DashboardPage.tsx';
 import { createQueryClient } from './queryClient';
 
 function App() {

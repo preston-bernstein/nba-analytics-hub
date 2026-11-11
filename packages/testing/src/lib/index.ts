@@ -1,1 +1,1 @@
-export * from './fixtures/index.js';
+export * from './mockFetch.js';

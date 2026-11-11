@@ -1,11 +1,11 @@
 import express, { type Express } from 'express';
 import cors from 'cors';
-import { registerHealthRoutes } from './routes/health.js';
-import { registerGamesRoutes } from './routes/games.js';
-import { registerGamesStreamRoutes } from './routes/gamesStream.js';
-import { liveGames } from './kafka/liveGames.js';
-import { registerPredictRoutes } from './routes/predict.js';
-import { registerDocsRoutes } from './routes/docs.js';
+import { registerHealthRoutes } from './platform/health.js';
+import { registerGamesRoutes } from './games/games.js';
+import { registerGamesStreamRoutes } from './games/gamesStream.js';
+import { liveGames } from './games/kafka/liveGames.js';
+import { registerPredictRoutes } from './prediction/predict.js';
+import { registerDocsRoutes } from './platform/docs.js';
 
 export const app: Express = express();
 

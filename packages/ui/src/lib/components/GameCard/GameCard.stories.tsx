@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import type { Game } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
 import { GameCard } from './GameCard';
 
 const meta: Meta<typeof GameCard> = {
