@@ -1,4 +1,4 @@
-import type { GameUpdatedEvent } from '@nba-analytics-hub/types';
+import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { mockGames } from '@nba-analytics-hub/testing';
 import { BoundedIdSet } from './boundedIdSet.js';
 import { createGameUpdatedHandler, PoisonMessageError } from './handler.js';

@@ -1,5 +1,5 @@
-import { applyGameUpdated } from '@nba-analytics-hub/domain';
-import type { Game, GameUpdatedEvent, LiveGameEntry } from '@nba-analytics-hub/types';
+import { applyGameUpdated, type GameUpdatedEvent, type LiveGameEntry } from '@nba-analytics-hub/events';
+import type { Game } from '@nba-analytics-hub/types';
 
 export type ApplyOutcome = 'applied' | 'stale';
 export type GameListener = (game: Game) => void;

@@ -1,4 +1,4 @@
-import type { Game } from '../games/types.js';
+import type { Game } from '@nba-analytics-hub/types';
 
 // Envelope for the `game.updated` Kafka topic (schema `game.updated.v1`).
 // The JSON schema lives in the nba-infra repo: kafka/schemas/game.updated.v1.json.

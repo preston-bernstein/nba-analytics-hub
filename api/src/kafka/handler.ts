@@ -1,4 +1,4 @@
-import { parseGameUpdatedEvent } from '@nba-analytics-hub/domain';
+import { parseGameUpdatedEvent } from '@nba-analytics-hub/events';
 import type { BoundedIdSet } from './boundedIdSet.js';
 import type { LiveGamesReadModel } from './liveGamesReadModel.js';
 

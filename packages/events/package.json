@@ -1,0 +1,53 @@
+{
+  "name": "@nba-analytics-hub/events",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@nba-analytics-hub/types": "0.0.1",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "nx": {
+    "tags": [
+      "domain:events"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "dependsOn": [
+          "@nba-analytics-hub/types:build",
+          "@nba-analytics-hub/testing:build"
+        ],
+        "options": {
+          "tsConfig": "packages/events/tsconfig.lib.json",
+          "main": "packages/events/src/index.ts",
+          "outputPath": "packages/events/dist"
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": [
+            "packages/events/**/*.ts",
+            "packages/events/**/*.tsx"
+          ]
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run",
+          "cwd": "packages/events"
+        }
+      }
+    }
+  }
+}

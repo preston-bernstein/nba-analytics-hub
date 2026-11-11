@@ -115,6 +115,7 @@
     "@nba-analytics-hub/config": "0.0.1",
     "@nba-analytics-hub/data-access": "0.0.1",
     "@nba-analytics-hub/domain": "0.0.1",
+    "@nba-analytics-hub/events": "0.0.1",
     "@nba-analytics-hub/testing": "0.0.1",
     "@nba-analytics-hub/types": "0.0.1",
     "@types/swagger-ui-express": "^4.1.8",

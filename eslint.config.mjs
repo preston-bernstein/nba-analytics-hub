@@ -39,6 +39,10 @@ export default [
               onlyDependOnLibsWithTags: ['scope:shared', 'scope:legacy'],
             },
             {
+              sourceTag: 'domain:events',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:legacy', 'domain:games'],
+            },
+            {
               sourceTag: 'scope:ui',
               onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'scope:legacy', 'domain:*'],
             },

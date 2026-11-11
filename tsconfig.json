@@ -19,6 +19,9 @@
       "path": "./packages/domain"
     },
     {
+      "path": "./packages/events"
+    },
+    {
       "path": "./packages/data-access"
     },
     {

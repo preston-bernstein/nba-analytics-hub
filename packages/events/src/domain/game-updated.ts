@@ -1,9 +1,5 @@
-import type {
-  Game,
-  GameUpdatedChangeKind,
-  GameUpdatedEvent,
-  LiveGameEntry,
-} from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/types';
+import type { GameUpdatedChangeKind, GameUpdatedEvent, LiveGameEntry } from '../types/game-updated.js';
 
 export type ParseGameUpdatedResult =
   | { ok: true; event: GameUpdatedEvent }

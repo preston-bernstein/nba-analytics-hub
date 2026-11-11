@@ -4,7 +4,7 @@ import express from 'express';
 import { vi } from 'vitest';
 import { mockGames } from '@nba-analytics-hub/testing';
 import type { GamesServiceClient } from '@nba-analytics-hub/data-access';
-import type { GameUpdatedEvent } from '@nba-analytics-hub/types';
+import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { describeIfSockets } from '../test-utils/describeIfSockets.js';
 import { LiveGamesReadModel } from '../kafka/liveGamesReadModel.js';
 import { registerGamesRoutes } from './games.js';
