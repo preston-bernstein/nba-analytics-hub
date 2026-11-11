@@ -13,7 +13,6 @@
       "@nx/react/typings/image.d.ts",
       "vite/client"
     ],
-    "rootDir": "src",
     "module": "esnext",
     "moduleResolution": "bundler"
   },
