@@ -7,6 +7,9 @@
     "test:run": "vitest run"
   },
   "nx": {
+    "tags": [
+      "scope:app"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/vite:build",

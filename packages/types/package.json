@@ -14,6 +14,9 @@
     "tslib": "^2.3.0"
   },
   "nx": {
+    "tags": [
+      "scope:legacy"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
@@ -26,7 +29,10 @@
       "lint": {
         "executor": "@nx/eslint:lint",
         "options": {
-          "lintFilePatterns": ["packages/types/**/*.ts", "packages/types/**/*.tsx"]
+          "lintFilePatterns": [
+            "packages/types/**/*.ts",
+            "packages/types/**/*.tsx"
+          ]
         }
       },
       "test": {

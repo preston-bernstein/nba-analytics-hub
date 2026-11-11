@@ -15,10 +15,15 @@
     "@nba-analytics-hub/types": "0.0.1"
   },
   "nx": {
+    "tags": [
+      "scope:shared"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
-        "dependsOn": ["@nba-analytics-hub/types:build"],
+        "dependsOn": [
+          "@nba-analytics-hub/types:build"
+        ],
         "options": {
           "tsConfig": "packages/testing/tsconfig.lib.json",
           "main": "packages/testing/src/index.ts",
@@ -28,7 +33,10 @@
       "lint": {
         "executor": "@nx/eslint:lint",
         "options": {
-          "lintFilePatterns": ["packages/testing/**/*.ts", "packages/testing/**/*.tsx"]
+          "lintFilePatterns": [
+            "packages/testing/**/*.ts",
+            "packages/testing/**/*.tsx"
+          ]
         }
       },
       "test": {

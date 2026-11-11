@@ -15,10 +15,15 @@
     "@nba-analytics-hub/types": "0.0.1"
   },
   "nx": {
+    "tags": [
+      "scope:legacy"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
-        "dependsOn": ["@nba-analytics-hub/types:build"],
+        "dependsOn": [
+          "@nba-analytics-hub/types:build"
+        ],
         "options": {
           "tsConfig": "packages/data-access/tsconfig.lib.json",
           "main": "packages/data-access/src/index.ts",

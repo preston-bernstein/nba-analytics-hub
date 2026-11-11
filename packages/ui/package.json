@@ -30,6 +30,9 @@
     "shadcn": "^3.5.1"
   },
   "nx": {
+    "tags": [
+      "scope:ui"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",

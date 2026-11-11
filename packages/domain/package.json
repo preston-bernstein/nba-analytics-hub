@@ -16,6 +16,9 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "nx": {
+    "tags": [
+      "scope:legacy"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",

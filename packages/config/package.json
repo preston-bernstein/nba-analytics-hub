@@ -16,10 +16,15 @@
     "vitest": "^3.2.4"
   },
   "nx": {
+    "tags": [
+      "scope:shared"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
-        "dependsOn": ["@nba-analytics-hub/types:build"],
+        "dependsOn": [
+          "@nba-analytics-hub/types:build"
+        ],
         "options": {
           "tsConfig": "packages/config/tsconfig.lib.json",
           "main": "packages/config/src/index.ts",
@@ -29,7 +34,10 @@
       "lint": {
         "executor": "@nx/eslint:lint",
         "options": {
-          "lintFilePatterns": ["packages/config/**/*.ts", "packages/config/**/*.tsx"]
+          "lintFilePatterns": [
+            "packages/config/**/*.ts",
+            "packages/config/**/*.tsx"
+          ]
         }
       },
       "test": {
