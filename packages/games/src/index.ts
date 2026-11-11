@@ -5,6 +5,7 @@ export * from './types/service/team.js';
 export * from './types/service/game.js';
 export * from './types/service/responses.js';
 export * from './domain/get-favorite.js';
+export * from './domain/game-status.js';
 export * from './client/gamesQuery.js';
 export * from './client/gamesClient.js';
 export * from './client/gamesServiceClient.js';
