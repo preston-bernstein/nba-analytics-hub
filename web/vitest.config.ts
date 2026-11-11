@@ -32,7 +32,7 @@ export default defineConfig({
         'vite.config.ts',
         'vitest.config.ts',
         'src/main.tsx',
-        'src/app/dashboard/types/index.ts',
+        'src/app/games/types/index.ts',
       ],
     },
   },

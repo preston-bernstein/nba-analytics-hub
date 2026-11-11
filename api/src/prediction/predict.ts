@@ -4,7 +4,7 @@ import {
   type PredictorServiceClient,
   createPredictorServiceClient,
 } from '@nba-analytics-hub/prediction';
-import { createRouteHandler } from './shared/routeUtils.js';
+import { createRouteHandler } from '../platform/routeUtils.js';
 
 interface PredictRouteDeps {
   predictorService?: PredictorServiceClient;
