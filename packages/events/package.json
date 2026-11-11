@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "tslib": "^2.3.0",
-    "@nba-analytics-hub/types": "0.0.1",
+    "@nba-analytics-hub/games": "0.0.1",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "nx": {
@@ -23,7 +23,7 @@
       "build": {
         "executor": "@nx/js:tsc",
         "dependsOn": [
-          "@nba-analytics-hub/types:build",
+          "@nba-analytics-hub/games:build",
           "@nba-analytics-hub/testing:build"
         ],
         "options": {

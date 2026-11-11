@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Copies nba-data-service's api/openapi.yaml into codegen/openapi/ so
-// packages/types can generate TS types from it locally. See
+// packages/games can generate TS types from it locally. See
 // codegen/openapi/README.md for why this is a copy rather than a symlink
 // or submodule (two separate repos, not a monorepo).
 import { copyFileSync, existsSync } from 'node:fs';

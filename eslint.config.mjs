@@ -13,7 +13,7 @@ export default [
       '**/storybook-static',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
-      'packages/types/src/lib/games/generated.ts',
+      'packages/games/src/types/generated.ts',
     ],
   },
   {
@@ -29,26 +29,26 @@ export default [
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
           depConstraints: [
-            // Transitional: remove once the legacy layer packages are retired.
+            { sourceTag: 'scope:shared', onlyDependOnLibsWithTags: ['scope:shared'] },
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: 'domain:games',
+              onlyDependOnLibsWithTags: ['scope:shared', 'domain:games'],
             },
             {
-              sourceTag: 'scope:shared',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:legacy'],
+              sourceTag: 'domain:prediction',
+              onlyDependOnLibsWithTags: ['scope:shared', 'domain:prediction'],
             },
             {
               sourceTag: 'domain:events',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:legacy', 'domain:games'],
+              onlyDependOnLibsWithTags: ['scope:shared', 'domain:games', 'domain:events'],
             },
             {
               sourceTag: 'scope:ui',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'scope:legacy', 'domain:*'],
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'domain:*'],
             },
             {
               sourceTag: 'scope:app',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'scope:legacy', 'domain:*'],
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:ui', 'domain:*'],
             },
           ],
         },

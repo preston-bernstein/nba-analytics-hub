@@ -22,9 +22,7 @@
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
-        "dependsOn": [
-          "@nba-analytics-hub/types:build"
-        ],
+        "dependsOn": [],
         "options": {
           "tsConfig": "packages/config/tsconfig.lib.json",
           "main": "packages/config/src/index.ts",

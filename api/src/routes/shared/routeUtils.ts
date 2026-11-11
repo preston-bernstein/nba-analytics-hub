@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import type { Request, Response } from 'express';
-import type { ErrorResponse } from '@nba-analytics-hub/types';
+import type { ErrorResponse } from '@nba-analytics-hub/platform';
 
 /**
  * Resolves request ID from header or generates a new UUID

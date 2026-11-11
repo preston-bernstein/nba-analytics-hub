@@ -1,9 +1,9 @@
 import type { Express, Request, Response } from 'express';
-import type { PredictionResponse } from '@nba-analytics-hub/types';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import {
   type PredictorServiceClient,
   createPredictorServiceClient,
-} from '@nba-analytics-hub/data-access';
+} from '@nba-analytics-hub/prediction';
 import { createRouteHandler } from './shared/routeUtils.js';
 
 interface PredictRouteDeps {

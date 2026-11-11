@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { DashboardContent } from './DashboardContent';
 
 const game: Game = {

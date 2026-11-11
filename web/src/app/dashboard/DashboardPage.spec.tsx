@@ -2,7 +2,8 @@ import { screen, waitFor } from '@testing-library/react';
 import { describe, it, beforeAll, afterEach, afterAll, expect } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { DashboardPage } from './DashboardPage.tsx';
 import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
 

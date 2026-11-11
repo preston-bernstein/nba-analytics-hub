@@ -1,9 +1,6 @@
 import type { Express, Request, Response } from 'express';
-import {
-  type GamesServiceClient,
-  createGamesServiceClient,
-} from '@nba-analytics-hub/data-access';
-import type { Game } from '@nba-analytics-hub/types';
+import { type GamesServiceClient, createGamesServiceClient } from '@nba-analytics-hub/games';
+import type { Game } from '@nba-analytics-hub/games';
 import { createRouteHandler } from './shared/routeUtils.js';
 
 interface GamesRouteDeps {

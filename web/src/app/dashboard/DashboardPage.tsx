@@ -1,5 +1,5 @@
 import { DateNavigation, formatDisplayDate } from '@nba-analytics-hub/ui';
-import { isToday, isAtMinDate, isAtMaxDate } from '@nba-analytics-hub/domain';
+import { isToday, isAtMinDate, isAtMaxDate } from '@nba-analytics-hub/platform';
 import { useDashboardData } from './hooks/useDashboardData';
 import { DashboardContent } from './components/DashboardContent';
 import { DashboardErrorState } from './components/DashboardErrorState';

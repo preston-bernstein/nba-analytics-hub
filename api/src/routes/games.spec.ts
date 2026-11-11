@@ -2,8 +2,8 @@ import request from 'supertest';
 import express from 'express';
 import { vi } from 'vitest';
 import { registerGamesRoutes } from './games.js';
-import type { GamesServiceClient } from '@nba-analytics-hub/data-access';
-import { mockGames } from '@nba-analytics-hub/testing';
+import type { GamesServiceClient } from '@nba-analytics-hub/games';
+import { mockGames } from '@nba-analytics-hub/games';
 import { describeIfSockets } from '../test-utils/describeIfSockets.js';
 
 const gamesResponse = { date: '2025-01-01', games: mockGames };

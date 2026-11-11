@@ -1,4 +1,5 @@
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 
 export type PredictionsByGameId = Record<string, PredictionResponse>;
 

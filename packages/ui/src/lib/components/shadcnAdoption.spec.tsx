@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { Game } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
 import { AppShell } from './AppShell';
 import { DateNavigation } from './DateNavigation';
 import { GameCard } from './GameCard';

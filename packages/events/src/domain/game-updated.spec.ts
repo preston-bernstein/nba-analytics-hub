@@ -1,5 +1,5 @@
 import type { GameUpdatedEvent } from '../types/game-updated.js';
-import { mockGames } from '@nba-analytics-hub/testing';
+import { mockGames } from '@nba-analytics-hub/games';
 import {
   applyGameUpdated,
   parseGameUpdatedEvent,

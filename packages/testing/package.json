@@ -11,8 +11,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@nba-analytics-hub/types": "0.0.1"
+    "tslib": "^2.3.0"
   },
   "nx": {
     "tags": [
@@ -21,9 +20,7 @@
     "targets": {
       "build": {
         "executor": "@nx/js:tsc",
-        "dependsOn": [
-          "@nba-analytics-hub/types:build"
-        ],
+        "dependsOn": [],
         "options": {
           "tsConfig": "packages/testing/tsconfig.lib.json",
           "main": "packages/testing/src/index.ts",

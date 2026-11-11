@@ -3,7 +3,7 @@
 // topics (it.game.updated.<id> and .dlq) and deletes them at the end.
 import { randomUUID } from 'node:crypto';
 import { Kafka, logLevel, type Admin, type Consumer, type Producer } from 'kafkajs';
-import { mockGames } from '@nba-analytics-hub/testing';
+import { mockGames } from '@nba-analytics-hub/games';
 import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { BoundedIdSet } from './boundedIdSet.js';
 import { startGameUpdatedConsumer, type KafkaLike } from './consumer.js';

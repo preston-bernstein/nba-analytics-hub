@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import type { PredictionResponse } from '@nba-analytics-hub/types';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { PredictionBadge } from './PredictionBadge';
 
 describe('PredictionBadge', () => {

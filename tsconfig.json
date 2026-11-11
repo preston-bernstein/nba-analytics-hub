@@ -13,16 +13,7 @@
       "path": "./api"
     },
     {
-      "path": "./packages/types"
-    },
-    {
-      "path": "./packages/domain"
-    },
-    {
       "path": "./packages/events"
-    },
-    {
-      "path": "./packages/data-access"
     },
     {
       "path": "./packages/config"
@@ -32,6 +23,18 @@
     },
     {
       "path": "./packages/ui"
+    },
+    {
+      "path": "./packages/platform"
+    },
+    {
+      "path": "./packages/games"
+    },
+    {
+      "path": "./packages/prediction"
+    },
+    {
+      "path": "./packages/events"
     }
   ],
   "ts-node": {

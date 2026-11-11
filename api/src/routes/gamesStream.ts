@@ -1,5 +1,5 @@
 import type { Express, Request, Response } from 'express';
-import type { Game } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
 import type { LiveGamesReadModel } from '../kafka/liveGamesReadModel.js';
 
 const DEFAULT_HEARTBEAT_MS = 15_000;

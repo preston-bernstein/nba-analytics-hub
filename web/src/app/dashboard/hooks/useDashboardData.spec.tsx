@@ -3,8 +3,9 @@ import { renderWithQueryClient } from '../../../test-utils/renderWithQueryClient
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
-import { addDays, getTodayDate } from '@nba-analytics-hub/domain';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
+import { addDays, getTodayDate } from '@nba-analytics-hub/platform';
 import { resolveApiConfig, useDashboardData } from './useDashboardData';
 
 const mockGames: Game[] = [

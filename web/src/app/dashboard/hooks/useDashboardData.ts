@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react';
 import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { getLocalTimeZone } from '@nba-analytics-hub/config';
-import { getTodayDate, addDays } from '@nba-analytics-hub/domain';
+import { getTodayDate, addDays } from '@nba-analytics-hub/platform';
 import { DashboardDataState, PredictionsByGameId } from '../types';
-import {
-  createGamesClient,
-  createPredictorClient,
-} from '@nba-analytics-hub/data-access';
+import { createGamesClient } from '@nba-analytics-hub/games';
+import { createPredictorClient } from '@nba-analytics-hub/prediction';
 
 export interface ApiConfig {
   baseUrl: string;

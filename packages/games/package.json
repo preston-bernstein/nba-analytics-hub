@@ -1,0 +1,53 @@
+{
+  "name": "@nba-analytics-hub/games",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@nba-analytics-hub/platform": "0.0.1",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "nx": {
+    "tags": [
+      "domain:games"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "dependsOn": [
+          "@nba-analytics-hub/platform:build",
+          "@nba-analytics-hub/testing:build"
+        ],
+        "options": {
+          "tsConfig": "packages/games/tsconfig.lib.json",
+          "main": "packages/games/src/index.ts",
+          "outputPath": "packages/games/dist"
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": [
+            "packages/games/**/*.ts",
+            "packages/games/**/*.tsx"
+          ]
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run",
+          "cwd": "packages/games"
+        }
+      }
+    }
+  }
+}
