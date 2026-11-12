@@ -22,6 +22,9 @@
       "path": "../packages/prediction"
     },
     {
+      "path": "../packages/players"
+    },
+    {
       "path": "../packages/events"
     }
   ]

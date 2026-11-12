@@ -42,6 +42,9 @@
       "path": "../packages/platform/tsconfig.lib.json"
     },
     {
+      "path": "../packages/players/tsconfig.lib.json"
+    },
+    {
       "path": "../packages/prediction/tsconfig.lib.json"
     }
   ]

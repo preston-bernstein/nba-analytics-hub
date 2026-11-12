@@ -6,8 +6,8 @@ import { registerGamesStreamRoutes } from './games/gamesStream.js';
 import { liveGames } from './games/live/liveGames.js';
 import { registerPredictRoutes } from './prediction/predict.js';
 import { registerDocsRoutes } from './platform/docs.js';
-import { registerPlayersRoutes } from './players/leaderboard.js';
-import { createPgLeaderboardRepo } from './players/leaderboardRepo.js';
+import { registerPlayersRoutes } from './players/players.js';
+import { createPgLeaderboardRepo } from './players/pgLeaderboardRepo.js';
 import { createPoolFromEnv } from './platform/db.js';
 
 export const app: Express = express();

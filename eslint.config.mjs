@@ -39,6 +39,10 @@ export default [
               onlyDependOnLibsWithTags: ['scope:shared', 'domain:prediction'],
             },
             {
+              sourceTag: 'domain:players',
+              onlyDependOnLibsWithTags: ['scope:shared', 'domain:players'],
+            },
+            {
               sourceTag: 'domain:events',
               onlyDependOnLibsWithTags: ['scope:shared', 'domain:games', 'domain:events'],
             },
