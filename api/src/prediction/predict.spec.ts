@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 import { registerPredictRoutes } from './predict.js';
 import type { PredictorServiceClient } from '@nba-analytics-hub/prediction';
 import { mockPredictorServiceResponse } from '@nba-analytics-hub/prediction';
-import { describeIfSockets } from '../test-utils/describeIfSockets.js';
+import { describeIfSockets } from '../platform/testing/describeIfSockets.js';
 
 const app = express();
 

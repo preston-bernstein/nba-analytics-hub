@@ -6,7 +6,7 @@ import { Kafka, logLevel, type Admin, type Consumer, type Producer } from 'kafka
 import { mockGames } from '@nba-analytics-hub/games';
 import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { BoundedIdSet } from './boundedIdSet.js';
-import { startConsumer, type KafkaLike } from './consumer.js';
+import { startConsumer, type KafkaLike } from '../../platform/kafka/consumer.js';
 import { createGameUpdatedHandler } from './handler.js';
 import { LiveGamesReadModel } from './liveGamesReadModel.js';
 

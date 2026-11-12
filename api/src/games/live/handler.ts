@@ -1,16 +1,9 @@
 import { parseGameUpdatedEvent } from '@nba-analytics-hub/events';
+import { PoisonMessageError } from '../../platform/kafka/consumer.js';
 import type { BoundedIdSet } from './boundedIdSet.js';
 import type { LiveGamesReadModel } from './liveGamesReadModel.js';
 
 export type HandleOutcome = 'applied' | 'stale' | 'duplicate';
-
-/** The message can never succeed (bad JSON, schema mismatch). Do not retry it. */
-export class PoisonMessageError extends Error {
-  constructor(reason: string) {
-    super(reason);
-    this.name = 'PoisonMessageError';
-  }
-}
 
 export interface GameUpdatedHandlerDeps {
   model: LiveGamesReadModel;

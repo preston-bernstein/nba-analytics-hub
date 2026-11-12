@@ -7,7 +7,7 @@ import {
   sendSuccess,
   createRouteHandler,
 } from './routeUtils.js';
-import { describeIfSockets } from '../test-utils/describeIfSockets.js';
+import { describeIfSockets } from './testing/describeIfSockets.js';
 
 describeIfSockets('routeUtils', () => {
   describe('resolveRequestId', () => {
