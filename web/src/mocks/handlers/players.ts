@@ -5,6 +5,8 @@ import { makeLeaderboard } from '../data/leaderboard';
 
 type Parsed<T> = { ok: true; value: T } | { ok: false; error: string };
 
+const badRequest = (error: string) => HttpResponse.json({ error }, { status: 400 });
+
 const bad = (error: string): Parsed<never> => ({ ok: false, error });
 
 function intParam(
@@ -49,7 +51,6 @@ export const playersHandlers = [
     const sort = params.get('sort') ?? 'pts';
     const dir = params.get('dir') ?? 'desc';
 
-    const badRequest = (error: string) => HttpResponse.json({ error }, { status: 400 });
     if (!season.ok) return badRequest(season.error);
     if (!limit.ok) return badRequest(limit.error);
     if (!offset.ok) return badRequest(offset.error);
