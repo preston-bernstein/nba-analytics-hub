@@ -21,8 +21,44 @@ export interface LeaderboardRow {
   fantasyPts: number | null;
 }
 
+export const SORT_COLUMNS = [
+  'name',
+  'position',
+  'gp',
+  'min',
+  'pts',
+  'reb',
+  'ast',
+  'stl',
+  'blk',
+  'tov',
+  'fgPct',
+  'fg3Pct',
+  'ftPct',
+  'plusMinus',
+  'fantasyPts',
+] as const;
+
+export type SortColumn = (typeof SORT_COLUMNS)[number];
+export type SortDir = 'asc' | 'desc';
+
+export interface LeaderboardQuery {
+  season: number;
+  seasonType: SeasonType;
+  sort: SortColumn;
+  dir: SortDir;
+  limit: number;
+  offset: number;
+  search: string | undefined;
+}
+
+export interface LeaderboardPage {
+  rows: LeaderboardRow[];
+  total: number;
+}
+
 export interface LeaderboardRepo {
-  list(season: number, seasonType: SeasonType): Promise<LeaderboardRow[]>;
+  list(query: LeaderboardQuery): Promise<LeaderboardPage>;
 }
 
 interface ApiItem {
@@ -61,17 +97,58 @@ export function leaderboardJobKey(season: number, seasonType: SeasonType): strin
 }
 
 interface Queryable {
-  query(sql: string, params: unknown[]): Promise<{ rows: { data: ApiItem }[] }>;
+  query(sql: string, params: unknown[]): Promise<{ rows: { data: ApiItem; total?: string }[] }>;
 }
 
-const SQL =
-  "select data from bdl.season_averages where job_key = $1 order by (data->'stats'->>'pts')::numeric desc nulls last";
+const stats = (key: string) => `((data->'stats'->>'${key}')::numeric)`;
+
+// Each ->> needs its own parentheses, because || binds tighter than ->>.
+const NAME_SQL = "((data->'player'->>'first_name') || ' ' || (data->'player'->>'last_name'))";
+
+// Fixed SQL for each sortable column. The client never supplies SQL text.
+const SORT_SQL: Record<SortColumn, string> = {
+  name: `(lower(${NAME_SQL}))`,
+  position: "(data->'player'->>'position')",
+  gp: stats('gp'),
+  min: stats('min'),
+  pts: stats('pts'),
+  reb: stats('reb'),
+  ast: stats('ast'),
+  stl: stats('stl'),
+  blk: stats('blk'),
+  tov: stats('tov'),
+  fgPct: stats('fg_pct'),
+  fg3Pct: stats('fg3_pct'),
+  ftPct: stats('ft_pct'),
+  plusMinus: stats('plus_minus'),
+  fantasyPts: stats('nba_fantasy_pts'),
+};
+
+function pageSql(sort: SortColumn, dir: SortDir): string {
+  const direction = dir === 'asc' ? 'asc' : 'desc';
+  return [
+    'select data, count(*) over () as total from bdl.season_averages',
+    'where job_key = $1',
+    `and ($4::text is null or position(lower($4) in lower(${NAME_SQL})) > 0)`,
+    `order by ${SORT_SQL[sort]} ${direction} nulls last, (data->'player'->>'id')::bigint`,
+    'limit $2 offset $3',
+  ].join(' ');
+}
 
 export function createPgLeaderboardRepo(db: Queryable): LeaderboardRepo {
   return {
-    async list(season, seasonType) {
-      const { rows } = await db.query(SQL, [leaderboardJobKey(season, seasonType)]);
-      return rows.map((r) => toLeaderboardRow(r.data));
+    async list(q) {
+      const params = [
+        leaderboardJobKey(q.season, q.seasonType),
+        q.limit,
+        q.offset,
+        q.search ?? null,
+      ];
+      const { rows } = await db.query(pageSql(q.sort, q.dir), params);
+      return {
+        rows: rows.map((r) => toLeaderboardRow(r.data)),
+        total: rows.length > 0 ? Number(rows[0].total) : 0,
+      };
     },
   };
 }
