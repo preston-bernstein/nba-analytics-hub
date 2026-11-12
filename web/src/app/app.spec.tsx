@@ -43,4 +43,17 @@ describe('App', () => {
     const title = await screen.findByTestId('app-title');
     expect(title).toHaveTextContent('NBA Analytics Hub');
   });
+
+  it('links to the games and players pages, and shows the leaderboard at /players', async () => {
+    window.history.pushState({}, '', '/players');
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
+    expect(await screen.findByRole('link', { name: 'Games' })).toHaveAttribute('href', '/');
+    expect(screen.getByRole('link', { name: 'Players' })).toHaveAttribute('href', '/players');
+    expect(await screen.findByRole('heading', { name: 'Player leaderboard' })).toBeInTheDocument();
+    window.history.pushState({}, '', '/');
+  });
 });
