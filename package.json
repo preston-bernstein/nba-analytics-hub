@@ -9,6 +9,7 @@
     "test:api": "nx test api",
     "test:web": " nx test web",
     "serve:web": "nx serve web",
+    "serve:web:mocks": "VITE_USE_MOCKS=true nx serve web",
     "serve:api": "nx serve api",
     "clean:api-dist": "node tools/clean-api-dist.mjs",
     "coverage:summary": "node tools/coverage-summary.js",
@@ -101,5 +102,10 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "6.29.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "web/public"
+    ]
   }
 }

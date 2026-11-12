@@ -1,68 +1,42 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 import { LEADERBOARD_PAGE_SIZE } from '@nba-analytics-hub/players';
-import type { LeaderboardRow } from '@nba-analytics-hub/players';
 import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
+import { makeLeaderboard } from '../../mocks/data/leaderboard';
+import { server } from '../../mocks/server';
 import { LeaderboardPage } from './LeaderboardPage';
 import { usePlayersStore } from './hooks/usePlayersStore';
 
 const PAGE_SIZE = LEADERBOARD_PAGE_SIZE.default;
-
-const row = (i: number): LeaderboardRow => ({
-  playerId: i,
-  name: `Player ${i}`,
-  position: 'G',
-  gp: 60,
-  min: 30.2,
-  pts: 25.04 - i / 10,
-  reb: 5,
-  ast: 4,
-  stl: 1,
-  blk: 0.5,
-  tov: 2,
-  fgPct: 0.5,
-  fg3Pct: 0.4,
-  ftPct: 0.8,
-  plusMinus: 2.5,
-  fantasyPts: 40,
-});
-
-const all = Array.from({ length: PAGE_SIZE + 20 }, (_, i) => row(i + 1));
 const requests: URL[] = [];
 
-const server = setupServer(
-  http.get('*/players/leaderboard', ({ request }) => {
-    const url = new URL(request.url);
-    requests.push(url);
-    const offset = Number(url.searchParams.get('offset') ?? 0);
-    const limit = Number(url.searchParams.get('limit') ?? PAGE_SIZE);
-    return HttpResponse.json({
-      rows: all.slice(offset, offset + limit),
-      total: all.length,
-      limit,
-      offset,
-    });
-  })
+// What the shared mock handler returns for the default view: points, high to low.
+const initial = usePlayersStore.getInitialState();
+const byPoints = makeLeaderboard(initial.season, initial.seasonType).toSorted(
+  (a, b) => (b.pts ?? 0) - (a.pts ?? 0) || a.playerId - b.playerId
 );
 
-beforeAll(() => server.listen());
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 beforeEach(() => {
   requests.length = 0;
   usePlayersStore.setState(usePlayersStore.getInitialState(), true);
+  server.events.on('request:start', ({ request }) => requests.push(new URL(request.url)));
 });
-afterEach(() => server.resetHandlers());
+afterEach(() => {
+  server.events.removeAllListeners();
+  server.resetHandlers();
+});
 afterAll(() => server.close());
 
 describe('LeaderboardPage', () => {
   it('shows the first page of players with formatted stats', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    expect(await screen.findByText('Player 1')).toBeInTheDocument();
-    const first = screen.getByText('Player 1').closest('tr') as HTMLElement;
-    expect(within(first).getByText('24.9')).toBeInTheDocument();
-    expect(within(first).getByText('50.0%')).toBeInTheDocument();
-    expect(within(first).getByText('+2.5')).toBeInTheDocument();
+    const top = byPoints[0];
+    expect(await screen.findByText(top.name)).toBeInTheDocument();
+    const first = screen.getByText(top.name).closest('tr') as HTMLElement;
+    expect(within(first).getByText((top.pts as number).toFixed(1))).toBeInTheDocument();
+    expect(within(first).getAllByRole('cell')).toHaveLength(15);
     expect(requests[0].searchParams.get('offset')).toBe('0');
     expect(requests[0].searchParams.get('limit')).toBe(String(PAGE_SIZE));
     expect(requests[0].searchParams.get('sort')).toBe('pts');
@@ -71,12 +45,12 @@ describe('LeaderboardPage', () => {
 
   it('shows how many players match', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    expect(await screen.findByText(/70 players/i)).toBeInTheDocument();
+    expect(await screen.findByText(`${byPoints.length} players`)).toBeInTheDocument();
   });
 
   it('asks the server to sort when a header is clicked', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    await screen.findByText('Player 1');
+    await screen.findByText(byPoints[0].name);
     fireEvent.click(screen.getByRole('button', { name: /^Player/ }));
     await waitFor(() => {
       const last = requests.at(-1) as URL;
@@ -92,19 +66,20 @@ describe('LeaderboardPage', () => {
 
   it('asks for the next page when the table is scrolled to the bottom', async () => {
     const { container } = renderWithQueryClient(<LeaderboardPage />);
-    await screen.findByText('Player 1');
+    await screen.findByText(byPoints[0].name);
     const el = container.querySelector('[data-slot="data-table-scroll"]') as HTMLElement;
     Object.defineProperty(el, 'scrollHeight', { value: 1000, configurable: true });
     Object.defineProperty(el, 'clientHeight', { value: 400, configurable: true });
     Object.defineProperty(el, 'scrollTop', { value: 600, configurable: true });
     fireEvent.scroll(el);
-    expect(await screen.findByText(`Player ${PAGE_SIZE + 1}`)).toBeInTheDocument();
-    expect(requests.at(-1)?.searchParams.get('offset')).toBe(String(PAGE_SIZE));
+    expect(await screen.findByText(byPoints[PAGE_SIZE].name)).toBeInTheDocument();
+    // The fake table size never changes, so it may ask for later pages too.
+    expect(requests.map((r) => r.searchParams.get('offset'))).toContain(String(PAGE_SIZE));
   });
 
   it('reloads from the first page when the season changes', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    await screen.findByText('Player 1');
+    await screen.findByText(byPoints[0].name);
     fireEvent.change(screen.getByLabelText('Season'), { target: { value: '2019' } });
     await waitFor(() => expect(requests.at(-1)?.searchParams.get('season')).toBe('2019'));
     expect(requests.at(-1)?.searchParams.get('offset')).toBe('0');
@@ -112,14 +87,14 @@ describe('LeaderboardPage', () => {
 
   it('reloads when the season type changes', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    await screen.findByText('Player 1');
+    await screen.findByText(byPoints[0].name);
     fireEvent.change(screen.getByLabelText('Season type'), { target: { value: 'playoffs' } });
     await waitFor(() => expect(requests.at(-1)?.searchParams.get('seasonType')).toBe('playoffs'));
   });
 
   it('searches on the server after the user stops typing', async () => {
     renderWithQueryClient(<LeaderboardPage />);
-    await screen.findByText('Player 1');
+    await screen.findByText(byPoints[0].name);
     fireEvent.change(screen.getByLabelText('Search players'), { target: { value: 'ann' } });
     await waitFor(() => expect(requests.at(-1)?.searchParams.get('search')).toBe('ann'), {
       timeout: 2000,

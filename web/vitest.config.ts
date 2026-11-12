@@ -33,6 +33,8 @@ export default defineConfig({
         'vite.config.ts',
         'vitest.config.ts',
         'src/main.tsx',
+        // Starts the real service worker, which only a browser can run.
+        'src/mocks/browser.ts',
         'src/app/games/types/index.ts',
       ],
     },
