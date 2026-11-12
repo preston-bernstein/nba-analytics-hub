@@ -31,6 +31,14 @@
   --border: hsl(30 15% 85%);
   --input: hsl(30 15% 85%);
   --ring: hsl(215 82% 56%);
+
+  /* status colors: live (rose) and warning (amber) */
+  --live: #ffe4e6;
+  --live-foreground: #be123c;
+  --live-border: #fecdd3;
+  --warning: #fef3c7;
+  --warning-foreground: #92400e;
+  --warning-border: #fde68a;
 }
 
 @theme inline {
@@ -60,6 +68,12 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-live: var(--live);
+  --color-live-foreground: var(--live-foreground);
+  --color-live-border: var(--live-border);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-border: var(--warning-border);
 }
 
 @theme {

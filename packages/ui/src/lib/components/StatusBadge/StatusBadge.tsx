@@ -9,9 +9,9 @@ const statusBadgeVariants = cva(
     variants: {
       status: {
         scheduled: 'bg-brand-50 text-brand-700 border-brand-200',
-        live: 'bg-rose-100 text-rose-700 border-rose-200 animate-pulse',
+        live: 'bg-live text-live-foreground border-live-border animate-pulse',
         final: 'bg-neutral-200 text-neutral-800 border-neutral-300',
-        postponed: 'bg-amber-100 text-amber-800 border-amber-200',
+        postponed: 'bg-warning text-warning-foreground border-warning-border',
         canceled: 'bg-neutral-100 text-neutral-600 border-neutral-300',
       },
     },

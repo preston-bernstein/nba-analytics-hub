@@ -16,6 +16,6 @@ describe('StatusBadge', () => {
 
   it('shows custom children and the status color', () => {
     render(<StatusBadge status="live">Q3 4:12</StatusBadge>);
-    expect(screen.getByText('Q3 4:12')).toHaveClass('bg-rose-100');
+    expect(screen.getByText('Q3 4:12')).toHaveClass('bg-live');
   });
 });
