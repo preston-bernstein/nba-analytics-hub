@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { LEADERBOARD_COLUMNS, SORT_COLUMNS } from '@nba-analytics-hub/players';
 import type { LeaderboardRow } from '@nba-analytics-hub/players';
-import { formatStat } from './format';
+import { formatStat } from '../lib/format';
 
 /** One table column for each entry in the shared column table. */
 export const leaderboardColumns: ColumnDef<LeaderboardRow>[] = SORT_COLUMNS.map((key) => {

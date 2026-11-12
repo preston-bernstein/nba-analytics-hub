@@ -151,4 +151,13 @@ describe('DataTable', () => {
     setup({ data: [], hasMore: false, emptyMessage: 'No players found' });
     expect(screen.getByText('No players found')).toBeInTheDocument();
   });
+
+  it('has a default density, and a compact variant that tightens rows', () => {
+    const normal = setup();
+    expect(scroller(normal.container)).toHaveAttribute('data-density', 'default');
+    const compact = setup({ density: 'compact' });
+    const el = scroller(compact.container);
+    expect(el).toHaveAttribute('data-density', 'compact');
+    expect(el.className).toMatch(/\[&_td\]:py-1/);
+  });
 });

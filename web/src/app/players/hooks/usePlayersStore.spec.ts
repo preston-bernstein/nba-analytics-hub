@@ -1,5 +1,5 @@
 import { beforeEach } from 'vitest';
-import { usePlayersStore } from './store';
+import { usePlayersStore } from './usePlayersStore';
 
 beforeEach(() => usePlayersStore.setState(usePlayersStore.getInitialState(), true));
 

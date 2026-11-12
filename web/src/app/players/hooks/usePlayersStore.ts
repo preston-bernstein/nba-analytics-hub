@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { SortDir } from '@nba-analytics-hub/platform';
 import type { LeaderboardColumnKey, SeasonType } from '@nba-analytics-hub/players';
-import { defaultSeason } from './seasons';
+import { defaultSeason } from '../lib/seasons';
 
 // Only what the user picks lives here. The rows live in the TanStack Query cache.
 export interface PlayersState {

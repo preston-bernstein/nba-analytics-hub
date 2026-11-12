@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import {
   type ColumnDef,
   type RowData,
-  type SortDirection,
   type SortingState,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { cn } from '../../utils/cn';
-import { Button } from '../ui/button';
+import { DataTableColumnHeader, ariaSort } from './DataTableColumnHeader';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
 declare module '@tanstack/react-table' {
@@ -23,7 +22,7 @@ declare module '@tanstack/react-table' {
 /** How close to the bottom, in pixels, the scroll must be before the next page loads. */
 const END_THRESHOLD = 200;
 
-export interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData, TValue> extends VariantProps<typeof dataTableVariants> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   /** The server sorts the rows. The table only shows which column is sorted. */
@@ -39,13 +38,18 @@ export interface DataTableProps<TData, TValue> {
   className?: string;
 }
 
-const ariaSort = (sorted: false | SortDirection) =>
-  sorted === 'asc' ? 'ascending' : sorted === 'desc' ? 'descending' : 'none';
-
-function SortIcon({ sorted }: { sorted: false | SortDirection }) {
-  const Icon = sorted === 'asc' ? ArrowUp : sorted === 'desc' ? ArrowDown : ArrowUpDown;
-  return <Icon aria-hidden="true" className={cn('size-3.5', !sorted && 'opacity-50')} />;
-}
+const dataTableVariants = cva(
+  'max-h-[70vh] overflow-auto rounded-md border [&_[data-slot=table-container]]:overflow-visible',
+  {
+    variants: {
+      density: {
+        default: '',
+        compact: '[&_th]:h-8 [&_td]:py-1 [&_td]:text-[13px]',
+      },
+    },
+    defaultVariants: { density: 'default' },
+  }
+);
 
 export function DataTable<TData, TValue>({
   columns,
@@ -57,6 +61,7 @@ export function DataTable<TData, TValue>({
   isFetching = false,
   onEndReached,
   emptyMessage = 'No results.',
+  density = 'default',
   className,
 }: DataTableProps<TData, TValue>) {
   // TanStack Table returns functions that React Compiler cannot memoize. The table is not memoized.
@@ -99,11 +104,9 @@ export function DataTable<TData, TValue>({
     <div
       ref={scrollRef}
       data-slot="data-table-scroll"
+      data-density={density}
       onScroll={() => loadMoreIfNeeded(true)}
-      className={cn(
-        'max-h-[70vh] overflow-auto rounded-md border [&_[data-slot=table-container]]:overflow-visible',
-        className
-      )}
+      className={cn(dataTableVariants({ density }), className)}
     >
       <Table>
         <TableHeader className="sticky top-0 z-10 bg-card shadow-[0_1px_0_0_var(--border)]">
@@ -111,28 +114,14 @@ export function DataTable<TData, TValue>({
             <TableRow key={group.id} className="hover:bg-transparent">
               {group.headers.map((header) => {
                 const { column } = header;
-                const sorted = column.getIsSorted();
                 const content = flexRender(column.columnDef.header, header.getContext());
                 return (
                   <TableHead
                     key={header.id}
-                    aria-sort={ariaSort(sorted)}
+                    aria-sort={ariaSort(column.getIsSorted())}
                     className={cn(column.columnDef.meta?.align === 'right' && 'text-right')}
                   >
-                    {column.getCanSort() ? (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-8 gap-1 px-2 data-[sorted=true]:text-foreground"
-                        data-sorted={sorted !== false}
-                        onClick={column.getToggleSortingHandler()}
-                      >
-                        {content}
-                        <SortIcon sorted={sorted} />
-                      </Button>
-                    ) : (
-                      content
-                    )}
+                    <DataTableColumnHeader column={column}>{content}</DataTableColumnHeader>
                   </TableHead>
                 );
               })}

@@ -2,11 +2,13 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { LEADERBOARD_PAGE_SIZE } from '@nba-analytics-hub/players';
 import type { LeaderboardRow } from '@nba-analytics-hub/players';
 import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
 import { LeaderboardPage } from './LeaderboardPage';
-import { usePlayersStore } from './store';
-import { PAGE_SIZE } from './api';
+import { usePlayersStore } from './hooks/usePlayersStore';
+
+const PAGE_SIZE = LEADERBOARD_PAGE_SIZE.default;
 
 const row = (i: number): LeaderboardRow => ({
   playerId: i,

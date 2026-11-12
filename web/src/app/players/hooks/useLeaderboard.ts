@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
-import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query';
 import { useShallow } from 'zustand/react/shallow';
-import { fetchLeaderboardPage, PAGE_SIZE } from '../api';
-import { usePlayersStore } from '../store';
-import { useDebouncedValue } from './useDebouncedValue';
+import { useDebouncedValue } from '@nba-analytics-hub/ui';
+import { LEADERBOARD_PAGE_SIZE } from '@nba-analytics-hub/players';
+import { useInfinitePage } from '../../shared/useInfinitePage';
+import { fetchLeaderboardPage } from '../lib/leaderboardApi';
+import { usePlayersStore } from './usePlayersStore';
 
 const SEARCH_DELAY_MS = 300;
 
-/** Loads the leaderboard one page at a time. The server sorts, filters and slices. */
+/** The leaderboard rows for what the user picked. The server sorts, filters and pages them. */
 export function useLeaderboard() {
   const { season, seasonType, search, sort, dir } = usePlayersStore(
     useShallow((s) => ({
@@ -20,37 +20,17 @@ export function useLeaderboard() {
   );
   const term = useDebouncedValue(search.trim(), SEARCH_DELAY_MS);
 
-  const query = useInfiniteQuery({
+  return useInfinitePage({
     queryKey: ['leaderboard', season, seasonType, sort, dir, term],
-    queryFn: ({ pageParam }) =>
+    fetchPage: (offset) =>
       fetchLeaderboardPage({
         season,
         seasonType,
         sort,
         dir,
-        limit: PAGE_SIZE,
-        offset: pageParam,
+        limit: LEADERBOARD_PAGE_SIZE.default,
+        offset,
         search: term || undefined,
       }),
-    initialPageParam: 0,
-    getNextPageParam: (last) => {
-      const next = last.offset + last.rows.length;
-      return last.rows.length > 0 && next < last.total ? next : undefined;
-    },
-    // Keep showing the old rows while a new sort or filter loads.
-    placeholderData: keepPreviousData,
   });
-
-  const rows = useMemo(() => query.data?.pages.flatMap((page) => page.rows) ?? [], [query.data]);
-
-  return {
-    rows,
-    total: query.data?.pages[0]?.total ?? 0,
-    error: query.error,
-    isPending: query.isPending,
-    isFetching: query.isFetching,
-    isPlaceholderData: query.isPlaceholderData,
-    hasNextPage: query.hasNextPage,
-    fetchNextPage: query.fetchNextPage,
-  };
 }

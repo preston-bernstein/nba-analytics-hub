@@ -1,5 +1,5 @@
 import { LEADERBOARD_COLUMNS, SORT_COLUMNS } from '@nba-analytics-hub/players';
-import { leaderboardColumns } from './columns';
+import { leaderboardColumns } from './leaderboardColumns';
 
 describe('leaderboardColumns', () => {
   it('has one column per entry in the shared column table, in the same order', () => {
