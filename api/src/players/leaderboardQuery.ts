@@ -1,13 +1,15 @@
 import type { Request } from 'express';
-import { SEASON_TYPES, SORT_COLUMNS } from '@nba-analytics-hub/players';
+import {
+  FIRST_SEASON,
+  LEADERBOARD_PAGE_SIZE,
+  SEASON_TYPES,
+  SORT_COLUMNS,
+} from '@nba-analytics-hub/players';
 import type { LeaderboardQuery } from '@nba-analytics-hub/players';
 import { type Parsed, parseEnum, parseInteger } from '../platform/queryParams.js';
 import { queryString } from '../platform/routeUtils.js';
 
-const FIRST_SEASON = 1996;
 const LAST_SEASON = 2100;
-const DEFAULT_LIMIT = 50;
-const MAX_LIMIT = 200;
 
 /** Reads and checks the leaderboard query string. Stops at the first bad param. */
 export function parseLeaderboardQuery(req: Request): Parsed<LeaderboardQuery> {
@@ -23,8 +25,8 @@ export function parseLeaderboardQuery(req: Request): Parsed<LeaderboardQuery> {
   if (!dir.ok) return dir;
   const limit = parseInteger(param('limit'), 'limit', {
     min: 1,
-    max: MAX_LIMIT,
-    fallback: DEFAULT_LIMIT,
+    max: LEADERBOARD_PAGE_SIZE.max,
+    fallback: LEADERBOARD_PAGE_SIZE.default,
   });
   if (!limit.ok) return limit;
   const offset = parseInteger(param('offset'), 'offset', {

@@ -10,6 +10,7 @@ export default defineConfig({
       '@nba-analytics-hub/platform': resolve(workspaceRoot, 'packages/platform/src/index.ts'),
       '@nba-analytics-hub/games': resolve(workspaceRoot, 'packages/games/src/index.ts'),
       '@nba-analytics-hub/prediction': resolve(workspaceRoot, 'packages/prediction/src/index.ts'),
+      '@nba-analytics-hub/players': resolve(workspaceRoot, 'packages/players/src/index.ts'),
       '@nba-analytics-hub/events': resolve(workspaceRoot, 'packages/events/src/index.ts'),
       '@nba-analytics-hub/config': resolve(workspaceRoot, 'packages/config/src/index.ts'),
       '@nba-analytics-hub/testing': resolve(workspaceRoot, 'packages/testing/src/index.ts'),

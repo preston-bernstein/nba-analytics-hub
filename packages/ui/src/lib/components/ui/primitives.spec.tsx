@@ -13,8 +13,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
+  Input,
+  NativeSelect,
   Progress,
   Skeleton,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from './index';
 
 describe('shadcn primitives', () => {
@@ -81,5 +91,56 @@ describe('shadcn primitives', () => {
     const { container } = render(<Progress />);
     const indicator = container.querySelector('[data-slot="progress-indicator"]') as HTMLElement;
     expect(indicator.style.transform).toBe('translateX(-100%)');
+  });
+
+  it('Table renders every part with its data-slot, inside a scroll container', () => {
+    const { container } = render(
+      <Table>
+        <TableCaption>Caption</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Head</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>Cell</TableCell>
+          </TableRow>
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>Foot</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    );
+    for (const slot of [
+      'table-container',
+      'table',
+      'table-caption',
+      'table-header',
+      'table-row',
+      'table-head',
+      'table-body',
+      'table-cell',
+      'table-footer',
+    ]) {
+      expect(container.querySelector(`[data-slot="${slot}"]`)).not.toBeNull();
+    }
+  });
+
+  it('Input and NativeSelect render with a data-slot and merge class names', () => {
+    render(
+      <>
+        <Input aria-label="name" className="w-40" />
+        <NativeSelect aria-label="season" className="w-32">
+          <option value="1">One</option>
+        </NativeSelect>
+      </>
+    );
+    expect(screen.getByLabelText('name')).toHaveAttribute('data-slot', 'input');
+    expect(screen.getByLabelText('name').className).toMatch(/w-40/);
+    expect(screen.getByLabelText('season')).toHaveAttribute('data-slot', 'native-select');
+    expect(screen.getByLabelText('season').className).toMatch(/w-32/);
   });
 });

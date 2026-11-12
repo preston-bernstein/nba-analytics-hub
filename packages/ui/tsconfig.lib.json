@@ -17,6 +17,7 @@
       "vite/client"
     ],
     "jsx": "react-jsx",
+    "lib": ["es2022", "dom"],
 
     // for shadcn-style "@/..." imports inside ui
     "baseUrl": "./src",
