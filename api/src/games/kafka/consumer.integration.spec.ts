@@ -6,7 +6,7 @@ import { Kafka, logLevel, type Admin, type Consumer, type Producer } from 'kafka
 import { mockGames } from '@nba-analytics-hub/games';
 import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { BoundedIdSet } from './boundedIdSet.js';
-import { startGameUpdatedConsumer, type KafkaLike } from './consumer.js';
+import { startConsumer, type KafkaLike } from './consumer.js';
 import { createGameUpdatedHandler } from './handler.js';
 import { LiveGamesReadModel } from './liveGamesReadModel.js';
 
@@ -85,7 +85,7 @@ describe.skipIf(!brokers)('game.updated consumer against a real broker', () => {
       },
     };
     const inner = createGameUpdatedHandler({ model, seen: new BoundedIdSet(1000) });
-    const consumer = await startGameUpdatedConsumer({
+    const consumer = await startConsumer({
       kafka: spyKafka,
       groupId,
       topic,

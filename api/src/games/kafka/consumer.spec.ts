@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 import {
-  startGameUpdatedConsumer,
+  startConsumer,
   type EachMessagePayloadLike,
   type KafkaLike,
 } from './consumer.js';
@@ -62,12 +62,13 @@ function payload(overrides: Partial<EachMessagePayloadLike['message']> = {}): Ea
 
 const text = (v: Buffer | string) => v.toString();
 const noSleep = async () => undefined;
+const topics = { topic: 'game.updated', dlqTopic: 'game.updated.dlq' };
 const quiet = { info: vi.fn(), warn: vi.fn(), error: vi.fn() };
 
-describe('startGameUpdatedConsumer', () => {
+describe('startConsumer', () => {
   it('subscribes from the beginning with the given group', async () => {
     const { kafka, state } = fakeKafka();
-    await startGameUpdatedConsumer({ kafka, groupId: 'bff', handler: vi.fn(), logger: quiet });
+    await startConsumer({ kafka, groupId: 'bff', ...topics, handler: vi.fn(), logger: quiet });
     expect(state.groupId).toBe('bff');
     expect(state.subscribed).toEqual({ topic: 'game.updated', fromBeginning: true });
   });
@@ -75,7 +76,7 @@ describe('startGameUpdatedConsumer', () => {
   it('passes the message value to the handler and resolves', async () => {
     const { kafka, state } = fakeKafka();
     const handler = vi.fn().mockReturnValue('applied');
-    await startGameUpdatedConsumer({ kafka, groupId: 'bff', handler, logger: quiet });
+    await startConsumer({ kafka, groupId: 'bff', ...topics, handler, logger: quiet });
     await state.eachMessage!(payload());
     expect(handler).toHaveBeenCalledWith('{"a":1}');
     expect(state.sent).toHaveLength(0);
@@ -93,9 +94,9 @@ describe('startGameUpdatedConsumer', () => {
       })
       .mockReturnValue('applied');
     const sleep = vi.fn(noSleep);
-    await startGameUpdatedConsumer({
+    await startConsumer({
       kafka,
-      groupId: 'bff',
+      groupId: 'bff', ...topics,
       handler,
       sleep,
       retry: { maxAttempts: 5, baseDelayMs: 100, maxDelayMs: 1000 },
@@ -113,9 +114,9 @@ describe('startGameUpdatedConsumer', () => {
       throw new Error('down');
     });
     const sleep = vi.fn(noSleep);
-    await startGameUpdatedConsumer({
+    await startConsumer({
       kafka,
-      groupId: 'bff',
+      groupId: 'bff', ...topics,
       handler,
       sleep,
       retry: { maxAttempts: 5, baseDelayMs: 100, maxDelayMs: 250 },
@@ -130,9 +131,9 @@ describe('startGameUpdatedConsumer', () => {
     const handler = vi.fn(() => {
       throw new Error('still down');
     });
-    await startGameUpdatedConsumer({
+    await startConsumer({
       kafka,
-      groupId: 'bff',
+      groupId: 'bff', ...topics,
       handler,
       sleep: noSleep,
       retry: { maxAttempts: 3, baseDelayMs: 1, maxDelayMs: 2 },
@@ -149,7 +150,7 @@ describe('startGameUpdatedConsumer', () => {
       throw new PoisonMessageError('bad json');
     });
     const sleep = vi.fn(noSleep);
-    await startGameUpdatedConsumer({ kafka, groupId: 'bff', handler, sleep, logger: quiet });
+    await startConsumer({ kafka, groupId: 'bff', ...topics, handler, sleep, logger: quiet });
     await state.eachMessage!(payload());
     expect(handler).toHaveBeenCalledTimes(1);
     expect(sleep).not.toHaveBeenCalled();
@@ -174,7 +175,7 @@ describe('startGameUpdatedConsumer', () => {
   it('treats an empty value as poison', async () => {
     const { kafka, state } = fakeKafka();
     const handler = vi.fn();
-    await startGameUpdatedConsumer({ kafka, groupId: 'bff', handler, logger: quiet });
+    await startConsumer({ kafka, groupId: 'bff', ...topics, handler, logger: quiet });
     await state.eachMessage!(payload({ value: null }));
     expect(handler).not.toHaveBeenCalled();
     expect(state.sent).toHaveLength(1);
@@ -186,7 +187,7 @@ describe('startGameUpdatedConsumer', () => {
     const handler = vi.fn(() => {
       throw new PoisonMessageError('bad');
     });
-    await startGameUpdatedConsumer({ kafka, groupId: 'bff', handler, logger: quiet });
+    await startConsumer({ kafka, groupId: 'bff', ...topics, handler, logger: quiet });
     await expect(state.eachMessage!(payload())).rejects.toThrow('dlq down');
   });
 
@@ -195,7 +196,7 @@ describe('startGameUpdatedConsumer', () => {
     const handler = vi.fn(() => {
       throw new PoisonMessageError('bad');
     });
-    await startGameUpdatedConsumer({
+    await startConsumer({
       kafka,
       groupId: 'bff',
       handler,
@@ -210,9 +211,9 @@ describe('startGameUpdatedConsumer', () => {
 
   it('stop disconnects consumer and producer', async () => {
     const { kafka, state } = fakeKafka();
-    const consumer = await startGameUpdatedConsumer({
+    const consumer = await startConsumer({
       kafka,
-      groupId: 'bff',
+      groupId: 'bff', ...topics,
       handler: vi.fn(),
       logger: quiet,
     });

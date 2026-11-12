@@ -2,6 +2,19 @@ import { randomUUID } from 'crypto';
 import type { Request, Response } from 'express';
 import type { ErrorResponse } from '@nba-analytics-hub/platform';
 
+export type RouteLogger = Pick<Console, 'error'>;
+
+/** Reads one query param. Returns undefined unless it is a non-empty string. */
+export function queryString(req: Request, name: string): string | undefined {
+  const value = req.query[name];
+  return typeof value === 'string' && value !== '' ? value : undefined;
+}
+
+/** Resolves a service base URL from an env var, with a local default. */
+export function serviceUrl(envVar: string, fallback: string): string {
+  return process.env[envVar] ?? fallback;
+}
+
 /**
  * Resolves request ID from header or generates a new UUID
  */
@@ -38,7 +51,7 @@ export function sendSuccess<T>(
  * Wraps an async handler with standard error handling
  */
 export function createRouteHandler<T>(
-  logger: Pick<Console, 'error'>,
+  logger: RouteLogger,
   errorMessage: string,
   fallbackError: string,
 ) {

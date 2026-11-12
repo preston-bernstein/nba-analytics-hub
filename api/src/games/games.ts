@@ -1,27 +1,24 @@
 import type { Express, Request, Response } from 'express';
 import { type GamesServiceClient, createGamesServiceClient } from '@nba-analytics-hub/games';
 import type { Game } from '@nba-analytics-hub/games';
-import { createRouteHandler } from '../platform/routeUtils.js';
+import {
+  type RouteLogger,
+  createRouteHandler,
+  queryString,
+  serviceUrl,
+} from '../platform/routeUtils.js';
 
 interface GamesRouteDeps {
   gamesService?: GamesServiceClient;
-  logger?: Pick<Console, 'error'>;
+  logger?: RouteLogger;
 }
 
-function buildGamesService(deps?: GamesRouteDeps): GamesServiceClient {
-  if (deps?.gamesService) {
-    return deps.gamesService;
-  }
-
-  const baseUrl = process.env.GAMES_SERVICE_URL ?? 'http://localhost:4000';
-  return createGamesServiceClient({ baseUrl });
-}
-
-export function registerGamesRoutes(
-  app: Express,
-  deps?: GamesRouteDeps,
-): void {
-  const gamesService = buildGamesService(deps);
+export function registerGamesRoutes(app: Express, deps?: GamesRouteDeps): void {
+  const gamesService =
+    deps?.gamesService ??
+    createGamesServiceClient({
+      baseUrl: serviceUrl('GAMES_SERVICE_URL', 'http://localhost:4000'),
+    });
   const logger = deps?.logger ?? console;
 
   const handleListGames = createRouteHandler<Game[]>(
@@ -29,7 +26,7 @@ export function registerGamesRoutes(
     'Failed to fetch games',
     'Unable to fetch games',
   );
-  const handleGetGameById = createRouteHandler(
+  const handleGetGameById = createRouteHandler<Game>(
     logger,
     'Failed to fetch game by id',
     'Unable to fetch game',
@@ -37,9 +34,11 @@ export function registerGamesRoutes(
 
   app.get('/games', (req: Request, res: Response) =>
     handleListGames(async (requestId) => {
-      const date = typeof req.query.date === 'string' ? req.query.date : undefined;
-      const tz = typeof req.query.tz === 'string' ? req.query.tz : undefined;
-      const { games } = await gamesService.getGames({ date, tz, requestId });
+      const { games } = await gamesService.getGames({
+        date: queryString(req, 'date'),
+        tz: queryString(req, 'tz'),
+        requestId,
+      });
       return games;
     }, req, res),
   );

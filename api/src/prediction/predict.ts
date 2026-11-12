@@ -1,62 +1,50 @@
 import type { Express, Request, Response } from 'express';
-import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import {
+  type PredictionResponse,
   type PredictorServiceClient,
   createPredictorServiceClient,
+  toPredictionResponse,
 } from '@nba-analytics-hub/prediction';
-import { createRouteHandler } from '../platform/routeUtils.js';
+import {
+  type RouteLogger,
+  createRouteHandler,
+  queryString,
+  serviceUrl,
+} from '../platform/routeUtils.js';
 
 interface PredictRouteDeps {
   predictorService?: PredictorServiceClient;
-  logger?: Pick<Console, 'error'>;
+  logger?: RouteLogger;
 }
 
-function buildPredictorService(deps?: PredictRouteDeps): PredictorServiceClient {
-  if (deps?.predictorService) {
-    return deps.predictorService;
-  }
-  const baseUrl = process.env.PREDICTOR_SERVICE_URL ?? 'http://localhost:5000';
-  return createPredictorServiceClient({ baseUrl });
-}
-
-export function registerPredictRoutes(
-  app: Express,
-  deps?: PredictRouteDeps,
-): void {
-  const predictorService = buildPredictorService(deps);
-  const logger = deps?.logger ?? console;
+export function registerPredictRoutes(app: Express, deps?: PredictRouteDeps): void {
+  const predictorService =
+    deps?.predictorService ??
+    createPredictorServiceClient({
+      baseUrl: serviceUrl('PREDICTOR_SERVICE_URL', 'http://localhost:5000'),
+    });
 
   const handlePredict = createRouteHandler<PredictionResponse>(
-    logger,
+    deps?.logger ?? console,
     'Failed to fetch prediction',
     'Unable to fetch prediction',
   );
 
   app.get('/predict', (req: Request, res: Response) => {
-    const homeTeam = req.query.home_team as string | undefined;
-    const awayTeam = req.query.away_team as string | undefined;
-    const gameDate = req.query.game_date as string | undefined;
+    const home = queryString(req, 'home_team');
+    const away = queryString(req, 'away_team');
+    const date = queryString(req, 'game_date');
 
-    if (!homeTeam || !awayTeam || !gameDate) {
+    if (!home || !away || !date) {
       return res.status(400).json({
         error: 'Missing required query params: home_team, away_team, game_date',
       });
     }
 
-    return handlePredict(async () => {
-      const serviceResp = await predictorService.predict({
-        home: homeTeam,
-        away: awayTeam,
-        date: gameDate,
-      });
-
-      return {
-        homeTeamId: serviceResp.home_team,
-        awayTeamId: serviceResp.away_team,
-        homeWinProbability: serviceResp.prob_home_win,
-        awayWinProbability: 1 - serviceResp.prob_home_win,
-        modelVersion: 'predictor-service',
-      };
-    }, req, res);
+    return handlePredict(
+      async () => toPredictionResponse(await predictorService.predict({ home, away, date })),
+      req,
+      res,
+    );
   });
 }

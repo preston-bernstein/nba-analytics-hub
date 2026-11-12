@@ -1,8 +1,5 @@
 import { PoisonMessageError } from './handler.js';
 
-const GAME_UPDATED_TOPIC = 'game.updated';
-const GAME_UPDATED_DLQ_TOPIC = 'game.updated.dlq';
-
 type HeaderValue = Buffer | string | Array<Buffer | string> | undefined;
 type Headers = Record<string, HeaderValue>;
 
@@ -51,13 +48,13 @@ const DEFAULT_RETRY: RetryOptions = {
 
 type Logger = Pick<Console, 'info' | 'warn' | 'error'>;
 
-export interface GameUpdatedConsumerOptions {
+export interface ConsumerOptions {
   kafka: KafkaLike;
   groupId: string;
-  /** Source topic. Defaults to game.updated. */
-  topic?: string;
-  /** Dead-letter topic. Defaults to game.updated.dlq. */
-  dlqTopic?: string;
+  /** Source topic. */
+  topic: string;
+  /** Dead-letter topic for poison messages. */
+  dlqTopic: string;
   handler: (value: string) => unknown | Promise<unknown>;
   fromBeginning?: boolean;
   retry?: RetryOptions;
@@ -75,12 +72,12 @@ const defaultSleep = (ms: number) => new Promise<void>((resolve) => setTimeout(r
  * - Other error: retry with exponential backoff up to `maxAttempts`, then
  *   reject. The offset is not committed, so the message is delivered again.
  */
-export async function startGameUpdatedConsumer(options: GameUpdatedConsumerOptions) {
+export async function startConsumer(options: ConsumerOptions) {
   const {
     kafka,
     groupId,
-    topic = GAME_UPDATED_TOPIC,
-    dlqTopic = GAME_UPDATED_DLQ_TOPIC,
+    topic,
+    dlqTopic,
     handler,
     fromBeginning = true,
     retry = DEFAULT_RETRY,
@@ -120,7 +117,7 @@ export async function startGameUpdatedConsumer(options: GameUpdatedConsumerOptio
       } catch (err) {
         if (err instanceof PoisonMessageError || attempt >= retry.maxAttempts) throw err;
         const delay = Math.min(retry.maxDelayMs, retry.baseDelayMs * 2 ** (attempt - 1));
-        logger.warn(`game.updated attempt ${attempt} failed, retrying in ${delay}ms`, err);
+        logger.warn(`${topic} attempt ${attempt} failed, retrying in ${delay}ms`, err);
         await sleep(delay);
       }
     }
@@ -133,10 +130,10 @@ export async function startGameUpdatedConsumer(options: GameUpdatedConsumerOptio
       await handleWithRetry(value.toString('utf8'));
     } catch (err) {
       if (!(err instanceof PoisonMessageError)) {
-        logger.error('game.updated failed after retries; offset not committed', err);
+        logger.error(`${topic} failed after retries; offset not committed`, err);
         throw err;
       }
-      logger.warn(`game.updated poison message sent to DLQ: ${err.message}`);
+      logger.warn(`${topic} poison message sent to DLQ: ${err.message}`);
       await sendToDlq(payload, err.message);
     }
   }

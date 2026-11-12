@@ -1,11 +1,13 @@
 import { Kafka, logLevel } from 'kafkajs';
 import { loadEnv } from '@nba-analytics-hub/config';
 import { BoundedIdSet } from './boundedIdSet.js';
-import { startGameUpdatedConsumer, type KafkaLike } from './consumer.js';
+import { startConsumer, type KafkaLike } from './consumer.js';
 import { createGameUpdatedHandler } from './handler.js';
 import { LiveGamesReadModel } from './liveGamesReadModel.js';
 
 const CONSUMER_GROUP_ID = 'bff';
+const GAME_UPDATED_TOPIC = 'game.updated';
+const GAME_UPDATED_DLQ_TOPIC = 'game.updated.dlq';
 /** How many recent eventIds are remembered. Older ids are forgotten. */
 const SEEN_EVENT_IDS_MAX = 10_000;
 
@@ -31,9 +33,11 @@ export async function startLiveGamesConsumer(
     model: liveGames,
     seen: new BoundedIdSet(SEEN_EVENT_IDS_MAX),
   });
-  return startGameUpdatedConsumer({
+  return startConsumer({
     kafka: kafka as unknown as KafkaLike,
     groupId: CONSUMER_GROUP_ID,
+    topic: GAME_UPDATED_TOPIC,
+    dlqTopic: GAME_UPDATED_DLQ_TOPIC,
     handler,
   });
 }
