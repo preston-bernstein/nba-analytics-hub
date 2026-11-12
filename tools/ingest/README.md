@@ -24,10 +24,20 @@ BALLDONTLIE_API_KEY=... node tools/ingest/run.mjs --out /data --phase all
 - Safe to stop and start again. A job is done when its final file exists. A crash leaves only a `.tmp` file, and the job runs again.
 - A 401 or 403 stops the run. A 429 or 5xx is retried with backoff.
 
+## Load into Postgres
+
+`load.sh` copies the raw archive into Postgres. Each endpoint gets one table in the `bdl` schema. Each row is one item from `body.data`, kept whole in a `data jsonb` column. Other columns say which job, page and row it came from.
+
+Run it on the NAS: `sudo ./load.sh` loads every endpoint. `sudo ./load.sh games stats` loads some. Each endpoint reloads in one transaction, so a failed load changes nothing. Run it again at any time.
+
+Postgres runs as the container `nba-postgres` (`postgres:17-alpine`) on port 5433 of the NAS. Its login is in `/volume1/docker/nba-data/postgres.env`.
+
+Example: `select data->>'full_name' from bdl.teams;`
+
 ## Test
 
 ```sh
-node --test tools/ingest/lib/ingest.test.mjs
+node --test tools/ingest/lib/ingest.test.mjs tools/ingest/lib/load.test.mjs
 ```
 
 ## Why raw first
