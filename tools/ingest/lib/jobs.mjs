@@ -220,6 +220,16 @@ function phaseOne(seasons) {
     }
   }
   for (const season of from(2015)) {
+    for (const period of range(1, 7)) {
+      jobs.push(
+        paged({
+          endpoint: 'stats_period',
+          key: `season-${season}_period-${period}`,
+          path: '/nba/v1/stats',
+          params: { seasons: [season], period },
+        })
+      );
+    }
     jobs.push(
       paged({
         endpoint: 'stats_advanced_v2',
@@ -277,6 +287,7 @@ function phaseOne(seasons) {
       }
     }
   }
+  jobs.push(paged({ endpoint: 'dfs_slates', key: 'all', path: '/nba/v1/dfs/slates', params: {} }));
   for (const teamId of range(1, 30)) {
     jobs.push({
       endpoint: 'contracts_teams',
@@ -288,7 +299,7 @@ function phaseOne(seasons) {
   return jobs;
 }
 
-function phaseTwo(games, players) {
+function phaseTwo(games, players, slates) {
   const jobs = [];
   const dates = new Map();
   for (const game of games) {
@@ -344,6 +355,22 @@ function phaseTwo(games, players) {
       );
     }
   }
+  for (const slate of slates) {
+    jobs.push({
+      endpoint: 'dfs_slate_detail',
+      key: `slate-${slate.id}`,
+      path: `/nba/v1/dfs/slates/${slate.id}`,
+      params: {},
+    });
+    jobs.push(
+      paged({
+        endpoint: 'dfs_draftables',
+        key: `slate-${slate.id}`,
+        path: '/nba/v1/dfs/draftables',
+        params: { slate_ids: [slate.id] },
+      })
+    );
+  }
   for (const player of players) {
     jobs.push(
       paged({
@@ -361,7 +388,7 @@ function phaseTwo(games, players) {
  * Builds the job list.
  * Phase 1 needs nothing. Phase 2 needs the game list and active players from phase 1.
  */
-export function buildJobs({ phase, seasons, games = [], players = [] }) {
+export function buildJobs({ phase, seasons, games = [], players = [], slates = [] }) {
   const allSeasons = seasons ?? range(FIRST_SEASON, new Date().getUTCFullYear());
-  return phase === 1 ? phaseOne(allSeasons) : phaseTwo(games, players);
+  return phase === 1 ? phaseOne(allSeasons) : phaseTwo(games, players, slates);
 }

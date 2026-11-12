@@ -60,6 +60,12 @@ function loadActivePlayers(root) {
   return readRecords(file).flatMap((record) => record.body?.data ?? []);
 }
 
+function loadSlates(root) {
+  const file = jobFile(root, 'dfs_slates', 'all');
+  if (!jobDone(file)) return [];
+  return readRecords(file).flatMap((record) => record.body?.data ?? []);
+}
+
 async function runJobs(jobs, client, root, log, concurrency) {
   const stats = new Map();
   let finished = 0;
@@ -102,7 +108,12 @@ async function main() {
     let jobs =
       phase === 1
         ? buildJobs({ phase: 1 })
-        : buildJobs({ phase: 2, games: loadGames(args.out), players: loadActivePlayers(args.out) });
+        : buildJobs({
+            phase: 2,
+            games: loadGames(args.out),
+            players: loadActivePlayers(args.out),
+            slates: loadSlates(args.out),
+          });
     if (args.only) jobs = jobs.filter((job) => args.only.includes(job.endpoint));
     if (args.smoke) {
       const seen = new Set();

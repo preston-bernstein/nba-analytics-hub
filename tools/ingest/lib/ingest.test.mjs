@@ -202,3 +202,21 @@ test('runPool rejects when a task throws', async () => {
     /boom/
   );
 });
+
+test('buildJobs phase 1 adds per-period stats jobs and DFS slates', () => {
+  const jobs = buildJobs({ phase: 1, seasons: [2024] });
+  const periods = jobs.filter((j) => j.endpoint === 'stats_period');
+  assert.deepEqual(
+    periods.map((j) => j.params.period),
+    [1, 2, 3, 4, 5, 6, 7]
+  );
+  assert.equal(periods[0].key, 'season-2024_period-1');
+  assert.ok(jobs.some((j) => j.endpoint === 'dfs_slates'));
+});
+
+test('buildJobs phase 2 adds DFS detail and draftables per slate', () => {
+  const jobs = buildJobs({ phase: 2, slates: [{ id: 'abc' }] });
+  assert.ok(jobs.some((j) => j.endpoint === 'dfs_slate_detail' && j.path.endsWith('/abc')));
+  const draftables = jobs.find((j) => j.endpoint === 'dfs_draftables');
+  assert.deepEqual(draftables.params.slate_ids, ['abc']);
+});
