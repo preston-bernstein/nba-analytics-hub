@@ -70,11 +70,11 @@ describe('LeaderboardPage', () => {
     const el = container.querySelector('[data-slot="data-table-scroll"]') as HTMLElement;
     Object.defineProperty(el, 'scrollHeight', { value: 1000, configurable: true });
     Object.defineProperty(el, 'clientHeight', { value: 400, configurable: true });
-    Object.defineProperty(el, 'scrollTop', { value: 600, configurable: true });
+    // 50px from the bottom: close enough to load more, but the table still looks full.
+    Object.defineProperty(el, 'scrollTop', { value: 550, configurable: true });
     fireEvent.scroll(el);
     expect(await screen.findByText(byPoints[PAGE_SIZE].name)).toBeInTheDocument();
-    // The fake table size never changes, so it may ask for later pages too.
-    expect(requests.map((r) => r.searchParams.get('offset'))).toContain(String(PAGE_SIZE));
+    expect(requests.map((r) => r.searchParams.get('offset'))).toEqual(['0', String(PAGE_SIZE)]);
   });
 
   it('reloads from the first page when the season changes', async () => {
