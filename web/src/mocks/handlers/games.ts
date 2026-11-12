@@ -13,8 +13,8 @@ export const gamesHandlers = [
   http.get('*/games', () => HttpResponse.json(mockGames)),
   http.get('*/predict', ({ request }) => {
     const params = new URL(request.url).searchParams;
-    const homeTeamId = params.get('homeTeamId') ?? '';
-    const awayTeamId = params.get('awayTeamId') ?? '';
+    const homeTeamId = params.get('homeTeamId') ?? 'HOME';
+    const awayTeamId = params.get('awayTeamId') ?? 'AWAY';
     const home = Number(
       (0.3 + 0.4 * hash01(`${homeTeamId}-${awayTeamId}-${params.get('gameDate')}`)).toFixed(3)
     );

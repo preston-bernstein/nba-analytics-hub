@@ -49,16 +49,13 @@ export const playersHandlers = [
     const sort = params.get('sort') ?? 'pts';
     const dir = params.get('dir') ?? 'desc';
 
-    const error =
-      (!season.ok && season.error) ||
-      (!limit.ok && limit.error) ||
-      (!offset.ok && offset.error) ||
-      (!SEASON_TYPES.includes(seasonType) && 'seasonType is not valid') ||
-      (!isSortColumn(sort) && 'sort is not a column') ||
-      (dir !== 'asc' && dir !== 'desc' && 'dir must be asc or desc');
-    if (error || !season.ok || !limit.ok || !offset.ok || !isSortColumn(sort)) {
-      return HttpResponse.json({ error: error || 'bad request' }, { status: 400 });
-    }
+    const badRequest = (error: string) => HttpResponse.json({ error }, { status: 400 });
+    if (!season.ok) return badRequest(season.error);
+    if (!limit.ok) return badRequest(limit.error);
+    if (!offset.ok) return badRequest(offset.error);
+    if (!SEASON_TYPES.includes(seasonType)) return badRequest('seasonType is not valid');
+    if (!isSortColumn(sort)) return badRequest('sort is not a column');
+    if (dir !== 'asc' && dir !== 'desc') return badRequest('dir must be asc or desc');
 
     const search = params.get('search')?.toLowerCase();
     const sign = dir === 'asc' ? 1 : -1;

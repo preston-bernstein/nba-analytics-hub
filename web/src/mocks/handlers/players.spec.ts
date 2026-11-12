@@ -64,10 +64,16 @@ describe('mock leaderboard handler', () => {
     expect(playoffs.body.total).toBeLessThan(regular.body.total);
   });
 
-  it.each(['', 'season=abc', 'season=2024&sort=nope', 'season=2024&dir=up', 'season=2024&limit=0'])(
-    'answers 400 for bad params: %s',
-    async (query) => {
-      expect((await get(query)).status).toBe(400);
-    }
-  );
+  it.each([
+    '',
+    'season=abc',
+    'season=2024&seasonType=nope',
+    'season=2024&sort=nope',
+    'season=2024&dir=up',
+    'season=2024&limit=0',
+    'season=2024&limit=500',
+    'season=2024&offset=-1',
+  ])('answers 400 for bad params: %s', async (query) => {
+    expect((await get(query)).status).toBe(400);
+  });
 });

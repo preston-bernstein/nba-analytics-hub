@@ -30,4 +30,11 @@ describe('mock games and prediction handlers', () => {
     const b = await (await fetch(url)).json();
     expect(a).toEqual(b);
   });
+
+  it('still answers a prediction request that has no team ids', async () => {
+    const res = await fetch('http://localhost/predict');
+    const body = (await res.json()) as PredictionResponse;
+    expect(res.status).toBe(200);
+    expect(body.homeWinProbability + body.awayWinProbability).toBeCloseTo(1);
+  });
 });
