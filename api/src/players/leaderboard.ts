@@ -13,6 +13,7 @@ import {
   type LeaderboardRepo,
   type SeasonType,
   type SortColumn,
+  type SortDir,
 } from './leaderboardRepo.js';
 
 interface PlayersRouteDeps {
@@ -51,7 +52,7 @@ export function registerPlayersRoutes(app: Express, deps: PlayersRouteDeps): voi
     const season = Number(queryString(req, 'season'));
     const seasonType = (queryString(req, 'seasonType') ?? 'regular') as SeasonType;
     const sort = (queryString(req, 'sort') ?? 'pts') as SortColumn;
-    const dir = queryString(req, 'dir') ?? 'desc';
+    const dir = (queryString(req, 'dir') ?? 'desc') as SortDir;
     const limit = intParam(req, 'limit', DEFAULT_LIMIT);
     const offset = intParam(req, 'offset', 0);
 
