@@ -110,9 +110,7 @@ describe('createGamesClient', () => {
 
     const client = createGamesClient({ baseUrl: BASE_URL });
 
-    await expect(client.getGames()).rejects.toThrow(
-      'Games request failed with status 502',
-    );
+    await expect(client.getGames()).rejects.toThrow('Games request failed with status 502');
   });
 
   it('propagates fetch rejections (network errors)', async () => {

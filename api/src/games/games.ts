@@ -24,30 +24,34 @@ export function registerGamesRoutes(app: Express, deps?: GamesRouteDeps): void {
   const handleListGames = createRouteHandler<Game[]>(
     logger,
     'Failed to fetch games',
-    'Unable to fetch games',
+    'Unable to fetch games'
   );
   const handleGetGameById = createRouteHandler<Game>(
     logger,
     'Failed to fetch game by id',
-    'Unable to fetch game',
+    'Unable to fetch game'
   );
 
   app.get('/games', (req: Request, res: Response) =>
-    handleListGames(async (requestId) => {
-      const { games } = await gamesService.getGames({
-        date: queryString(req, 'date'),
-        tz: queryString(req, 'tz'),
-        requestId,
-      });
-      return games;
-    }, req, res),
+    handleListGames(
+      async (requestId) => {
+        const { games } = await gamesService.getGames({
+          date: queryString(req, 'date'),
+          tz: queryString(req, 'tz'),
+          requestId,
+        });
+        return games;
+      },
+      req,
+      res
+    )
   );
 
   app.get('/games/:id', (req: Request, res: Response) =>
     handleGetGameById(
       (requestId) => gamesService.getGameById(req.params.id, { requestId }),
       req,
-      res,
-    ),
+      res
+    )
   );
 }

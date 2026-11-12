@@ -2,92 +2,51 @@
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
     ".": {
-      "entry": [
-        "web/src/main.tsx",
-        "api/src/main.ts"
-      ],
-      "project": [
-        "web/src/**/*.{ts,tsx}",
-        "api/src/**/*.ts"
-      ],
-      "ignore": [
-        "web/src/**/*.spec.{ts,tsx}",
-        "api/src/**/*.spec.ts"
-      ]
+      "entry": ["web/src/main.tsx", "api/src/main.ts"],
+      "project": ["web/src/**/*.{ts,tsx}", "api/src/**/*.ts"],
+      "ignore": ["web/src/**/*.spec.{ts,tsx}", "api/src/**/*.spec.ts"]
     },
     "packages/ui": {
       "entry": "src/index.ts",
-      "project": [
-        "src/**/*.{ts,tsx}"
-      ],
-      "ignore": [
-        "src/**/*.spec.{ts,tsx}",
-        "src/**/*.stories.{ts,tsx}"
-      ]
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignore": ["src/**/*.spec.{ts,tsx}", "src/**/*.stories.{ts,tsx}"]
     },
     "packages/config": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     },
     "packages/testing": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     },
     "infra": {
-      "entry": [
-        "bin/app.ts"
-      ],
-      "project": [
-        "bin/**/*.ts",
-        "src/**/*.ts"
-      ],
-      "ignore": [
-        "src/**/*.spec.ts"
-      ],
-      "ignoreDependencies": [
-        "tsx"
-      ]
+      "entry": ["bin/app.ts"],
+      "project": ["bin/**/*.ts", "src/**/*.ts"],
+      "ignore": ["src/**/*.spec.ts"],
+      "ignoreDependencies": ["tsx"]
     },
     "packages/platform": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     },
     "packages/games": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     },
     "packages/prediction": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     },
     "packages/events": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
-      "ignore": [
-        "src/**/*.spec.ts"
-      ]
+      "ignore": ["src/**/*.spec.ts"]
     }
   },
-  "ignore": [
-    "codegen/**",
-    "packages/types/**",
-    "**/*.d.ts",
-    "**/dist/**",
-    "**/out-tsc/**"
-  ]
+  "ignore": ["codegen/**", "packages/types/**", "**/*.d.ts", "**/dist/**", "**/out-tsc/**"]
 }

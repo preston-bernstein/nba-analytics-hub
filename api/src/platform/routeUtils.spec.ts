@@ -1,12 +1,7 @@
 import { vi } from 'vitest';
 import express from 'express';
 import request from 'supertest';
-import {
-  resolveRequestId,
-  sendError,
-  sendSuccess,
-  createRouteHandler,
-} from './routeUtils.js';
+import { resolveRequestId, sendError, sendSuccess, createRouteHandler } from './routeUtils.js';
 import { describeIfSockets } from './testing/describeIfSockets.js';
 
 describeIfSockets('routeUtils', () => {
@@ -19,9 +14,7 @@ describeIfSockets('routeUtils', () => {
     it('generates a UUID when header is absent', () => {
       const req = { header: vi.fn().mockReturnValue(undefined) } as never;
       const id = resolveRequestId(req);
-      expect(id).toMatch(
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
-      );
+      expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
     });
   });
 
@@ -35,9 +28,7 @@ describeIfSockets('routeUtils', () => {
         await handler(async () => ({ ok: true }), req, res);
       });
 
-      const res = await request(app)
-        .get('/test')
-        .set('X-Request-ID', 'rh-1');
+      const res = await request(app).get('/test').set('X-Request-ID', 'rh-1');
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual({ ok: true });
@@ -51,12 +42,16 @@ describeIfSockets('routeUtils', () => {
       const app = express();
 
       app.get('/fail', async (req, res) => {
-        await handler(async () => { throw new Error('boom'); }, req, res);
+        await handler(
+          async () => {
+            throw new Error('boom');
+          },
+          req,
+          res
+        );
       });
 
-      const res = await request(app)
-        .get('/fail')
-        .set('X-Request-ID', 'rh-2');
+      const res = await request(app).get('/fail').set('X-Request-ID', 'rh-2');
 
       expect(res.status).toBe(502);
       expect(res.body).toMatchObject({

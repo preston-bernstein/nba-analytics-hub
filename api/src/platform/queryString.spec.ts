@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { Request } from 'express';
 import { queryString } from './routeUtils.js';
 
-const reqWith = (query: Record<string, unknown>) => ({ query }) as unknown as Request;
+const reqWith = (query: Record<string, unknown>) => ({ query } as unknown as Request);
 
 describe('queryString', () => {
   it('returns a string value', () => {

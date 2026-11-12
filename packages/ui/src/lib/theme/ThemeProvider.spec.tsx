@@ -7,7 +7,7 @@ describe('ThemeProvider', () => {
     render(
       <ThemeProvider>
         <span>hello theme</span>
-      </ThemeProvider>,
+      </ThemeProvider>
     );
 
     expect(screen.getByText('hello theme')).toBeInTheDocument();

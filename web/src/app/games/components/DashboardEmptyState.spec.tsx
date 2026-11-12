@@ -12,9 +12,7 @@ describe('DashboardEmptyState', () => {
   it('renders helpful subtext', () => {
     render(<DashboardEmptyState />);
 
-    expect(
-      screen.getByText(/Try a different date to find games/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Try a different date to find games/i)).toBeInTheDocument();
   });
 
   it('renders basketball icon', () => {

@@ -32,7 +32,7 @@ const mockPrediction: PredictionResponse = {
 
 const server = setupServer(
   http.get('*/games', () => HttpResponse.json(mockGames)),
-  http.get('*/predict', () => HttpResponse.json(mockPrediction)),
+  http.get('*/predict', () => HttpResponse.json(mockPrediction))
 );
 
 beforeAll(() => server.listen());
@@ -76,7 +76,7 @@ describe('resolveApiConfig', () => {
         DEV: false,
         VITE_API_BASE_URL: 'https://api.example.com',
       } as ImportMetaEnv,
-      'https://app.example.com',
+      'https://app.example.com'
     );
 
     expect(config.baseUrl).toBe('https://api.example.com');
@@ -89,7 +89,7 @@ describe('resolveApiConfig', () => {
         DEV: true,
         VITE_API_BASE_URL: '',
       } as ImportMetaEnv,
-      'https://app.example.com',
+      'https://app.example.com'
     );
 
     expect(config.baseUrl).toBe('http://localhost:3000');
@@ -102,7 +102,7 @@ describe('resolveApiConfig', () => {
         DEV: false,
         VITE_API_BASE_URL: '',
       } as ImportMetaEnv,
-      'https://app.example.com',
+      'https://app.example.com'
     );
 
     expect(config.baseUrl).toBe('https://app.example.com');
@@ -115,7 +115,7 @@ describe('resolveApiConfig', () => {
         DEV: false,
         VITE_API_BASE_URL: '   ',
       } as ImportMetaEnv,
-      'https://app.example.com',
+      'https://app.example.com'
     );
 
     expect(config.baseUrl).toBe('https://app.example.com');
@@ -123,12 +123,10 @@ describe('resolveApiConfig', () => {
   });
 
   it('falls back to localhost when no window origin is available', () => {
-    const config = resolveApiConfig(
-      {
-        DEV: false,
-        VITE_API_BASE_URL: '',
-      } as ImportMetaEnv,
-    );
+    const config = resolveApiConfig({
+      DEV: false,
+      VITE_API_BASE_URL: '',
+    } as ImportMetaEnv);
 
     expect(config.baseUrl).toBe('http://localhost:3000');
     expect(config.basePath).toBe('/api');
@@ -179,7 +177,7 @@ describe('useDashboardData', () => {
       http.get('*/predict', () => {
         predictRequests += 1;
         return HttpResponse.json(mockPrediction);
-      }),
+      })
     );
 
     renderWithQueryClient(<HookHarness />);
@@ -199,4 +197,3 @@ describe('useDashboardData', () => {
     expect(predictRequests).toBe(1);
   });
 });
-

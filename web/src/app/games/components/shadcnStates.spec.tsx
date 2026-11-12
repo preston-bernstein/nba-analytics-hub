@@ -8,9 +8,7 @@ import { DashboardLoadingState } from './DashboardLoadingState';
 describe('dashboard states use shadcn/ui', () => {
   it('loading state renders shadcn Skeletons', () => {
     const { container } = render(<DashboardLoadingState />);
-    expect(
-      container.querySelectorAll('[data-slot="skeleton"]').length,
-    ).toBeGreaterThan(0);
+    expect(container.querySelectorAll('[data-slot="skeleton"]').length).toBeGreaterThan(0);
   });
 
   it('error state renders a destructive shadcn Alert', () => {

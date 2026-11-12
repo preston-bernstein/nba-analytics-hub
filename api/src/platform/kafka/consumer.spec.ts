@@ -1,9 +1,5 @@
 import { vi } from 'vitest';
-import {
-  startConsumer,
-  type EachMessagePayloadLike,
-  type KafkaLike,
-} from './consumer.js';
+import { startConsumer, type EachMessagePayloadLike, type KafkaLike } from './consumer.js';
 import { PoisonMessageError } from './consumer.js';
 
 function fakeKafka() {
@@ -46,7 +42,9 @@ function fakeKafka() {
   return { kafka, state };
 }
 
-function payload(overrides: Partial<EachMessagePayloadLike['message']> = {}): EachMessagePayloadLike {
+function payload(
+  overrides: Partial<EachMessagePayloadLike['message']> = {}
+): EachMessagePayloadLike {
   return {
     topic: 'game.updated',
     partition: 2,
@@ -96,7 +94,8 @@ describe('startConsumer', () => {
     const sleep = vi.fn(noSleep);
     await startConsumer({
       kafka,
-      groupId: 'bff', ...topics,
+      groupId: 'bff',
+      ...topics,
       handler,
       sleep,
       retry: { maxAttempts: 5, baseDelayMs: 100, maxDelayMs: 1000 },
@@ -116,7 +115,8 @@ describe('startConsumer', () => {
     const sleep = vi.fn(noSleep);
     await startConsumer({
       kafka,
-      groupId: 'bff', ...topics,
+      groupId: 'bff',
+      ...topics,
       handler,
       sleep,
       retry: { maxAttempts: 5, baseDelayMs: 100, maxDelayMs: 250 },
@@ -133,7 +133,8 @@ describe('startConsumer', () => {
     });
     await startConsumer({
       kafka,
-      groupId: 'bff', ...topics,
+      groupId: 'bff',
+      ...topics,
       handler,
       sleep: noSleep,
       retry: { maxAttempts: 3, baseDelayMs: 1, maxDelayMs: 2 },
@@ -213,7 +214,8 @@ describe('startConsumer', () => {
     const { kafka, state } = fakeKafka();
     const consumer = await startConsumer({
       kafka,
-      groupId: 'bff', ...topics,
+      groupId: 'bff',
+      ...topics,
       handler: vi.fn(),
       logger: quiet,
     });

@@ -28,7 +28,7 @@ describe('shadcn primitives', () => {
         </CardHeader>
         <CardContent>Content</CardContent>
         <CardFooter>Footer</CardFooter>
-      </Card>,
+      </Card>
     );
     for (const slot of [
       'card',
@@ -48,13 +48,10 @@ describe('shadcn primitives', () => {
       <Alert variant="destructive">
         <AlertTitle>Heads up</AlertTitle>
         <AlertDescription>Details</AlertDescription>
-      </Alert>,
+      </Alert>
     );
     expect(screen.getByRole('alert')).toHaveAttribute('data-slot', 'alert');
-    expect(screen.getByText('Details')).toHaveAttribute(
-      'data-slot',
-      'alert-description',
-    );
+    expect(screen.getByText('Details')).toHaveAttribute('data-slot', 'alert-description');
   });
 
   it('Skeleton renders a pulsing placeholder', () => {
@@ -73,7 +70,7 @@ describe('shadcn primitives', () => {
         <Badge asChild>
           <a href="/y">Link badge</a>
         </Badge>
-      </>,
+      </>
     );
     expect(screen.getByText('Link button').tagName).toBe('A');
     expect(screen.getByText('Link button')).toHaveAttribute('data-slot', 'button');
@@ -82,9 +79,7 @@ describe('shadcn primitives', () => {
 
   it('Progress with no value shows an empty bar', () => {
     const { container } = render(<Progress />);
-    const indicator = container.querySelector(
-      '[data-slot="progress-indicator"]',
-    ) as HTMLElement;
+    const indicator = container.querySelector('[data-slot="progress-indicator"]') as HTMLElement;
     expect(indicator.style.transform).toBe('translateX(-100%)');
   });
 });

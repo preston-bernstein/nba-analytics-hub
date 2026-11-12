@@ -73,8 +73,8 @@ describe('game.updated handler', () => {
           eventId: 'e-final',
           occurredAt: '2025-01-01T05:00:00Z',
           game: { ...game, statusKind: 'FINAL', score: { home: 100, away: 90 } },
-        }),
-      ),
+        })
+      )
     );
     const result = handle(
       JSON.stringify(
@@ -82,8 +82,8 @@ describe('game.updated handler', () => {
           eventId: 'e-old',
           occurredAt: '2025-01-01T02:00:00Z',
           game: { ...game, statusKind: 'IN_PROGRESS', score: { home: 50, away: 40 } },
-        }),
-      ),
+        })
+      )
     );
     expect(result).toBe('stale');
     expect(model.get(game.id)?.statusKind).toBe('FINAL');

@@ -31,7 +31,7 @@ describe('resolveGameStatus', () => {
 
   it('is live when a timestamp status comes with a score', () => {
     expect(
-      resolveGameStatus(game({ status: '2025-01-01T00:00:00Z', score: { home: 2, away: 0 } })).kind,
+      resolveGameStatus(game({ status: '2025-01-01T00:00:00Z', score: { home: 2, away: 0 } })).kind
     ).toBe('IN_PROGRESS');
   });
 
@@ -49,7 +49,7 @@ describe('resolveGameStatus', () => {
 
   it('is live when the text is generic but a score exists', () => {
     expect(resolveGameStatus(game({ status: 'TBD', score: { home: 0, away: 3 } })).kind).toBe(
-      'IN_PROGRESS',
+      'IN_PROGRESS'
     );
   });
 });

@@ -1,4 +1,8 @@
-import { applyGameUpdated, type GameUpdatedEvent, type LiveGameEntry } from '@nba-analytics-hub/events';
+import {
+  applyGameUpdated,
+  type GameUpdatedEvent,
+  type LiveGameEntry,
+} from '@nba-analytics-hub/events';
 import type { Game } from '@nba-analytics-hub/games';
 
 export type ApplyOutcome = 'applied' | 'stale';

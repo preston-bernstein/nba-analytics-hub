@@ -25,11 +25,7 @@ export function resolveRequestId(req: Request): string {
 /**
  * Sends an error response with request ID header
  */
-export function sendError(
-  res: Response,
-  payload: ErrorResponse,
-  status = 502,
-): Response {
+export function sendError(res: Response, payload: ErrorResponse, status = 502): Response {
   res.setHeader('X-Request-ID', payload.requestId ?? '');
   return res.status(status).json(payload);
 }
@@ -37,12 +33,7 @@ export function sendError(
 /**
  * Sends a success response with request ID header
  */
-export function sendSuccess<T>(
-  res: Response,
-  requestId: string,
-  data: T,
-  status = 200,
-): Response {
+export function sendSuccess<T>(res: Response, requestId: string, data: T, status = 200): Response {
   res.setHeader('X-Request-ID', requestId);
   return res.status(status).json(data);
 }
@@ -53,12 +44,12 @@ export function sendSuccess<T>(
 export function createRouteHandler<T>(
   logger: RouteLogger,
   errorMessage: string,
-  fallbackError: string,
+  fallbackError: string
 ) {
   return async (
     fetcher: (requestId: string) => Promise<T>,
     req: Request,
-    res: Response,
+    res: Response
   ): Promise<Response> => {
     const requestId = resolveRequestId(req);
     try {

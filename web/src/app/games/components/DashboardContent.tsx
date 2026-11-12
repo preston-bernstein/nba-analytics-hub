@@ -23,17 +23,15 @@ export function DashboardContent({
           const fallbackMessage = predictionError
             ? 'Prediction unavailable'
             : loadingPredictions
-              ? 'Loading prediction...'
-              : 'No prediction available';
+            ? 'Loading prediction...'
+            : 'No prediction available';
           return (
             <article key={game.id} className="flex flex-col gap-3">
               <GameCard game={game} prediction={prediction} />
               {!prediction && (
                 <Card className="rounded-lg p-3 text-center text-sm text-muted-foreground">
                   {loadingPredictions && (
-                    <span className="inline-block animate-pulse">
-                      {fallbackMessage}
-                    </span>
+                    <span className="inline-block animate-pulse">{fallbackMessage}</span>
                   )}
                   {!loadingPredictions && fallbackMessage}
                 </Card>

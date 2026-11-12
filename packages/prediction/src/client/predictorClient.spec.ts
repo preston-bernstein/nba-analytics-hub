@@ -140,9 +140,7 @@ describe('createPredictorClient', () => {
       gameDate: '2025-01-01',
     };
 
-    await expect(client.predict(req)).rejects.toThrow(
-      'Predictor request failed with status 503',
-    );
+    await expect(client.predict(req)).rejects.toThrow('Predictor request failed with status 503');
   });
 
   it('propagates fetch rejections (network errors)', async () => {

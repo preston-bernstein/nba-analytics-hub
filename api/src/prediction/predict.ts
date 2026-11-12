@@ -27,7 +27,7 @@ export function registerPredictRoutes(app: Express, deps?: PredictRouteDeps): vo
   const handlePredict = createRouteHandler<PredictionResponse>(
     deps?.logger ?? console,
     'Failed to fetch prediction',
-    'Unable to fetch prediction',
+    'Unable to fetch prediction'
   );
 
   app.get('/predict', (req: Request, res: Response) => {
@@ -44,7 +44,7 @@ export function registerPredictRoutes(app: Express, deps?: PredictRouteDeps): vo
     return handlePredict(
       async () => toPredictionResponse(await predictorService.predict({ home, away, date })),
       req,
-      res,
+      res
     );
   });
 }

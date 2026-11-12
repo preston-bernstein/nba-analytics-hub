@@ -40,11 +40,16 @@ export function GameCard({ game, prediction }: GameCardProps) {
       aria-label="game-card"
       className={cn(
         'mx-auto w-full max-w-[400px] gap-0 rounded-lg p-4 transition-all',
-        isLive && 'ring-1 ring-rose-200',
+        isLive && 'ring-1 ring-rose-200'
       )}
     >
       <div className="grid w-full grid-cols-[1fr_auto_1fr] items-center gap-x-4 gap-y-2">
-        <TeamScore name={awayTeam.name} score={score.away} isWinner={awayWins} showScore={showScore} />
+        <TeamScore
+          name={awayTeam.name}
+          score={score.away}
+          isWinner={awayWins}
+          showScore={showScore}
+        />
 
         {kind === 'FINAL' ? (
           <span className="justify-self-center text-[11px] font-semibold uppercase tracking-wide text-neutral-900">
@@ -60,7 +65,12 @@ export function GameCard({ game, prediction }: GameCardProps) {
           <StatusBadge status={BADGE_STATUS[kind]}>{liveLabel}</StatusBadge>
         )}
 
-        <TeamScore name={homeTeam.name} score={score.home} isWinner={homeWins} showScore={showScore} />
+        <TeamScore
+          name={homeTeam.name}
+          score={score.home}
+          isWinner={homeWins}
+          showScore={showScore}
+        />
       </div>
 
       {predictionDisplay && (

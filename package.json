@@ -14,6 +14,8 @@
     "coverage:summary": "node tools/coverage-summary.js",
     "refresh:openapi": "node tools/refresh-openapi-spec.mjs",
     "generate:games-types": "openapi-typescript codegen/openapi/nba-data-service.yaml -o packages/games/src/types/generated.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "knip": "knip",
     "lint:ox": "oxlint --deny-warnings",
     "test:games": "nx test games",

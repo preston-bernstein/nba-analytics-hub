@@ -7,9 +7,7 @@ export function DashboardEmptyState() {
         &#127936;
       </div>
       <h2 className="text-xl font-semibold text-foreground">No games scheduled</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Try a different date to find games.
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground">Try a different date to find games.</p>
     </Card>
   );
 }

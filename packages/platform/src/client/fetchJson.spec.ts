@@ -21,7 +21,7 @@ describe('fetchJson', () => {
   it('throws on non-ok responses', async () => {
     fetchMock.mockResolvedValue({ ok: false, status: 404, json: async () => ({}) });
     await expect(fetchJson(BASE, '/endpoint', 'Test')).rejects.toThrow(
-      'Test request failed with status 404',
+      'Test request failed with status 404'
     );
   });
 
