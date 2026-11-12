@@ -12,6 +12,16 @@ import { buildJobs } from './jobs.mjs';
 const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'ingest-'));
 const noSleep = async () => undefined;
 
+async function* pages() {
+  yield { url: 'u1', status: 200, fetchedAt: 't', body: { data: [1] } };
+  yield { url: 'u2', status: 200, fetchedAt: 't', body: { data: [2] } };
+}
+
+async function* boom() {
+  yield { url: 'u1', status: 200, fetchedAt: 't', body: {} };
+  throw new Error('network');
+}
+
 test('limiter spaces calls by 60000/perMinute ms', async () => {
   let now = 0;
   const sleeps = [];
@@ -98,7 +108,7 @@ test('client returns 400 and 404 without throwing', async () => {
 });
 
 test('fetchAllPages follows next_cursor until it is absent', async () => {
-  const pages = [
+  const responses = [
     { status: 200, url: 'u1', body: { data: [1], meta: { next_cursor: 5 } } },
     { status: 200, url: 'u2', body: { data: [2], meta: { next_cursor: 9 } } },
     { status: 200, url: 'u3', body: { data: [3], meta: {} } },
@@ -107,7 +117,7 @@ test('fetchAllPages follows next_cursor until it is absent', async () => {
   const client = {
     get: async (_p, params) => {
       seen.push(params.cursor);
-      return pages.shift();
+      return responses.shift();
     },
   };
   const out = [];
@@ -127,10 +137,6 @@ test('writeJob stores records gzipped and readRecords gives them back', async ()
   const dir = tmp();
   const file = jobFile(dir, 'games', 'season-2024');
   assert.equal(jobDone(file), false);
-  async function* pages() {
-    yield { url: 'u1', status: 200, fetchedAt: 't', body: { data: [1] } };
-    yield { url: 'u2', status: 200, fetchedAt: 't', body: { data: [2] } };
-  }
   const n = await writeJob(file, pages());
   assert.equal(n, 2);
   assert.equal(jobDone(file), true);
@@ -144,10 +150,6 @@ test('writeJob stores records gzipped and readRecords gives them back', async ()
 test('writeJob leaves no final file when the source throws', async () => {
   const dir = tmp();
   const file = jobFile(dir, 'games', 'season-2024');
-  async function* boom() {
-    yield { url: 'u1', status: 200, fetchedAt: 't', body: {} };
-    throw new Error('network');
-  }
   await assert.rejects(() => writeJob(file, boom()), /network/);
   assert.equal(jobDone(file), false);
 });
@@ -188,7 +190,7 @@ test('runPool runs every item and never exceeds the concurrency limit', async ()
     seen.push(item);
     active -= 1;
   });
-  assert.deepEqual(seen.sort(), [1, 2, 3, 4, 5, 6, 7]);
+  assert.deepEqual(seen.toSorted(), [1, 2, 3, 4, 5, 6, 7]);
   assert.ok(peak <= 3 && peak > 1);
 });
 
