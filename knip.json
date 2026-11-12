@@ -42,6 +42,11 @@
       "project": "src/**/*.ts",
       "ignore": ["src/**/*.spec.ts"]
     },
+    "packages/players": {
+      "entry": "src/index.ts",
+      "project": "src/**/*.ts",
+      "ignore": ["src/**/*.spec.ts"]
+    },
     "packages/events": {
       "entry": "src/index.ts",
       "project": "src/**/*.ts",
