@@ -1,5 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { jobFile, writeJob, streamRecords } from './archive.mjs';
 import { extractRows, csvLine, tableName, createTableSql } from './load.mjs';
 
 const record = (body) => ({ url: 'https://x.test/a', status: 200, fetchedAt: 't', body });
@@ -51,4 +55,17 @@ test('createTableSql makes a jsonb table with provenance columns and an id index
   assert.match(sql, /data jsonb not null/i);
   assert.match(sql, /job_key text not null/i);
   assert.match(sql, /create index if not exists games_id_idx on bdl\.games \(\(data->>'id'\)\)/i);
+});
+
+async function* threePages() {
+  for (let i = 0; i < 3; i += 1) yield { url: `u${i}`, status: 200, body: { data: [i] } };
+}
+
+test('streamRecords yields each record in order without reading the whole file', async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'stream-'));
+  const file = jobFile(dir, 'games', 'season-2024');
+  await writeJob(file, threePages());
+  const seen = [];
+  for await (const rec of streamRecords(file)) seen.push(rec.body.data[0]);
+  assert.deepEqual(seen, [0, 1, 2]);
 });

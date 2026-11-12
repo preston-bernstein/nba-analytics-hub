@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import readline from 'node:readline';
 import zlib from 'node:zlib';
 
 /** Final file for one job: <root>/raw/<endpoint>/<key>.ndjson.gz */
@@ -37,4 +38,15 @@ export function readRecords(file) {
     .split('\n')
     .filter(Boolean)
     .map((line) => JSON.parse(line));
+}
+
+/** Streams records one at a time, so a large file never has to fit in memory. */
+export async function* streamRecords(file) {
+  const lines = readline.createInterface({
+    input: fs.createReadStream(file).pipe(zlib.createGunzip()),
+    crlfDelay: Infinity,
+  });
+  for await (const line of lines) {
+    if (line) yield JSON.parse(line);
+  }
 }
