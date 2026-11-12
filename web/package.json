@@ -7,6 +7,9 @@
     "test:run": "vitest run"
   },
   "nx": {
+    "tags": [
+      "scope:app"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/vite:build",
@@ -73,6 +76,9 @@
     }
   },
   "dependencies": {
+    "@nba-analytics-hub/games": "0.0.1",
+    "@nba-analytics-hub/platform": "0.0.1",
+    "@nba-analytics-hub/prediction": "0.0.1",
     "@tanstack/react-query": "^5.105.1",
     "lucide-react": "^1.66.0"
   }

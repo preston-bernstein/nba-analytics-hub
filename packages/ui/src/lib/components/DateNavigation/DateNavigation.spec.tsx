@@ -44,17 +44,13 @@ describe('DateNavigation', () => {
   });
 
   it('hides Today button when showTodayButton is false', () => {
-    render(
-      <DateNavigation {...defaultProps} displayDate="Yesterday" showTodayButton={false} />,
-    );
+    render(<DateNavigation {...defaultProps} displayDate="Yesterday" showTodayButton={false} />);
     expect(screen.queryByRole('button', { name: 'Today' })).not.toBeInTheDocument();
   });
 
   it('calls onToday when Today button clicked', () => {
     const onToday = vi.fn();
-    render(
-      <DateNavigation {...defaultProps} showTodayButton={true} onToday={onToday} />,
-    );
+    render(<DateNavigation {...defaultProps} showTodayButton={true} onToday={onToday} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'Today' }));
     expect(onToday).toHaveBeenCalled();
@@ -77,11 +73,7 @@ describe('DateNavigation', () => {
   it('does not call onPreviousDay when previous button is disabled', () => {
     const onPreviousDay = vi.fn();
     render(
-      <DateNavigation
-        {...defaultProps}
-        disablePrevious={true}
-        onPreviousDay={onPreviousDay}
-      />,
+      <DateNavigation {...defaultProps} disablePrevious={true} onPreviousDay={onPreviousDay} />
     );
 
     fireEvent.click(screen.getByLabelText('Previous day'));
@@ -90,9 +82,7 @@ describe('DateNavigation', () => {
 
   it('does not call onNextDay when next button is disabled', () => {
     const onNextDay = vi.fn();
-    render(
-      <DateNavigation {...defaultProps} disableNext={true} onNextDay={onNextDay} />,
-    );
+    render(<DateNavigation {...defaultProps} disableNext={true} onNextDay={onNextDay} />);
 
     fireEvent.click(screen.getByLabelText('Next day'));
     expect(onNextDay).not.toHaveBeenCalled();

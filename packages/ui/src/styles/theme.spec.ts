@@ -34,6 +34,12 @@ const themeUtilities = [
   'bg-popover',
   'border-input',
   'bg-brand-500',
+  'bg-live',
+  'text-live-foreground',
+  'border-live-border',
+  'bg-warning',
+  'text-warning-foreground',
+  'border-warning-border',
 ];
 
 describe('Tailwind theme tokens', () => {
@@ -49,9 +55,7 @@ describe('Tailwind theme tokens', () => {
     });
     const uiSrc = resolve(here, '..');
     expect(
-      compiler.sources.some(({ base, pattern }) =>
-        resolve(base, pattern).startsWith(uiSrc),
-      ),
+      compiler.sources.some(({ base, pattern }) => resolve(base, pattern).startsWith(uiSrc))
     ).toBe(true);
   });
 });

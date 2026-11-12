@@ -46,10 +46,10 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../domain/tsconfig.lib.json"
+      "path": "../games/tsconfig.lib.json"
     },
     {
-      "path": "../types/tsconfig.lib.json"
+      "path": "../prediction/tsconfig.lib.json"
     }
   ]
 }

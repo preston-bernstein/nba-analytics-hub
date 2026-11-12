@@ -2,19 +2,17 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { socketsAvailable } from './src/test-utils/socketSupport.js';
+import { socketsAvailable } from './src/platform/testing/socketSupport.js';
 
 const workspaceRoot = fileURLToPath(new URL('..', import.meta.url));
 
 export default defineConfig({
   resolve: {
     alias: {
-      '@nba-analytics-hub/types': resolve(workspaceRoot, 'packages/types/src/index.ts'),
-      '@nba-analytics-hub/domain': resolve(workspaceRoot, 'packages/domain/src/index.ts'),
-      '@nba-analytics-hub/data-access': resolve(
-        workspaceRoot,
-        'packages/data-access/src/index.ts',
-      ),
+      '@nba-analytics-hub/platform': resolve(workspaceRoot, 'packages/platform/src/index.ts'),
+      '@nba-analytics-hub/games': resolve(workspaceRoot, 'packages/games/src/index.ts'),
+      '@nba-analytics-hub/prediction': resolve(workspaceRoot, 'packages/prediction/src/index.ts'),
+      '@nba-analytics-hub/events': resolve(workspaceRoot, 'packages/events/src/index.ts'),
       '@nba-analytics-hub/config': resolve(workspaceRoot, 'packages/config/src/index.ts'),
       '@nba-analytics-hub/testing': resolve(workspaceRoot, 'packages/testing/src/index.ts'),
       '@nba-analytics-hub/ui': resolve(workspaceRoot, 'packages/ui/src/index.ts'),
@@ -36,7 +34,7 @@ export default defineConfig({
         'eslint.config.mjs',
         'vitest.config.ts',
         'src/main.ts',
-        'src/test-utils/**',
+        'src/platform/testing/**',
       ],
     },
   },

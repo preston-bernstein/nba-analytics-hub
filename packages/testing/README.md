@@ -14,8 +14,9 @@ It exists to reduce duplication and provide consistent testing behavior across a
   - `apps/api` (Supertest)
   - `apps/web` (React Testing Library + MSW)
   - `packages/ui`
-  - `packages/domain`
-  - `packages/data-access`
+  - `packages/games`
+  - `packages/prediction`
+  - `packages/platform`
 
 This keeps each project’s test code lean and avoids scattering mock logic.
 

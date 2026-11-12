@@ -58,5 +58,13 @@ writeFileSync(mergedPath, mergedContent.join('\n'), 'utf8');
 
 console.log('Merged coverage written to', mergedPath);
 console.log('--- Aggregate Coverage ---');
-console.log('Lines   :', formatPercent(coveredLines, totalLines) + '%', `(${coveredLines}/${totalLines})`);
-console.log('Branches:', formatPercent(coveredBranches, totalBranches) + '%', `(${coveredBranches}/${totalBranches})`);
+console.log(
+  'Lines   :',
+  formatPercent(coveredLines, totalLines) + '%',
+  `(${coveredLines}/${totalLines})`
+);
+console.log(
+  'Branches:',
+  formatPercent(coveredBranches, totalBranches) + '%',
+  `(${coveredBranches}/${totalBranches})`
+);

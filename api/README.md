@@ -23,9 +23,9 @@ This API is intentionally simple and focused on the vertical slice.
 - **Supertest** + **Vitest** for API route testing
 - **Docker** for containerization
 - **Shared libraries**:
-  - `@nba-analytics-hub/types` → Request/response types
-  - `@nba-analytics-hub/domain` → Domain helpers
-  - `@nba-analytics-hub/data-access` → (future) internal HTTP wrappers
+  - `@nba-analytics-hub/games`, `@nba-analytics-hub/prediction` → domain types, helpers, and clients
+  - `@nba-analytics-hub/events` → `game.updated` event types and logic
+  - `@nba-analytics-hub/platform` → shared errors, health, and HTTP helpers
   - `@nba-analytics-hub/testing` → Shared test helpers (planned)
 
 ---
@@ -59,7 +59,7 @@ Off by default. It starts only when `KAFKA_BROKERS` is set (comma list, for exam
 If it fails to start, the API keeps running and logs the error.
 
 - Topic `game.updated`, consumer group `bff`, reads from the beginning when the group has no offset.
-- Each message is parsed and checked against schema v1 (`parseGameUpdatedEvent` in `packages/domain`).
+- Each message is parsed and checked against schema v1 (`parseGameUpdatedEvent` in `packages/events`).
 - Duplicates are skipped by `eventId`. The memory of seen ids is in-process and bounded to the last 10,000 ids. It is empty after a restart, so a replay after a restart can apply a repeated event again. Applying an event twice is harmless, because the read model keeps one latest game per id and ignores older events.
 - An event older than the stored one is ignored. A game that is FINAL is never moved back to another status.
 - Transient errors are retried up to 5 tries with delays of 200 ms, 400 ms, 800 ms, 1.6 s (capped at 5 s). After that the handler rejects, the offset is not committed, and the message is delivered again.

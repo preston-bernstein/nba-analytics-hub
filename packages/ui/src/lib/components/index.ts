@@ -1,4 +1,8 @@
 export * from './AppShell';
 export * from './DateNavigation';
 export * from './GameCard';
-export * from './PredictionBadge';export * from './ui';
+export * from './PredictionBadge';
+export * from './ProbabilityBar';
+export * from './StatusBadge';
+export * from './TeamScore';
+export * from './ui';

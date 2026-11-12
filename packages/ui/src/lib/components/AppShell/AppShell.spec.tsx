@@ -6,7 +6,7 @@ describe('AppShell', () => {
     render(
       <AppShell title="NBA Analytics Hub">
         <div>Inner content</div>
-      </AppShell>,
+      </AppShell>
     );
 
     expect(screen.getByTestId('app-title')).toHaveTextContent('NBA Analytics Hub');
@@ -25,7 +25,7 @@ describe('AppShell', () => {
         }
       >
         <div>Content</div>
-      </AppShell>,
+      </AppShell>
     );
 
     expect(screen.getByRole('button', { name: /Games/i })).toBeInTheDocument();
@@ -36,23 +36,19 @@ describe('AppShell', () => {
     render(
       <AppShell title="No footer">
         <div>Content</div>
-      </AppShell>,
+      </AppShell>
     );
 
-    expect(
-      screen.getByText(/Powered by NBA Analytics Hub/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Powered by NBA Analytics Hub/i)).toBeInTheDocument();
   });
 
   it('renders custom footer when provided', () => {
     render(
       <AppShell title="Custom footer" footer={<span>Custom footer · v0.1</span>}>
         <div>Content</div>
-      </AppShell>,
+      </AppShell>
     );
 
-    expect(
-      screen.getByText(/Custom footer · v0\.1/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Custom footer · v0\.1/i)).toBeInTheDocument();
   });
 });

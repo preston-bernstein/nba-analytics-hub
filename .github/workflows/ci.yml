@@ -60,11 +60,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Lint
         run: npm run lint:all -- --verbose
 
       - name: Test
         run: npm run test:all -- --coverage
+
+      - name: Build Storybook
+        run: npx nx build-storybook @nba-analytics-hub/ui
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
@@ -98,7 +104,7 @@ jobs:
 
       - name: Build (libs and API)
         run: |
-          npx nx run-many -t build --projects=@nba-analytics-hub/types,@nba-analytics-hub/domain,@nba-analytics-hub/config,@nba-analytics-hub/data-access,@nba-analytics-hub/testing,@nba-analytics-hub/ui,@nba-analytics-hub/api --parallel=2
+          npx nx run-many -t build --projects=@nba-analytics-hub/platform,@nba-analytics-hub/games,@nba-analytics-hub/prediction,@nba-analytics-hub/events,@nba-analytics-hub/config,@nba-analytics-hub/testing,@nba-analytics-hub/ui,@nba-analytics-hub/api --parallel=2
 
   web-image:
     runs-on: ubuntu-latest

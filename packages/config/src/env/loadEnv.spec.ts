@@ -14,9 +14,7 @@ describe('loadEnv', () => {
     delete process.env.PREDICTOR_BASE_URL;
 
     const env = loadEnv({});
-    expect(env.NODE_ENV).toBe(
-      ((process.env.NODE_ENV as AppEnv['NODE_ENV']) ?? 'development'),
-    );
+    expect(env.NODE_ENV).toBe((process.env.NODE_ENV as AppEnv['NODE_ENV']) ?? 'development');
     expect(env.API_BASE_URL).toBe('http://localhost:3333');
     expect(env.PREDICTOR_BASE_URL).toBe('http://localhost:8000');
   });
@@ -57,9 +55,7 @@ describe('loadEnv', () => {
   });
 
   it('throws on invalid NODE_ENV', () => {
-    expect(() =>
-      loadEnv({ NODE_ENV: 'staging' as AppEnv['NODE_ENV'] }),
-    ).toThrow(/NODE_ENV/);
+    expect(() => loadEnv({ NODE_ENV: 'staging' as AppEnv['NODE_ENV'] })).toThrow(/NODE_ENV/);
   });
 
   it('ignores blank API_BASE_URL and uses fallback', () => {

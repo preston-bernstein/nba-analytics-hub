@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { Game, PredictionResponse } from '@nba-analytics-hub/types';
+import type { Game } from '@nba-analytics-hub/games';
+import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { GameCard } from './GameCard';
 
 describe('GameCard', () => {

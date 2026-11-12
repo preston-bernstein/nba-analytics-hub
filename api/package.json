@@ -8,6 +8,9 @@
     "test:watch": "vitest"
   },
   "nx": {
+    "tags": [
+      "scope:app"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
@@ -85,7 +88,9 @@
       },
       "serve": {
         "executor": "@nx/js:node",
-        "dependsOn": ["build"],
+        "dependsOn": [
+          "build"
+        ],
         "options": {
           "buildTarget": "@nba-analytics-hub/api:build:development",
           "watch": false
@@ -108,10 +113,10 @@
   },
   "dependencies": {
     "@nba-analytics-hub/config": "0.0.1",
-    "@nba-analytics-hub/data-access": "0.0.1",
-    "@nba-analytics-hub/domain": "0.0.1",
-    "@nba-analytics-hub/testing": "0.0.1",
-    "@nba-analytics-hub/types": "0.0.1",
+    "@nba-analytics-hub/events": "0.0.1",
+    "@nba-analytics-hub/games": "0.0.1",
+    "@nba-analytics-hub/platform": "0.0.1",
+    "@nba-analytics-hub/prediction": "0.0.1",
     "@types/swagger-ui-express": "^4.1.8",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

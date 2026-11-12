@@ -17,14 +17,10 @@ export function AppShell({ title, nav, children, footer }: AppShellProps) {
         >
           {title}
         </div>
-        {nav ? (
-          <nav className="flex gap-3 text-sm text-muted-foreground">{nav}</nav>
-        ) : null}
+        {nav ? <nav className="flex gap-3 text-sm text-muted-foreground">{nav}</nav> : null}
       </header>
 
-      <main className="mx-auto w-full max-w-[1200px] flex-1 px-6 pt-8 pb-10">
-        {children}
-      </main>
+      <main className="mx-auto w-full max-w-[1200px] flex-1 px-6 pt-8 pb-10">{children}</main>
 
       <footer className="flex justify-center border-t px-6 py-3 text-xs text-muted-foreground">
         {footer ?? <span>Powered by NBA Analytics Hub</span>}

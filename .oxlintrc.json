@@ -1,14 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "typescript",
-    "react",
-    "jsx-a11y",
-    "import",
-    "vitest",
-    "unicorn",
-    "oxc"
-  ],
+  "plugins": ["typescript", "react", "jsx-a11y", "import", "vitest", "unicorn", "oxc"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -41,29 +33,18 @@
   ],
   "overrides": [
     {
-      "files": [
-        "**/*.spec.ts",
-        "**/*.spec.tsx",
-        "**/*.test.ts",
-        "**/*.test.tsx"
-      ],
+      "files": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx"],
       "rules": {
         "oxc/no-async-endpoint-handlers": "off"
       }
     },
     {
-      "files": [
-        "infra/**/*.spec.ts"
-      ],
+      "files": ["infra/**/*.spec.ts"],
       "rules": {
         "vitest/expect-expect": [
           "error",
           {
-            "assertFunctionNames": [
-              "expect",
-              "*.has*",
-              "*.resourceCountIs"
-            ]
+            "assertFunctionNames": ["expect", "*.has*", "*.resourceCountIs"]
           }
         ]
       }

@@ -11,7 +11,6 @@
       "@nx/react/typings/image.d.ts",
       "vite/client"
     ],
-    "rootDir": "src",
     "module": "esnext",
     "moduleResolution": "bundler"
   },
@@ -37,13 +36,16 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
-      "path": "../packages/data-access/tsconfig.lib.json"
-    },
-    {
-      "path": "../packages/types/tsconfig.lib.json"
-    },
-    {
       "path": "../packages/ui/tsconfig.lib.json"
+    },
+    {
+      "path": "../packages/games/tsconfig.lib.json"
+    },
+    {
+      "path": "../packages/platform/tsconfig.lib.json"
+    },
+    {
+      "path": "../packages/prediction/tsconfig.lib.json"
     }
   ]
 }
