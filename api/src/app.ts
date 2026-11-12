@@ -6,6 +6,9 @@ import { registerGamesStreamRoutes } from './games/gamesStream.js';
 import { liveGames } from './games/live/liveGames.js';
 import { registerPredictRoutes } from './prediction/predict.js';
 import { registerDocsRoutes } from './platform/docs.js';
+import { registerPlayersRoutes } from './players/leaderboard.js';
+import { createPgLeaderboardRepo } from './players/leaderboardRepo.js';
+import { createPoolFromEnv } from './platform/db.js';
 
 export const app: Express = express();
 
@@ -28,3 +31,5 @@ registerHealthRoutes(app);
 registerGamesStreamRoutes(app, { model: liveGames });
 registerGamesRoutes(app);
 registerPredictRoutes(app);
+const pool = createPoolFromEnv();
+registerPlayersRoutes(app, { repo: pool ? createPgLeaderboardRepo(pool) : undefined });

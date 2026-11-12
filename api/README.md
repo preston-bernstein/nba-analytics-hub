@@ -71,6 +71,12 @@ Integration test (needs a broker with both topics): `KAFKA_TEST_BROKERS=localhos
 
 ---
 
+## Player leaderboard
+
+`GET /players/leaderboard?season=2024&seasonType=regular` returns season averages for every player. It reads the `bdl.season_averages` table that `tools/ingest/load.sh` fills. `seasonType` is `regular`, `playoffs`, `playin` or `ist`. The default is `regular`.
+
+Set `DATABASE_URL` to a Postgres connection string, for example `postgres://nba:<password>@10.0.0.250:5433/nba`. Without it, the route returns 503.
+
 ## Development
 
 From the repository root:
