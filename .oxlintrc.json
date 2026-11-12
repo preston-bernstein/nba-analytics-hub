@@ -28,6 +28,7 @@
     "**/coverage/**",
     "**/test-output/**",
     "**/storybook-static/**",
+    "web/public/mockServiceWorker.js",
     "tmp/**",
     "packages/types/src/lib/games/generated.ts"
   ],

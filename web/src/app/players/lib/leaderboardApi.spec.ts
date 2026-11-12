@@ -1,16 +1,19 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
+import { server } from '../../../mocks/server';
 import { fetchLeaderboardPage } from './leaderboardApi';
 
 let seen: URL | undefined;
-const server = setupServer(
-  http.get('*/players/leaderboard', ({ request }) => {
-    seen = new URL(request.url);
-    return HttpResponse.json({ rows: [], total: 0, limit: 25, offset: 50 });
-  })
+beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
+beforeEach(() =>
+  server.use(
+    http.get('*/players/leaderboard', ({ request }) => {
+      seen = new URL(request.url);
+      return HttpResponse.json({ rows: [], total: 0, limit: 25, offset: 50 });
+    })
+  )
 );
-beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('fetchLeaderboardPage', () => {
