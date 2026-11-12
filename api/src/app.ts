@@ -3,7 +3,7 @@ import cors from 'cors';
 import { registerHealthRoutes } from './platform/health.js';
 import { registerGamesRoutes } from './games/games.js';
 import { registerGamesStreamRoutes } from './games/gamesStream.js';
-import { liveGames } from './games/kafka/liveGames.js';
+import { liveGames } from './games/live/liveGames.js';
 import { registerPredictRoutes } from './prediction/predict.js';
 import { registerDocsRoutes } from './platform/docs.js';
 

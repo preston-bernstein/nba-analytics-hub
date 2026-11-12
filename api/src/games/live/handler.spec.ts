@@ -1,7 +1,8 @@
 import type { GameUpdatedEvent } from '@nba-analytics-hub/events';
 import { mockGames } from '@nba-analytics-hub/games';
 import { BoundedIdSet } from './boundedIdSet.js';
-import { createGameUpdatedHandler, PoisonMessageError } from './handler.js';
+import { PoisonMessageError } from '../../platform/kafka/consumer.js';
+import { createGameUpdatedHandler } from './handler.js';
 import { LiveGamesReadModel } from './liveGamesReadModel.js';
 
 const game = mockGames[0]!;

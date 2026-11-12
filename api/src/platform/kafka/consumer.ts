@@ -1,4 +1,10 @@
-import { PoisonMessageError } from './handler.js';
+/** The message can never succeed (bad JSON, schema mismatch). Do not retry it. */
+export class PoisonMessageError extends Error {
+  constructor(reason: string) {
+    super(reason);
+    this.name = 'PoisonMessageError';
+  }
+}
 
 type HeaderValue = Buffer | string | Array<Buffer | string> | undefined;
 type Headers = Record<string, HeaderValue>;

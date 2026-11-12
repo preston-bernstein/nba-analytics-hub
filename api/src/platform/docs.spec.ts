@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 import express from 'express';
 import request from 'supertest';
 import { registerDocsRoutes } from './docs.js';
-import { describeIfSockets } from '../test-utils/describeIfSockets.js';
+import { describeIfSockets } from './testing/describeIfSockets.js';
 
 describeIfSockets('docs routes', () => {
   it('serves the openapi.yaml file', async () => {

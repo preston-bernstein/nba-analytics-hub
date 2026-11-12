@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { app } from '../app.js';
-import { describeIfSockets } from '../test-utils/describeIfSockets.js';
+import { describeIfSockets } from './testing/describeIfSockets.js';
 
 describeIfSockets('GET /health', () => {
   it('returns ok', async () => {

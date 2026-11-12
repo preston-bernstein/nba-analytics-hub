@@ -4,7 +4,7 @@ import {
   type EachMessagePayloadLike,
   type KafkaLike,
 } from './consumer.js';
-import { PoisonMessageError } from './handler.js';
+import { PoisonMessageError } from './consumer.js';
 
 function fakeKafka() {
   const state = {

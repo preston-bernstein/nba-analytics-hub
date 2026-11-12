@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { socketsAvailable } from './src/test-utils/socketSupport.js';
+import { socketsAvailable } from './src/platform/testing/socketSupport.js';
 
 const workspaceRoot = fileURLToPath(new URL('..', import.meta.url));
 
@@ -34,7 +34,7 @@ export default defineConfig({
         'eslint.config.mjs',
         'vitest.config.ts',
         'src/main.ts',
-        'src/test-utils/**',
+        'src/platform/testing/**',
       ],
     },
   },

@@ -1,7 +1,7 @@
 import { Kafka, logLevel } from 'kafkajs';
 import { loadEnv } from '@nba-analytics-hub/config';
 import { BoundedIdSet } from './boundedIdSet.js';
-import { startConsumer, type KafkaLike } from './consumer.js';
+import { startConsumer, type KafkaLike } from '../../platform/kafka/consumer.js';
 import { createGameUpdatedHandler } from './handler.js';
 import { LiveGamesReadModel } from './liveGamesReadModel.js';
 
