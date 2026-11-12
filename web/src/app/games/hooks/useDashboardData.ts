@@ -13,10 +13,7 @@ export interface ApiConfig {
   basePath: string;
 }
 
-export function resolveApiConfig(
-  env: ImportMetaEnv,
-  locationOrigin?: string,
-): ApiConfig {
+export function resolveApiConfig(env: ImportMetaEnv, locationOrigin?: string): ApiConfig {
   const explicitBaseUrl = env.VITE_API_BASE_URL;
   const hasExplicit = Boolean(explicitBaseUrl && explicitBaseUrl.trim());
   const fallbackBaseUrl = env.DEV
@@ -31,7 +28,7 @@ export function resolveApiConfig(
 
 const { baseUrl: API_BASE_URL, basePath: API_BASE_PATH } = resolveApiConfig(
   import.meta.env,
-  typeof window !== 'undefined' ? window.location.origin : undefined,
+  typeof window !== 'undefined' ? window.location.origin : undefined
 );
 
 function toGameDate(dateIso: string): string {
@@ -78,8 +75,9 @@ export function useDashboardData(): DashboardDataState {
       predictions[games[index].id] = query.data as PredictionResponse;
     }
   });
-  const predictionFailure = predictionQueries.find((query) => query.error)
-    ?.error as Error | undefined;
+  const predictionFailure = predictionQueries.find((query) => query.error)?.error as
+    | Error
+    | undefined;
 
   const goToPreviousDay = useCallback(() => {
     setSelectedDate((prev) => addDays(prev, -1));
@@ -98,9 +96,7 @@ export function useDashboardData(): DashboardDataState {
     predictions,
     loadingGames: gamesQuery.isFetching && !gamesReady,
     loadingPredictions: predictionQueries.some((query) => query.isPending),
-    gamesError: gamesQuery.error
-      ? `Failed to load dashboard: ${gamesQuery.error.message}`
-      : null,
+    gamesError: gamesQuery.error ? `Failed to load dashboard: ${gamesQuery.error.message}` : null,
     predictionError: predictionFailure
       ? `Failed to load predictions: ${predictionFailure.message}`
       : null,

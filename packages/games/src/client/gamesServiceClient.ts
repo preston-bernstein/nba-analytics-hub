@@ -15,16 +15,14 @@ export interface GamesServiceRequestOptions {
   requestId?: string;
 }
 
-export interface GetGamesParams
-  extends GamesServiceRequestOptions,
-    GamesQueryParams {}
+export interface GetGamesParams extends GamesServiceRequestOptions, GamesQueryParams {}
 
 export interface GamesServiceClient {
   checkHealth(options?: GamesServiceRequestOptions): Promise<GamesServiceHealthResponse>;
   getGames(params?: GetGamesParams): Promise<GamesServiceTodayResponse>;
   getGameById(
     gameId: string,
-    options?: GamesServiceRequestOptions,
+    options?: GamesServiceRequestOptions
   ): Promise<GamesServiceGameDetailResponse>;
 }
 
@@ -32,14 +30,10 @@ function buildHeaders(requestId?: string): Record<string, string> | undefined {
   return requestId ? { 'X-Request-ID': requestId } : undefined;
 }
 
-export function createGamesServiceClient(
-  options: GamesServiceClientOptions,
-): GamesServiceClient {
+export function createGamesServiceClient(options: GamesServiceClientOptions): GamesServiceClient {
   const { baseUrl } = options;
 
-  const fetchGames = async (
-    params?: GetGamesParams,
-  ): Promise<GamesServiceTodayResponse> => {
+  const fetchGames = async (params?: GetGamesParams): Promise<GamesServiceTodayResponse> => {
     const url = new URL('/games', baseUrl);
     applyGamesQueryParams(url, params);
 
@@ -50,7 +44,7 @@ export function createGamesServiceClient(
 
   return {
     async checkHealth(
-      requestOptions?: GamesServiceRequestOptions,
+      requestOptions?: GamesServiceRequestOptions
     ): Promise<GamesServiceHealthResponse> {
       const url = new URL('/health', baseUrl);
       return fetchJson<GamesServiceHealthResponse>(baseUrl, url, 'Games service', {
@@ -64,7 +58,7 @@ export function createGamesServiceClient(
 
     async getGameById(
       gameId: string,
-      requestOptions?: GamesServiceRequestOptions,
+      requestOptions?: GamesServiceRequestOptions
     ): Promise<GamesServiceGame> {
       const url = new URL(`/games/${encodeURIComponent(gameId)}`, baseUrl);
       return fetchJson<GamesServiceGame>(baseUrl, url, 'Games service', {

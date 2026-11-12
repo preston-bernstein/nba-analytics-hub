@@ -2,9 +2,11 @@ import { mockGames } from '../testing/mockGames.js';
 import { getFavorite } from './get-favorite.js';
 
 describe('getFavorite', () => {
-  const baseGame = mockGames[0] ?? (() => {
-    throw new Error('mockGames fixture is missing');
-  })();
+  const baseGame =
+    mockGames[0] ??
+    (() => {
+      throw new Error('mockGames fixture is missing');
+    })();
 
   it('returns the home team as the favorite for now', () => {
     const favorite = getFavorite(baseGame);

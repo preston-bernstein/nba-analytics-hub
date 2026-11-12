@@ -19,7 +19,7 @@ export const liveGames = new LiveGamesReadModel();
  * (and does nothing) when it is not.
  */
 export async function startLiveGamesConsumer(
-  env: Record<string, string | undefined> = process.env,
+  env: Record<string, string | undefined> = process.env
 ) {
   const { KAFKA_BROKERS } = loadEnv(env);
   if (KAFKA_BROKERS.length === 0) return undefined;

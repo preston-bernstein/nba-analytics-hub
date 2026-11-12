@@ -1,6 +1,16 @@
-# Add files here to ignore them from prettier formatting
+# Build output and caches
 /dist
 /coverage
 /.nx/cache
 /.nx/workspace-data
-packages/types/src/lib/games/generated.ts
+**/dist
+
+# Generated or not ours
+package-lock.json
+packages/games/src/types/generated.ts
+codegen
+docs
+*.md
+*.yaml
+*.yml
+postman

@@ -3,10 +3,7 @@ export interface GamesQueryParams {
   tz?: string;
 }
 
-export function applyGamesQueryParams(
-  url: URL,
-  params?: GamesQueryParams,
-): URL {
+export function applyGamesQueryParams(url: URL, params?: GamesQueryParams): URL {
   if (params?.date) {
     url.searchParams.set('date', params.date);
   }

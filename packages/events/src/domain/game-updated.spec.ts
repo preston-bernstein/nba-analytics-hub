@@ -1,9 +1,6 @@
 import type { GameUpdatedEvent } from '../types/game-updated.js';
 import { mockGames } from '@nba-analytics-hub/games';
-import {
-  applyGameUpdated,
-  parseGameUpdatedEvent,
-} from './game-updated.js';
+import { applyGameUpdated, parseGameUpdatedEvent } from './game-updated.js';
 
 const baseGame = mockGames[0]!;
 
@@ -91,10 +88,7 @@ describe('applyGameUpdated', () => {
   });
 
   it('ignores an older event for the same game', () => {
-    const entry = applyGameUpdated(
-      undefined,
-      makeEvent({ occurredAt: '2025-01-01T03:00:00Z' }),
-    )!;
+    const entry = applyGameUpdated(undefined, makeEvent({ occurredAt: '2025-01-01T03:00:00Z' }))!;
     const older = makeEvent({
       occurredAt: '2025-01-01T02:00:00Z',
       game: { ...baseGame, score: { home: 1, away: 1 } },
@@ -108,7 +102,7 @@ describe('applyGameUpdated', () => {
       makeEvent({
         occurredAt: '2025-01-01T04:00:00Z',
         game: { ...baseGame, statusKind: 'FINAL', score: { home: 100, away: 90 } },
-      }),
+      })
     )!;
     const late = makeEvent({
       occurredAt: '2025-01-01T05:00:00Z',
@@ -120,7 +114,7 @@ describe('applyGameUpdated', () => {
   it('lets a newer FINAL event replace a FINAL game', () => {
     const final = applyGameUpdated(
       undefined,
-      makeEvent({ game: { ...baseGame, statusKind: 'FINAL' } }),
+      makeEvent({ game: { ...baseGame, statusKind: 'FINAL' } })
     )!;
     const corrected = makeEvent({
       occurredAt: '2025-01-01T09:00:00Z',

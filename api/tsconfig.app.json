@@ -7,28 +7,16 @@
     "composite": true,
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "paths": {
-      "@nba-analytics-hub/types": [
-        "../packages/types/dist/src/index.d.ts"
-      ],
-      "@nba-analytics-hub/domain": [
-        "../packages/domain/dist/src/index.d.ts"
-      ],
-      "@nba-analytics-hub/config": [
-        "../packages/config/dist/src/index.d.ts"
-      ],
-      "@nba-analytics-hub/testing": [
-        "../packages/testing/dist/src/index.d.ts"
-      ],
-      "@nba-analytics-hub/data-access": [
-        "../packages/data-access/dist/src/index.d.ts"
-      ]
+      "@nba-analytics-hub/types": ["../packages/types/dist/src/index.d.ts"],
+      "@nba-analytics-hub/domain": ["../packages/domain/dist/src/index.d.ts"],
+      "@nba-analytics-hub/config": ["../packages/config/dist/src/index.d.ts"],
+      "@nba-analytics-hub/testing": ["../packages/testing/dist/src/index.d.ts"],
+      "@nba-analytics-hub/data-access": ["../packages/data-access/dist/src/index.d.ts"]
     },
     "module": "NodeNext",
     "moduleResolution": "NodeNext"
   },
-  "include": [
-    "src/**/*.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": [
     "eslint.config.js",
     "eslint.config.cjs",

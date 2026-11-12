@@ -5,7 +5,7 @@ export const PREDICTOR_SERVICE_MODEL_VERSION = 'predictor-service';
 
 /** Maps the predictor service's wire format to the app's PredictionResponse. */
 export function toPredictionResponse(
-  response: PredictorServicePredictResponse,
+  response: PredictorServicePredictResponse
 ): PredictionResponse {
   return {
     homeTeamId: response.home_team,

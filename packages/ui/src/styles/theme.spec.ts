@@ -55,9 +55,7 @@ describe('Tailwind theme tokens', () => {
     });
     const uiSrc = resolve(here, '..');
     expect(
-      compiler.sources.some(({ base, pattern }) =>
-        resolve(base, pattern).startsWith(uiSrc),
-      ),
+      compiler.sources.some(({ base, pattern }) => resolve(base, pattern).startsWith(uiSrc))
     ).toBe(true);
   });
 });

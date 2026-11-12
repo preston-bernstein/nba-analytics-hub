@@ -18,7 +18,7 @@ if (!existsSync(source)) {
     `[refresh-openapi-spec] Could not find nba-data-service's spec at:\n  ${source}\n` +
       'Expected nba-data-service to be checked out as a sibling directory ' +
       '(../nba-data-service relative to this repo). If your checkout lives ' +
-      'elsewhere, copy api/openapi.yaml to codegen/openapi/nba-data-service.yaml manually.',
+      'elsewhere, copy api/openapi.yaml to codegen/openapi/nba-data-service.yaml manually.'
   );
   process.exit(1);
 }

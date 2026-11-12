@@ -43,9 +43,7 @@ describeIfSockets('games routes', () => {
     const getGameById = vi.fn().mockResolvedValue(mockGames[0]);
     const { app } = createTestContext({ getGameById });
 
-    const res = await request(app)
-      .get('/games/game-123')
-      .set('X-Request-ID', 'client-req-2');
+    const res = await request(app).get('/games/game-123').set('X-Request-ID', 'client-req-2');
 
     expect(res.status).toBe(200);
     expect(res.headers['x-request-id']).toBe('client-req-2');
@@ -81,9 +79,7 @@ describeIfSockets('games routes', () => {
 
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
-    const res = await request(app)
-      .get('/games/bad-id')
-      .set('X-Request-ID', 'req-err');
+    const res = await request(app).get('/games/bad-id').set('X-Request-ID', 'req-err');
 
     expect(res.status).toBe(502);
     expect(res.body).toMatchObject({

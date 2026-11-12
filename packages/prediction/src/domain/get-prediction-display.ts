@@ -1,8 +1,6 @@
 import type { PredictionDisplay, PredictionResponse } from '../types/prediction.js';
 
-export function getPredictionDisplay(
-  prediction: PredictionResponse
-): PredictionDisplay {
+export function getPredictionDisplay(prediction: PredictionResponse): PredictionDisplay {
   const homePct = Math.round(prediction.homeWinProbability * 100);
   const awayPct = Math.round(prediction.awayWinProbability * 100);
 

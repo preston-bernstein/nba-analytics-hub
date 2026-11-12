@@ -13,14 +13,12 @@ export interface PredictorServiceClient {
 }
 
 export function createPredictorServiceClient(
-  options: PredictorServiceClientOptions,
+  options: PredictorServiceClientOptions
 ): PredictorServiceClient {
   const { baseUrl } = options;
 
   return {
-    async predict(
-      query: PredictorServicePredictQuery,
-    ): Promise<PredictorServicePredictResponse> {
+    async predict(query: PredictorServicePredictQuery): Promise<PredictorServicePredictResponse> {
       const url = new URL('/v1/predict', baseUrl);
       url.searchParams.set('home', query.home);
       url.searchParams.set('away', query.away);
@@ -50,9 +48,7 @@ export function createPredictorServiceClient(
         throw new Error(`Predictor service returned 422: ${detail}`);
       }
 
-      throw new Error(
-        `Predictor service request failed with status ${res.status}`,
-      );
+      throw new Error(`Predictor service request failed with status ${res.status}`);
     },
   };
 }

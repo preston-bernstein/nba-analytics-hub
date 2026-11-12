@@ -31,9 +31,7 @@ describe('createPredictorServiceClient', () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const calledUrl = new URL((fetchMock.mock.calls[0] as [string])[0]);
-    expect(calledUrl.origin + calledUrl.pathname).toBe(
-      `${BASE_URL}/v1/predict`,
-    );
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/v1/predict`);
     expect(calledUrl.searchParams.get('home')).toBe(query.home);
     expect(calledUrl.searchParams.get('away')).toBe(query.away);
     expect(calledUrl.searchParams.get('date')).toBe(query.date);
@@ -90,7 +88,7 @@ describe('createPredictorServiceClient', () => {
     };
 
     await expect(client.predict(query)).rejects.toThrow(
-      'Predictor service returned 422: Unknown team code',
+      'Predictor service returned 422: Unknown team code'
     );
   });
 
@@ -103,9 +101,9 @@ describe('createPredictorServiceClient', () => {
 
     const client = createPredictorServiceClient({ baseUrl: BASE_URL });
 
-    await expect(
-      client.predict({ home: 'NYK', away: 'BOS' }),
-    ).rejects.toThrow('Predictor service returned 422: Unprocessable predictor request');
+    await expect(client.predict({ home: 'NYK', away: 'BOS' })).rejects.toThrow(
+      'Predictor service returned 422: Unprocessable predictor request'
+    );
   });
 
   it('throws a generic 422 error when parsing the body fails', async () => {
@@ -119,9 +117,9 @@ describe('createPredictorServiceClient', () => {
 
     const client = createPredictorServiceClient({ baseUrl: BASE_URL });
 
-    await expect(
-      client.predict({ home: 'NYK', away: 'BOS' }),
-    ).rejects.toThrow('Predictor service returned 422: Unprocessable predictor request');
+    await expect(client.predict({ home: 'NYK', away: 'BOS' })).rejects.toThrow(
+      'Predictor service returned 422: Unprocessable predictor request'
+    );
   });
 
   it('throws a descriptive error when the predictor service returns non-OK', async () => {
@@ -139,7 +137,7 @@ describe('createPredictorServiceClient', () => {
     };
 
     await expect(client.predict(query)).rejects.toThrow(
-      'Predictor service request failed with status 503',
+      'Predictor service request failed with status 503'
     );
   });
 });

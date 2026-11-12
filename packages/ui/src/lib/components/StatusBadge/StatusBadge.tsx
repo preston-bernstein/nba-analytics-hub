@@ -16,7 +16,7 @@ const statusBadgeVariants = cva(
       },
     },
     defaultVariants: { status: 'scheduled' },
-  },
+  }
 );
 
 export type StatusBadgeStatus = NonNullable<VariantProps<typeof statusBadgeVariants>['status']>;

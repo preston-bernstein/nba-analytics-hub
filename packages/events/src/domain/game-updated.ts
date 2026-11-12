@@ -1,5 +1,9 @@
 import type { Game } from '@nba-analytics-hub/games';
-import type { GameUpdatedChangeKind, GameUpdatedEvent, LiveGameEntry } from '../types/game-updated.js';
+import type {
+  GameUpdatedChangeKind,
+  GameUpdatedEvent,
+  LiveGameEntry,
+} from '../types/game-updated.js';
 
 export type ParseGameUpdatedResult =
   | { ok: true; event: GameUpdatedEvent }
@@ -92,7 +96,7 @@ export function parseGameUpdatedEvent(raw: string): ParseGameUpdatedResult {
  */
 export function applyGameUpdated(
   current: LiveGameEntry | undefined,
-  event: GameUpdatedEvent,
+  event: GameUpdatedEvent
 ): LiveGameEntry | undefined {
   if (current) {
     if (Date.parse(event.occurredAt) < Date.parse(current.occurredAt)) return undefined;

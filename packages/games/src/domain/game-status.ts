@@ -28,7 +28,7 @@ function hasScore(score: Game['score']): boolean {
  * `SCHEDULED`, read the status text and score to find the real state.
  */
 export function resolveGameStatus(
-  game: Pick<Game, 'status' | 'statusKind' | 'score'>,
+  game: Pick<Game, 'status' | 'statusKind' | 'score'>
 ): ResolvedGameStatus {
   const text = cleanStatusText(game.status);
   if (game.statusKind !== 'SCHEDULED') return { kind: game.statusKind, text };

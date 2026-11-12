@@ -50,10 +50,7 @@ const server = setupServer(
     const awayTeam = url.searchParams.get('away_team');
 
     if (!homeTeam || !awayTeam) {
-      return HttpResponse.json(
-        { error: 'missing teams' },
-        { status: 400 },
-      );
+      return HttpResponse.json({ error: 'missing teams' }, { status: 400 });
     }
 
     const prediction: PredictionResponse = {
@@ -65,7 +62,7 @@ const server = setupServer(
     };
 
     return HttpResponse.json(prediction);
-  }),
+  })
 );
 
 beforeAll(() => server.listen());
@@ -73,36 +70,30 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 describe('DashboardPage', () => {
-  it(
-    'renders games and their predictions',
-    async () => {
-      renderWithQueryClient(<DashboardPage />);
+  it('renders games and their predictions', async () => {
+    renderWithQueryClient(<DashboardPage />);
 
-      // Header and date navigation should always be visible
-      expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Games')).toBeInTheDocument();
+    // Header and date navigation should always be visible
+    expect(screen.getByLabelText('games-dashboard')).toBeInTheDocument();
+    expect(screen.getByText('Games')).toBeInTheDocument();
 
-      await waitFor(() => {
-        expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
+    });
 
-      expect(screen.getByText('Boston Celtics')).toBeInTheDocument();
-      expect(screen.getByText('Los Angeles Lakers')).toBeInTheDocument();
-      expect(screen.getByText('Golden State Warriors')).toBeInTheDocument();
+    expect(screen.getByText('Boston Celtics')).toBeInTheDocument();
+    expect(screen.getByText('Los Angeles Lakers')).toBeInTheDocument();
+    expect(screen.getByText('Golden State Warriors')).toBeInTheDocument();
 
-      await waitFor(() => {
-        expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
-        expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
-      });
-    },
-    15000,
-  );
+    await waitFor(() => {
+      expect(screen.getAllByText(/70%/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/30%/).length).toBeGreaterThan(0);
+    });
+  }, 15000);
 
   it('shows an error message when the games API fails but keeps header visible', async () => {
     server.use(
-      http.get('*/games', () =>
-        HttpResponse.json({ error: 'Server down' }, { status: 500 }),
-      ),
+      http.get('*/games', () => HttpResponse.json({ error: 'Server down' }, { status: 500 }))
     );
 
     renderWithQueryClient(<DashboardPage />);
@@ -116,16 +107,12 @@ describe('DashboardPage', () => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 
-    expect(
-      screen.getByText(/Failed to load dashboard:/i),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Failed to load dashboard:/i)).toBeInTheDocument();
   });
 
   it('shows an error message when predictions fail', async () => {
     server.use(
-      http.get('*/predict', () =>
-        HttpResponse.json({ error: 'Predictor down' }, { status: 500 }),
-      ),
+      http.get('*/predict', () => HttpResponse.json({ error: 'Predictor down' }, { status: 500 }))
     );
 
     renderWithQueryClient(<DashboardPage />);
@@ -153,9 +140,7 @@ describe('DashboardPage', () => {
   });
 
   it('shows singular "game" text when exactly one game is scheduled', async () => {
-    server.use(
-      http.get('*/games', () => HttpResponse.json([mockGames[0]])),
-    );
+    server.use(http.get('*/games', () => HttpResponse.json([mockGames[0]])));
 
     renderWithQueryClient(<DashboardPage />);
 
@@ -176,7 +161,7 @@ describe('DashboardPage', () => {
           awayWinProbability: 0.4,
           modelVersion: 'test',
         });
-      }),
+      })
     );
 
     renderWithQueryClient(<DashboardPage />);
@@ -191,17 +176,15 @@ describe('DashboardPage', () => {
       () => {
         expect(screen.getByText('Loading predictions...')).toBeInTheDocument();
       },
-      { timeout: 1000 },
+      { timeout: 1000 }
     );
 
     // Wait for predictions to finish loading
     await waitFor(
       () => {
-        expect(
-          screen.queryByText('Loading predictions...'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Loading predictions...')).not.toBeInTheDocument();
       },
-      { timeout: 2000 },
+      { timeout: 2000 }
     );
   });
 });

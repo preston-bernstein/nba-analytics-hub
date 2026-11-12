@@ -29,7 +29,7 @@ describe('shadcn/ui adoption', () => {
         onPreviousDay={vi.fn()}
         onNextDay={vi.fn()}
         onToday={vi.fn()}
-      />,
+      />
     );
     for (const button of screen.getAllByRole('button')) {
       expect(button).toHaveAttribute('data-slot', 'button');
@@ -52,16 +52,10 @@ describe('shadcn/ui adoption', () => {
           homeWinProbability: 0.6,
           awayWinProbability: 0.4,
         }}
-      />,
+      />
     );
-    expect(screen.getByLabelText('prediction-badge')).toHaveAttribute(
-      'data-slot',
-      'card',
-    );
-    expect(screen.getByRole('progressbar')).toHaveAttribute(
-      'data-slot',
-      'progress',
-    );
+    expect(screen.getByLabelText('prediction-badge')).toHaveAttribute('data-slot', 'card');
+    expect(screen.getByRole('progressbar')).toHaveAttribute('data-slot', 'progress');
   });
 
   it('AppShell is styled with Tailwind, not a CSS module', () => {

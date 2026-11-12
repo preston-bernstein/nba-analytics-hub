@@ -38,12 +38,7 @@ describe('DashboardContent', () => {
   });
 
   it('renders prediction winner inside game card when available', () => {
-    render(
-      <DashboardContent
-        {...defaultProps}
-        predictions={{ [game.id]: prediction }}
-      />,
-    );
+    render(<DashboardContent {...defaultProps} predictions={{ [game.id]: prediction }} />);
 
     expect(screen.getByText('Prediction')).toBeInTheDocument();
     expect(screen.getByText('ATL')).toBeInTheDocument();
@@ -60,12 +55,7 @@ describe('DashboardContent', () => {
   });
 
   it('shows prediction unavailable when there is a prediction error', () => {
-    render(
-      <DashboardContent
-        {...defaultProps}
-        predictionError="Service unavailable"
-      />,
-    );
+    render(<DashboardContent {...defaultProps} predictionError="Service unavailable" />);
 
     expect(screen.getByText(/Predictions unavailable:/i)).toBeInTheDocument();
     expect(screen.getByText('Prediction unavailable')).toBeInTheDocument();

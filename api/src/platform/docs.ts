@@ -36,6 +36,6 @@ export function registerDocsRoutes(app: Express): void {
     swaggerUi.serve,
     swaggerUi.setup(undefined, {
       swaggerOptions: { url: '/api/docs/openapi.yaml' },
-    }),
+    })
   );
 }

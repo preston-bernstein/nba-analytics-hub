@@ -81,9 +81,7 @@ describe('createGamesServiceClient', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [urlArg, init] = fetchMock.mock.calls[0] as [string, Record<string, unknown>];
     const calledUrl = new URL(urlArg);
-    expect(calledUrl.origin + calledUrl.pathname).toBe(
-      `${BASE_URL}/games/${mockGame.id}`,
-    );
+    expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/games/${mockGame.id}`);
     expect(init?.headers).toMatchObject({ 'X-Request-ID': 'req-456' });
     expect(result).toEqual(mockGame);
   });
@@ -97,9 +95,7 @@ describe('createGamesServiceClient', () => {
 
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
 
-    await expect(client.getGames()).rejects.toThrow(
-      'Games service request failed with status 502',
-    );
+    await expect(client.getGames()).rejects.toThrow('Games service request failed with status 502');
   });
 
   it('throws on non-OK for game by id', async () => {
@@ -112,7 +108,7 @@ describe('createGamesServiceClient', () => {
     const client = createGamesServiceClient({ baseUrl: BASE_URL });
 
     await expect(client.getGameById('missing')).rejects.toThrow(
-      'Games service request failed with status 404',
+      'Games service request failed with status 404'
     );
   });
 
@@ -140,8 +136,6 @@ describe('createGamesServiceClient', () => {
 
     const [urlArg] = fetchMock.mock.calls[0] as [string];
     const calledUrl = new URL(urlArg);
-    expect(calledUrl.pathname).toBe(
-      `/games/${encodeURIComponent(mockGame.id)}`,
-    );
+    expect(calledUrl.pathname).toBe(`/games/${encodeURIComponent(mockGame.id)}`);
   });
 });

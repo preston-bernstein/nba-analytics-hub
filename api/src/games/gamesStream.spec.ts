@@ -79,7 +79,7 @@ describeIfSockets('GET /games/stream', () => {
         evt('e2', '2025-01-01T02:00:00Z', {
           ...mockGames[0]!,
           score: { home: 7, away: 3 },
-        }),
+        })
       );
       await c.waitFor('event: game');
       expect(c.text()).toContain('"home":7');
