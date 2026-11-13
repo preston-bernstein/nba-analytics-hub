@@ -16,6 +16,9 @@
     },
     {
       "path": "../packages/prediction"
+    },
+    {
+      "path": "../packages/players"
     }
   ],
   "extends": "../tsconfig.base.json"

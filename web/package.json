@@ -78,8 +78,12 @@
   "dependencies": {
     "@nba-analytics-hub/games": "0.0.1",
     "@nba-analytics-hub/platform": "0.0.1",
+    "@nba-analytics-hub/players": "0.0.1",
     "@nba-analytics-hub/prediction": "0.0.1",
+    "@nba-analytics-hub/ui": "0.0.1",
     "@tanstack/react-query": "^5.105.1",
-    "lucide-react": "^1.66.0"
+    "@tanstack/react-table": "^8.21.3",
+    "lucide-react": "^1.66.0",
+    "zustand": "^5.1.0"
   }
 }

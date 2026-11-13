@@ -25,6 +25,7 @@
       "@nba-analytics-hub/platform": ["packages/platform/src/index.ts"],
       "@nba-analytics-hub/games": ["packages/games/src/index.ts"],
       "@nba-analytics-hub/prediction": ["packages/prediction/src/index.ts"],
+      "@nba-analytics-hub/players": ["packages/players/src/index.ts"],
       "@nba-analytics-hub/events": ["packages/events/src/index.ts"],
       "@nba-analytics-hub/config": ["packages/config/src/index.ts"],
       "@nba-analytics-hub/testing": ["packages/testing/src/index.ts"],

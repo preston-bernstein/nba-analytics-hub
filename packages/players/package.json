@@ -1,0 +1,52 @@
+{
+  "name": "@nba-analytics-hub/players",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "@nba-analytics-hub/platform": "0.0.1",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "nx": {
+    "tags": [
+      "domain:players"
+    ],
+    "targets": {
+      "build": {
+        "executor": "@nx/js:tsc",
+        "dependsOn": [
+          "@nba-analytics-hub/platform:build"
+        ],
+        "options": {
+          "tsConfig": "packages/players/tsconfig.lib.json",
+          "main": "packages/players/src/index.ts",
+          "outputPath": "packages/players/dist"
+        }
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint",
+        "options": {
+          "lintFilePatterns": [
+            "packages/players/**/*.ts",
+            "packages/players/**/*.tsx"
+          ]
+        }
+      },
+      "test": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "vitest run",
+          "cwd": "packages/players"
+        }
+      }
+    }
+  }
+}

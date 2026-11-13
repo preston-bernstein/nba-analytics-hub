@@ -6,38 +6,15 @@ import { getLocalTimeZone } from '@nba-analytics-hub/config';
 import { getTodayDate, addDays } from '@nba-analytics-hub/platform';
 import { DashboardDataState, PredictionsByGameId } from '../types';
 import { createGamesClient } from '@nba-analytics-hub/games';
+import { apiClientConfig } from '../../apiConfig';
 import { createPredictorClient } from '@nba-analytics-hub/prediction';
-
-export interface ApiConfig {
-  baseUrl: string;
-  basePath: string;
-}
-
-export function resolveApiConfig(env: ImportMetaEnv, locationOrigin?: string): ApiConfig {
-  const explicitBaseUrl = env.VITE_API_BASE_URL;
-  const hasExplicit = Boolean(explicitBaseUrl && explicitBaseUrl.trim());
-  const fallbackBaseUrl = env.DEV
-    ? 'http://localhost:3000'
-    : locationOrigin ?? 'http://localhost:3000';
-
-  return {
-    baseUrl: hasExplicit ? explicitBaseUrl : fallbackBaseUrl,
-    basePath: hasExplicit ? '' : env.DEV ? '' : '/api',
-  };
-}
-
-const { baseUrl: API_BASE_URL, basePath: API_BASE_PATH } = resolveApiConfig(
-  import.meta.env,
-  typeof window !== 'undefined' ? window.location.origin : undefined
-);
 
 function toGameDate(dateIso: string): string {
   return new Date(dateIso).toISOString().slice(0, 10);
 }
 
-const clientConfig = { baseUrl: API_BASE_URL, basePath: API_BASE_PATH };
-const gamesClient = createGamesClient(clientConfig);
-const predictorClient = createPredictorClient(clientConfig);
+const gamesClient = createGamesClient(apiClientConfig);
+const predictorClient = createPredictorClient(apiClientConfig);
 const localTimeZone = getLocalTimeZone();
 const NO_GAMES: Game[] = [];
 

@@ -1,4 +1,5 @@
 export * from './AppShell';
+export * from './DataTable';
 export * from './DateNavigation';
 export * from './GameCard';
 export * from './PredictionBadge';

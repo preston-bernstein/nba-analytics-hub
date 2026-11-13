@@ -6,7 +6,8 @@ import { setupServer } from 'msw/node';
 import type { Game } from '@nba-analytics-hub/games';
 import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { addDays, getTodayDate } from '@nba-analytics-hub/platform';
-import { resolveApiConfig, useDashboardData } from './useDashboardData';
+import { resolveApiConfig } from '../../apiConfig';
+import { useDashboardData } from './useDashboardData';
 
 const mockGames: Game[] = [
   {

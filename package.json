@@ -9,6 +9,7 @@
     "test:api": "nx test api",
     "test:web": " nx test web",
     "serve:web": "nx serve web",
+    "serve:web:mocks": "VITE_USE_MOCKS=true nx serve web",
     "serve:api": "nx serve api",
     "clean:api-dist": "node tools/clean-api-dist.mjs",
     "coverage:summary": "node tools/coverage-summary.js",
@@ -49,6 +50,7 @@
     "@testing-library/react": "16.3.0",
     "@types/express": "^4.17.21",
     "@types/node": "20.19.9",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@types/supertest": "^6.0.3",
@@ -96,8 +98,14 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "express": "^4.21.2",
+    "pg": "^8.23.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "6.29.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "web/public"
+    ]
   }
 }
