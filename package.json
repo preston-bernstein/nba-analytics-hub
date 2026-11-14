@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "test": "vitest run",
     "test:all": "nx run-many -t test --all",
     "lint:all": "oxlint --deny-warnings && nx run-many -t lint --all --output-style=stream",
     "test:ui": "nx test ui",
@@ -107,5 +108,9 @@
     "workerDirectory": [
       "web/public"
     ]
+  },
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
   }
 }
