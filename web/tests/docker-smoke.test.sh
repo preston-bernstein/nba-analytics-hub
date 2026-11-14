@@ -33,7 +33,10 @@ for _ in $(seq 1 30); do
   sleep 1
 done
 
-fail() { echo "FAIL: $*" >&2; exit 1; }
+fail() {
+  echo "FAIL: $*" >&2
+  exit 1
+}
 
 curl -fsS "http://$host:$port/" | grep -q '<div id="root">' \
   || fail "/ did not serve index.html"
