@@ -16,3 +16,6 @@ docs
 postman
 **/storybook-static
 web/public/mockServiceWorker.js
+
+# Written by the core pack gate (templates/core-lizard.py), not by hand
+.core-baseline.json
