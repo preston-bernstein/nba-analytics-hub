@@ -1,0 +1,5 @@
+# Existing findings accepted in the pack-compliance pass. One per line: <check> <path> <reason>
+name api/src/platform/routeUtils.ts existing name; rename when the module is next reworked
+name packages/platform/src/domain/date-utils.ts existing name; rename when the module is next reworked
+name packages/ui/src/lib/utils existing name; rename when the module is next reworked
+name web/src/test-utils existing name; rename when the module is next reworked
