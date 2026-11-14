@@ -1,0 +1,365 @@
+{
+ "_reason": "Existing over-limit functions accepted on 2026-11-13; new code must stay within the limits. Fix them when touched.",
+ "functions": {
+  "api/src/games/games.spec.ts::(anonymous)": {
+   "nloc": 6,
+   "length": 70,
+   "ccn": 1,
+   "param": 0,
+   "token": 46,
+   "nd": 0
+  },
+  "api/src/games/gamesStream.spec.ts::(anonymous)": {
+   "nloc": 7,
+   "length": 110,
+   "ccn": 1,
+   "param": 0,
+   "token": 57,
+   "nd": 0
+  },
+  "api/src/games/live/consumer.integration.spec.ts::(anonymous)": {
+   "nloc": 17,
+   "length": 154,
+   "ccn": 1,
+   "param": 0,
+   "token": 148,
+   "nd": 0
+  },
+  "api/src/games/live/handler.spec.ts::(anonymous)": {
+   "nloc": 8,
+   "length": 62,
+   "ccn": 1,
+   "param": 0,
+   "token": 62,
+   "nd": 0
+  },
+  "api/src/platform/kafka/consumer.spec.ts::(anonymous)": {
+   "nloc": 12,
+   "length": 161,
+   "ccn": 1,
+   "param": 0,
+   "token": 112,
+   "nd": 0
+  },
+  "api/src/platform/kafka/consumer.ts::startConsumer": {
+   "nloc": 26,
+   "length": 79,
+   "ccn": 5,
+   "param": 1,
+   "token": 133,
+   "nd": 0
+  },
+  "api/src/platform/routeUtils.spec.ts::(anonymous)": {
+   "nloc": 6,
+   "length": 105,
+   "ccn": 1,
+   "param": 0,
+   "token": 42,
+   "nd": 0
+  },
+  "api/src/players/leaderboardQuery.spec.ts::(anonymous)": {
+   "nloc": 16,
+   "length": 57,
+   "ccn": 1,
+   "param": 0,
+   "token": 144,
+   "nd": 0
+  },
+  "api/src/players/leaderboardQuery.ts::parseLeaderboardQuery": {
+   "nloc": 35,
+   "length": 37,
+   "ccn": 7,
+   "param": 1,
+   "token": 272,
+   "nd": 0
+  },
+  "infra/src/api-stack.spec.ts::(anonymous)": {
+   "nloc": 11,
+   "length": 68,
+   "ccn": 1,
+   "param": 0,
+   "token": 89,
+   "nd": 0
+  },
+  "packages/config/src/env/loadEnv.spec.ts::(anonymous)": {
+   "nloc": 13,
+   "length": 81,
+   "ccn": 1,
+   "param": 0,
+   "token": 110,
+   "nd": 0
+  },
+  "packages/events/src/domain/game-updated.spec.ts::(anonymous)": {
+   "nloc": 7,
+   "length": 56,
+   "ccn": 1,
+   "param": 0,
+   "token": 52,
+   "nd": 0
+  },
+  "packages/events/src/domain/game-updated.ts::gameProblem": {
+   "nloc": 18,
+   "length": 18,
+   "ccn": 15,
+   "param": 1,
+   "token": 183,
+   "nd": 0
+  },
+  "packages/games/src/client/gamesClient.spec.ts::(anonymous)": {
+   "nloc": 10,
+   "length": 116,
+   "ccn": 1,
+   "param": 0,
+   "token": 86,
+   "nd": 0
+  },
+  "packages/games/src/client/gamesServiceClient.spec.ts::(anonymous)": {
+   "nloc": 10,
+   "length": 133,
+   "ccn": 1,
+   "param": 0,
+   "token": 86,
+   "nd": 0
+  },
+  "packages/platform/src/client/fetchJson.spec.ts::(anonymous)": {
+   "nloc": 7,
+   "length": 52,
+   "ccn": 1,
+   "param": 0,
+   "token": 53,
+   "nd": 0
+  },
+  "packages/platform/src/domain/date-utils.spec.ts::(anonymous)": {
+   "nloc": 10,
+   "length": 119,
+   "ccn": 1,
+   "param": 0,
+   "token": 80,
+   "nd": 0
+  },
+  "packages/prediction/src/client/predictorClient.spec.ts::(anonymous)": {
+   "nloc": 10,
+   "length": 151,
+   "ccn": 1,
+   "param": 0,
+   "token": 86,
+   "nd": 0
+  },
+  "packages/prediction/src/client/predictorServiceClient.spec.ts::(anonymous)": {
+   "nloc": 9,
+   "length": 132,
+   "ccn": 1,
+   "param": 0,
+   "token": 75,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/AppShell/AppShell.spec.tsx::(anonymous)": {
+   "nloc": 6,
+   "length": 51,
+   "ccn": 1,
+   "param": 0,
+   "token": 42,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/DataTable/DataTable.spec.tsx::(anonymous)": {
+   "nloc": 15,
+   "length": 105,
+   "ccn": 1,
+   "param": 0,
+   "token": 132,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/DataTable/DataTable.tsx::DataTable": {
+   "nloc": 59,
+   "length": 111,
+   "ccn": 9,
+   "param": 1,
+   "token": 262,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/DateNavigation/DateNavigation.spec.tsx::(anonymous)": {
+   "nloc": 20,
+   "length": 86,
+   "ccn": 1,
+   "param": 0,
+   "token": 150,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/GameCard/GameCard.spec.tsx::(anonymous)": {
+   "nloc": 34,
+   "length": 242,
+   "ccn": 1,
+   "param": 0,
+   "token": 288,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/GameCard/GameCard.tsx::GameCard": {
+   "nloc": 53,
+   "length": 70,
+   "ccn": 14,
+   "param": 1,
+   "token": 253,
+   "nd": 0
+  },
+  "packages/ui/src/lib/components/ui/primitives.spec.tsx::(anonymous)": {
+   "nloc": 9,
+   "length": 117,
+   "ccn": 1,
+   "param": 0,
+   "token": 72,
+   "nd": 0
+  },
+  "tools/ingest/lib/client.mjs::get": {
+   "nloc": 29,
+   "length": 29,
+   "ccn": 11,
+   "param": 2,
+   "token": 240,
+   "nd": 0
+  },
+  "tools/ingest/lib/jobs.mjs::phaseOne": {
+   "nloc": 154,
+   "length": 156,
+   "ccn": 21,
+   "param": 1,
+   "token": 1012,
+   "nd": 0
+  },
+  "tools/ingest/lib/jobs.mjs::phaseTwo": {
+   "nloc": 84,
+   "length": 84,
+   "ccn": 12,
+   "param": 3,
+   "token": 504,
+   "nd": 0
+  },
+  "tools/ingest/run.mjs::main": {
+   "nloc": 33,
+   "length": 38,
+   "ccn": 8,
+   "param": 0,
+   "token": 313,
+   "nd": 0
+  },
+  "tools/ingest/run.mjs::parseArgs": {
+   "nloc": 22,
+   "length": 22,
+   "ccn": 9,
+   "param": 1,
+   "token": 200,
+   "nd": 0
+  },
+  "tools/ingest/run.mjs::runJobs": {
+   "nloc": 6,
+   "length": 22,
+   "ccn": 1,
+   "param": 5,
+   "token": 44,
+   "nd": 0
+  },
+  "web/public/mockServiceWorker.js::(anonymous)": {
+   "nloc": 52,
+   "length": 67,
+   "ccn": 10,
+   "param": 1,
+   "token": 213,
+   "nd": 0
+  },
+  "web/public/mockServiceWorker.js::getResponse": {
+   "nloc": 32,
+   "length": 70,
+   "ccn": 5,
+   "param": 4,
+   "token": 134,
+   "nd": 0
+  },
+  "web/src/app/app.spec.tsx::(anonymous)": {
+   "nloc": 8,
+   "length": 53,
+   "ccn": 1,
+   "param": 0,
+   "token": 58,
+   "nd": 0
+  },
+  "web/src/app/games/DashboardPage.spec.tsx::(anonymous)": {
+   "nloc": 8,
+   "length": 119,
+   "ccn": 1,
+   "param": 0,
+   "token": 70,
+   "nd": 0
+  },
+  "web/src/app/games/DashboardPage.tsx::DashboardPage": {
+   "nloc": 41,
+   "length": 74,
+   "ccn": 7,
+   "param": 0,
+   "token": 142,
+   "nd": 0
+  },
+  "web/src/app/games/hooks/useDashboardData.spec.tsx::(anonymous)": {
+   "param": 0,
+   "nloc": 7,
+   "length": 64,
+   "ccn": 1,
+   "nd": 0,
+   "token": 52
+  },
+  "web/src/app/games/hooks/useDashboardData.ts::useDashboardData": {
+   "nloc": 35,
+   "length": 65,
+   "ccn": 7,
+   "param": 0,
+   "token": 248,
+   "nd": 0
+  },
+  "web/src/app/players/LeaderboardPage.spec.tsx::(anonymous)": {
+   "nloc": 11,
+   "length": 90,
+   "ccn": 1,
+   "param": 0,
+   "token": 101,
+   "nd": 0
+  },
+  "web/src/app/players/components/LeaderboardFilters.tsx::LeaderboardFilters": {
+   "nloc": 39,
+   "length": 56,
+   "ccn": 1,
+   "param": 1,
+   "token": 160,
+   "nd": 0
+  },
+  "web/src/app/shared/useInfinitePage.spec.tsx::(anonymous)": {
+   "nloc": 7,
+   "length": 53,
+   "ccn": 1,
+   "param": 0,
+   "token": 57,
+   "nd": 0
+  },
+  "web/src/mocks/handlers/players.spec.ts::(anonymous)": {
+   "nloc": 18,
+   "length": 66,
+   "ccn": 1,
+   "param": 0,
+   "token": 102,
+   "nd": 0
+  },
+  "web/src/mocks/handlers/players.ts::(anonymous)": {
+   "nloc": 33,
+   "length": 43,
+   "ccn": 12,
+   "param": 1,
+   "token": 323,
+   "nd": 0
+  },
+  "web/src/mocks/handlers/players.ts::intParam": {
+   "nloc": 14,
+   "length": 14,
+   "ccn": 6,
+   "param": 5,
+   "token": 110,
+   "nd": 0
+  }
+ }
+}
