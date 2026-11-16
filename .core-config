@@ -1,2 +1,2 @@
 CORE_DUP_THRESHOLD=4  # existing duplication is 3.28%; lower it as clones are removed
-CORE_EXCLUDE=*/scripts/core-*.py  # pack tooling copied unchanged from the core pack; fix it upstream, not here
+CORE_EXCLUDE=*/scripts/*.py  # pack tooling copied unchanged from the core, docker, shell and github-actions packs; fix it upstream, not here

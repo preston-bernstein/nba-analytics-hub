@@ -140,3 +140,66 @@ jobs:
 
       - name: Build and smoke-test the web container
         run: bash web/tests/docker-smoke.test.sh
+
+  # One job per tool-based pack gate. Each runs the vendored script, the same
+  # command developers run. The tools come from hash-locked files.
+  pack-gates:
+    name: ${{ matrix.gate }} gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        gate: [docker, shell, gha]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install gate tools
+        run: |
+          python3 -m venv "$RUNNER_TEMP/gate-venv"
+          "$RUNNER_TEMP/gate-venv/bin/python" -m pip install --require-hashes -r scripts/gate-tools/requirements.txt
+          echo "$RUNNER_TEMP/gate-venv/bin" >> "$GITHUB_PATH"
+
+      - name: Install Trivy
+        if: matrix.gate == 'docker'
+        run: |
+          bash scripts/gate-tools/install-trivy.sh "$RUNNER_TEMP/trivy-bin"
+          echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
+
+      - name: Run gate
+        env:
+          GATE: ${{ matrix.gate }}
+        run: bash "scripts/${GATE}-validate.sh"
+
+  # js-validate and ts-validate share one install. Both run ESLint and the
+  # tests, so those run twice (about 15 seconds each). The gate scripts stay
+  # unchanged, so the overlap stays.
+  node-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NX_DAEMON: false
+      NX_ISOLATE_PLUGINS: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run JavaScript gate
+        run: bash scripts/js-validate.sh
+
+      - name: Run TypeScript gate
+        run: bash scripts/ts-validate.sh

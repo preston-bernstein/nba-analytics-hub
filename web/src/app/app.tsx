@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { NavLink, Routes, Route } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { AppShell, cn } from '@nba-analytics-hub/ui';
-import { DashboardPage } from './games/DashboardPage';
-import { LeaderboardPage } from './players/LeaderboardPage';
+import { DashboardPage } from './games';
+import { LeaderboardPage } from './players';
 import { createQueryClient } from './queryClient';
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>

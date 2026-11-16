@@ -6,7 +6,7 @@ import { getLocalTimeZone } from '@nba-analytics-hub/config';
 import { getTodayDate, addDays } from '@nba-analytics-hub/platform';
 import { DashboardDataState, PredictionsByGameId } from '../types';
 import { createGamesClient } from '@nba-analytics-hub/games';
-import { apiClientConfig } from '../../apiConfig';
+import { apiClientConfig } from '../../shared/apiConfig';
 import { createPredictorClient } from '@nba-analytics-hub/prediction';
 
 function toGameDate(dateIso: string): string {
