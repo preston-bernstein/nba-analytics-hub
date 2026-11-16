@@ -22,3 +22,6 @@ web/public/mockServiceWorker.js
 
 # Written by eslint --suppress-all
 eslint-suppressions.json
+
+# Vendored Vale styles from the writing pack
+.vale
