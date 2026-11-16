@@ -1,0 +1,7 @@
+# <glob> <reason>. Vendored pack gate scripts stay byte-identical to the pack so they can be diffed against it.
+scripts/core-validate.sh vendored unchanged from the core pack
+scripts/docker-validate.sh vendored unchanged from the docker pack
+scripts/shell-validate.sh vendored unchanged from the shell pack
+scripts/gha-validate.sh vendored unchanged from the github-actions pack
+scripts/js-validate.sh vendored unchanged from the javascript-node pack
+scripts/ts-validate.sh vendored unchanged from the typescript pack

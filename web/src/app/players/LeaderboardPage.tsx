@@ -1,6 +1,6 @@
 import { LeaderboardFilters } from './components/LeaderboardFilters';
 import { LeaderboardTable } from './components/LeaderboardTable';
-import { usePlayersStore } from './hooks/usePlayersStore';
+import { usePlayersStore } from './stores/usePlayersStore';
 import { seasonOptions } from './lib/seasons';
 
 const SEASONS = seasonOptions();

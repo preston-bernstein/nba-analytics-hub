@@ -6,7 +6,7 @@ import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
 import { makeLeaderboard } from '../../mocks/data/leaderboard';
 import { server } from '../../mocks/server';
 import { LeaderboardPage } from './LeaderboardPage';
-import { usePlayersStore } from './hooks/usePlayersStore';
+import { usePlayersStore } from './stores/usePlayersStore';
 
 const PAGE_SIZE = LEADERBOARD_PAGE_SIZE.default;
 const requests: URL[] = [];

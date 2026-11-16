@@ -4,7 +4,7 @@ import type { SortingState } from '@tanstack/react-table';
 import { isSortColumn } from '@nba-analytics-hub/players';
 import { Alert, AlertTitle, DataTable, Skeleton, cn } from '@nba-analytics-hub/ui';
 import { useLeaderboard } from '../hooks/useLeaderboard';
-import { usePlayersStore } from '../hooks/usePlayersStore';
+import { usePlayersStore } from '../stores/usePlayersStore';
 import { leaderboardColumns } from './leaderboardColumns';
 
 /** The leaderboard rows in a table. The server sorts them, and pages load as you scroll. */
