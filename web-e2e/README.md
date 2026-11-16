@@ -63,4 +63,4 @@ Dashboard rendering for games by date.
 
 Prediction display once the vertical slice is complete.
 
-As the dashboard and API mature, additional scenarios (error states, loading states, navigation) should be added here.
+As the dashboard and API mature, additional scenarios (error states, loading states, navigation) belong here.
