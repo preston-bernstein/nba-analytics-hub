@@ -1,2 +1,2 @@
-CORE_DUP_THRESHOLD=4  # existing duplication is 3.28%; lower it as clones are removed
+CORE_DUP_THRESHOLD=5.5  # duplication is 5.04% since package-lock.json grew past the jscpd size cap and left the denominator; clone lines fell from 1501 to 913. Lower it as clones are removed
 CORE_EXCLUDE=*/scripts/*.py  # pack tooling copied unchanged from the core, docker, shell and github-actions packs; fix it upstream, not here

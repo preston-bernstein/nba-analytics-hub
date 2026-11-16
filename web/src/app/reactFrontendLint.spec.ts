@@ -12,7 +12,7 @@ async function ruleIds(file: string, code: string): Promise<string[]> {
   return (result?.messages ?? []).map((message) => message.ruleId ?? 'parse-error');
 }
 
-describe('react-frontend lint rules', () => {
+describe('react-frontend boundaries', () => {
   it('blocks an import into another feature', async () => {
     const ids = await ruleIds(
       'web/src/app/games/components/Bad.tsx',
@@ -36,7 +36,9 @@ describe('react-frontend lint rules', () => {
     );
     expect(ids).toEqual([]);
   });
+});
 
+describe('react-frontend server state', () => {
   it('blocks fetch and axios outside an api folder', async () => {
     const ids = await ruleIds(
       'web/src/app/games/components/Bad.tsx',
@@ -50,7 +52,9 @@ describe('react-frontend lint rules', () => {
     const ids = await ruleIds('web/src/app/games/api/ok.ts', "export const a = fetch('/x');\n");
     expect(ids).toEqual([]);
   });
+});
 
+describe('react-frontend client state and styling', () => {
   it('blocks other store libraries, including in an api folder', async () => {
     const ids = await ruleIds(
       'web/src/app/games/api/Bad.ts',
