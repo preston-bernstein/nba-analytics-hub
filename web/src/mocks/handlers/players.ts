@@ -62,27 +62,33 @@ function parsePaging(params: URLSearchParams): Parsed<Paging> {
   return { ok: true, value: { limit: limit.value, offset: offset.value } };
 }
 
+type Ordering = Pick<Query, 'seasonType' | 'sort' | 'dir'>;
+
+function parseOrdering(params: URLSearchParams): Parsed<Ordering> {
+  const seasonType = (params.get('seasonType') ?? 'regular') as SeasonType;
+  const sort = params.get('sort') ?? 'pts';
+  const dir = params.get('dir') ?? 'desc';
+  if (!SEASON_TYPES.includes(seasonType)) return bad('seasonType is not valid');
+  if (!isSortColumn(sort)) return bad('sort is not a column');
+  if (dir !== 'asc' && dir !== 'desc') return bad('dir must be asc or desc');
+  return { ok: true, value: { seasonType, sort, dir } };
+}
+
 /** Reads the query string with the same checks, in the same order, as the API. */
 function parseQuery(params: URLSearchParams): Parsed<Query> {
   const season = intParam(params.get('season'), 'season', { min: 1996, max: 2100 });
   const paging = parsePaging(params);
-  const seasonType = (params.get('seasonType') ?? 'regular') as SeasonType;
-  const sort = params.get('sort') ?? 'pts';
-  const dir = params.get('dir') ?? 'desc';
+  const ordering = parseOrdering(params);
 
   if (!season.ok) return season;
   if (!paging.ok) return paging;
-  if (!SEASON_TYPES.includes(seasonType)) return bad('seasonType is not valid');
-  if (!isSortColumn(sort)) return bad('sort is not a column');
-  if (dir !== 'asc' && dir !== 'desc') return bad('dir must be asc or desc');
+  if (!ordering.ok) return ordering;
 
   return {
     ok: true,
     value: {
       season: season.value,
-      seasonType,
-      sort,
-      dir,
+      ...ordering.value,
       ...paging.value,
       search: params.get('search')?.toLowerCase(),
     },
