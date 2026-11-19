@@ -2,15 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DateNavigation } from './DateNavigation';
 
-describe('DateNavigation', () => {
-  const defaultProps = {
-    displayDate: 'Today',
-    showTodayButton: false,
-    onPreviousDay: vi.fn(),
-    onNextDay: vi.fn(),
-    onToday: vi.fn(),
-  };
+const defaultProps = {
+  displayDate: 'Today',
+  showTodayButton: false,
+  onPreviousDay: vi.fn(),
+  onNextDay: vi.fn(),
+  onToday: vi.fn(),
+};
 
+describe('DateNavigation', () => {
   it('renders the display date', () => {
     render(<DateNavigation {...defaultProps} />);
     expect(screen.getByText('Today')).toBeInTheDocument();
@@ -55,7 +55,9 @@ describe('DateNavigation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Today' }));
     expect(onToday).toHaveBeenCalled();
   });
+});
 
+describe('DateNavigation', () => {
   it('disables previous button when disablePrevious is true', () => {
     render(<DateNavigation {...defaultProps} disablePrevious={true} />);
 

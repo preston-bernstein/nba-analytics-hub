@@ -52,7 +52,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 20
           cache: npm
@@ -73,12 +73,35 @@ jobs:
         run: npx nx build-storybook @nba-analytics-hub/ui
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: |
             **/coverage/lcov.info
           fail_ci_if_error: true
+
+  core-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 20
+
+      - name: Install core gate tools
+        run: |
+          python3 -m pip install --require-hashes -r scripts/core-tools/requirements.txt
+          npm ci --prefix scripts/core-tools
+          echo "$PWD/scripts/core-tools/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - name: Run core gate
+        run: bash scripts/core-validate.sh
 
   build:
     runs-on: ubuntu-latest
@@ -94,7 +117,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 20
           cache: npm
@@ -117,3 +140,90 @@ jobs:
 
       - name: Build and smoke-test the web container
         run: bash web/tests/docker-smoke.test.sh
+
+  # One job per tool-based pack gate. Each runs the vendored script, the same
+  # command developers run. The tools come from hash-locked files.
+  pack-gates:
+    name: ${{ matrix.gate }} gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        gate: [docker, shell, gha]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install gate tools
+        run: |
+          python3 -m venv "$RUNNER_TEMP/gate-venv"
+          "$RUNNER_TEMP/gate-venv/bin/python" -m pip install --require-hashes -r scripts/gate-tools/requirements.txt
+          echo "$RUNNER_TEMP/gate-venv/bin" >> "$GITHUB_PATH"
+
+      - name: Install Trivy
+        if: matrix.gate == 'docker'
+        run: |
+          bash scripts/gate-tools/install-trivy.sh "$RUNNER_TEMP/trivy-bin"
+          echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
+
+      - name: Run gate
+        env:
+          GATE: ${{ matrix.gate }}
+        run: bash "scripts/${GATE}-validate.sh"
+
+  # The writing gate lints every prose and comment file, because the repo has no
+  # open findings. The logging check audits Compose files and Python code.
+  writing-logging-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Vale
+        run: |
+          bash scripts/gate-tools/install-vale.sh "$RUNNER_TEMP/vale-bin"
+          echo "$RUNNER_TEMP/vale-bin" >> "$GITHUB_PATH"
+
+      - name: Run writing gate
+        env:
+          WRITING_ALL: "1"
+        run: bash scripts/writing-validate.sh
+
+      - name: Run logging check
+        run: python3 scripts/logging-check.py .
+
+  # js-validate and ts-validate share one install. Both run ESLint and the
+  # tests, so those run twice (about 15 seconds each). The gate scripts stay
+  # unchanged, so the overlap stays.
+  node-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NX_DAEMON: false
+      NX_ISOLATE_PLUGINS: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run JavaScript gate
+        run: bash scripts/js-validate.sh
+
+      - name: Run TypeScript gate
+        run: bash scripts/ts-validate.sh

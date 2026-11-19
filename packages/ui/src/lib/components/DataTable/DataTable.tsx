@@ -4,11 +4,12 @@ import {
   type ColumnDef,
   type RowData,
   type SortingState,
+  type Table as TanstackTable,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { cn } from '../../utils/cn';
+import { cn } from '../../formatting/cn';
 import { DataTableColumnHeader, ariaSort } from './DataTableColumnHeader';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
@@ -51,6 +52,99 @@ const dataTableVariants = cva(
   }
 );
 
+function DataTableHead<TData>({ table }: { table: TanstackTable<TData> }) {
+  return (
+    <TableHeader className="sticky top-0 z-10 bg-card shadow-[0_1px_0_0_var(--border)]">
+      {table.getHeaderGroups().map((group) => (
+        <TableRow key={group.id} className="hover:bg-transparent">
+          {group.headers.map((header) => {
+            const { column } = header;
+            const content = flexRender(column.columnDef.header, header.getContext());
+            return (
+              <TableHead
+                key={header.id}
+                aria-sort={ariaSort(column.getIsSorted())}
+                className={cn(column.columnDef.meta?.align === 'right' && 'text-right')}
+              >
+                <DataTableColumnHeader column={column}>{content}</DataTableColumnHeader>
+              </TableHead>
+            );
+          })}
+        </TableRow>
+      ))}
+    </TableHeader>
+  );
+}
+
+interface DataTableRowsProps<TData> {
+  table: TanstackTable<TData>;
+  isFetching: boolean;
+  emptyMessage: string;
+}
+
+function DataTableRows<TData>({ table, isFetching, emptyMessage }: DataTableRowsProps<TData>) {
+  const rows = table.getRowModel().rows;
+  const columnCount = table.getVisibleLeafColumns().length;
+  return (
+    <TableBody>
+      {rows.map((row) => (
+        <TableRow key={row.id}>
+          {row.getVisibleCells().map((cell) => (
+            <TableCell
+              key={cell.id}
+              className={cn(
+                cell.column.columnDef.meta?.align === 'right' && 'text-right tabular-nums'
+              )}
+            >
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+      {rows.length === 0 && !isFetching ? (
+        <TableRow className="hover:bg-transparent">
+          <TableCell colSpan={columnCount} className="h-24 text-center text-muted-foreground">
+            {emptyMessage}
+          </TableCell>
+        </TableRow>
+      ) : null}
+      {isFetching && rows.length > 0 ? (
+        <TableRow className="hover:bg-transparent">
+          <TableCell colSpan={columnCount} className="text-center text-muted-foreground">
+            <output>Loading…</output>
+          </TableCell>
+        </TableRow>
+      ) : null}
+    </TableBody>
+  );
+}
+
+interface LoadMoreOptions {
+  hasMore: boolean;
+  isFetching: boolean;
+  onEndReached?: () => void;
+}
+
+/** Returns the scroll container ref and a check that loads the next page when one is due. */
+function useLoadMore({ hasMore, isFetching, onEndReached }: LoadMoreOptions) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const loadMoreIfNeeded = useCallback(
+    (filled: boolean) => {
+      const el = scrollRef.current;
+      if (!el || !hasMore || isFetching || !onEndReached) return;
+      const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+      // On mount, a table that has not been laid out yet has no height. Wait for it.
+      if (filled ? distance < END_THRESHOLD : el.scrollHeight > 0 && distance <= 0) {
+        onEndReached();
+      }
+    },
+    [hasMore, isFetching, onEndReached]
+  );
+
+  return { scrollRef, loadMoreIfNeeded };
+}
+
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -79,26 +173,10 @@ export function DataTable<TData, TValue>({
       onSortingChange(typeof updater === 'function' ? updater(sorting) : updater),
   });
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const loadMoreIfNeeded = useCallback(
-    (filled: boolean) => {
-      const el = scrollRef.current;
-      if (!el || !hasMore || isFetching || !onEndReached) return;
-      const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
-      // On mount, a table that has not been laid out yet has no height. Wait for it.
-      if (filled ? distance < END_THRESHOLD : el.scrollHeight > 0 && distance <= 0) {
-        onEndReached();
-      }
-    },
-    [hasMore, isFetching, onEndReached]
-  );
+  const { scrollRef, loadMoreIfNeeded } = useLoadMore({ hasMore, isFetching, onEndReached });
 
   // When the rows do not fill the table there is nothing to scroll, so load the next page.
   useEffect(() => loadMoreIfNeeded(false), [loadMoreIfNeeded, data.length]);
-
-  const rows = table.getRowModel().rows;
-  const columnCount = table.getVisibleLeafColumns().length;
 
   return (
     <div
@@ -109,55 +187,8 @@ export function DataTable<TData, TValue>({
       className={cn(dataTableVariants({ density }), className)}
     >
       <Table>
-        <TableHeader className="sticky top-0 z-10 bg-card shadow-[0_1px_0_0_var(--border)]">
-          {table.getHeaderGroups().map((group) => (
-            <TableRow key={group.id} className="hover:bg-transparent">
-              {group.headers.map((header) => {
-                const { column } = header;
-                const content = flexRender(column.columnDef.header, header.getContext());
-                return (
-                  <TableHead
-                    key={header.id}
-                    aria-sort={ariaSort(column.getIsSorted())}
-                    className={cn(column.columnDef.meta?.align === 'right' && 'text-right')}
-                  >
-                    <DataTableColumnHeader column={column}>{content}</DataTableColumnHeader>
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className={cn(
-                    cell.column.columnDef.meta?.align === 'right' && 'text-right tabular-nums'
-                  )}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-          {rows.length === 0 && !isFetching ? (
-            <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={columnCount} className="h-24 text-center text-muted-foreground">
-                {emptyMessage}
-              </TableCell>
-            </TableRow>
-          ) : null}
-          {isFetching && rows.length > 0 ? (
-            <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={columnCount} className="text-center text-muted-foreground">
-                <output>Loading…</output>
-              </TableCell>
-            </TableRow>
-          ) : null}
-        </TableBody>
+        <DataTableHead table={table} />
+        <DataTableRows table={table} isFetching={isFetching} emptyMessage={emptyMessage} />
       </Table>
     </div>
   );

@@ -2,7 +2,7 @@
 
 Ideas to build toward in the app. None are started. Each one uses data that is already in the Postgres archive (schema `bdl`, loaded from BALLDONTLIE).
 
-Order is a suggestion, not a plan. The first idea is the smallest build.
+Order is a suggestion. It is not a plan. The first idea is the smallest build.
 
 ## 1. Beat the Line
 

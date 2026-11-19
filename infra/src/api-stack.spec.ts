@@ -23,9 +23,9 @@ function synth(desiredCount?: number): Template {
   return Template.fromStack(makeStack(desiredCount));
 }
 
-describe('ApiStack', () => {
-  const template = synth();
+const template = synth();
 
+describe('ApiStack', () => {
   it('synthesizes with no warnings or errors', () => {
     const annotations = Annotations.fromStack(makeStack());
     annotations.hasNoWarning('*', Match.anyValue());
@@ -65,7 +65,9 @@ describe('ApiStack', () => {
       ],
     });
   });
+});
 
+describe('ApiStack', () => {
   it('puts the API behind a public load balancer that checks /health', () => {
     template.hasResourceProperties('AWS::ElasticLoadBalancingV2::LoadBalancer', {
       Scheme: 'internet-facing',

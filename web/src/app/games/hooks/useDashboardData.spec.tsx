@@ -1,12 +1,12 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { renderWithQueryClient } from '../../../test-utils/renderWithQueryClient';
+import { renderWithQueryClient } from '../../../testing/renderWithQueryClient';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 import type { Game } from '@nba-analytics-hub/games';
 import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { addDays, getTodayDate } from '@nba-analytics-hub/platform';
-import { resolveApiConfig } from '../../apiConfig';
+import { resolveApiConfig } from '../../shared/apiConfig';
 import { useDashboardData } from './useDashboardData';
 
 const mockGames: Game[] = [
@@ -109,7 +109,9 @@ describe('resolveApiConfig', () => {
     expect(config.baseUrl).toBe('https://app.example.com');
     expect(config.basePath).toBe('/api');
   });
+});
 
+describe('resolveApiConfig', () => {
   it('treats whitespace-only explicit base URLs as empty', () => {
     const config = resolveApiConfig(
       {
@@ -166,7 +168,9 @@ describe('useDashboardData', () => {
       expect(screen.getByTestId('selected-date')).toHaveTextContent(today);
     });
   });
+});
 
+describe('useDashboardData', () => {
   it('serves a date it has already loaded from the cache', async () => {
     let gamesRequests = 0;
     let predictRequests = 0;

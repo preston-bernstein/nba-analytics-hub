@@ -104,7 +104,9 @@ describeIfSockets('GET /games/stream', () => {
       await new Promise((r) => server.close(r));
     }
   });
+});
 
+describeIfSockets('GET /games/stream', () => {
   it('sends heartbeat comments', async () => {
     const app = express();
     registerGamesStreamRoutes(app, { model: new LiveGamesReadModel(), heartbeatMs: 20 });
@@ -140,7 +142,9 @@ describeIfSockets('GET /games/stream', () => {
     server.closeAllConnections();
     await new Promise((r) => server.close(r));
   });
+});
 
+describeIfSockets('GET /games/stream', () => {
   it('is matched before /games/:id and leaves /games/:id alone', async () => {
     const gamesService: GamesServiceClient = {
       checkHealth: vi.fn(),

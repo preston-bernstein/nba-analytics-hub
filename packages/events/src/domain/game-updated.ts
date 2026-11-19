@@ -40,21 +40,39 @@ function isTeam(value: unknown): boolean {
   return isRecord(value) && typeof value.id === 'string' && typeof value.name === 'string';
 }
 
-function gameProblem(game: unknown): string | undefined {
-  if (!isRecord(game)) return 'game must be an object';
+function scoreProblem(score: unknown): string | undefined {
+  if (!isRecord(score) || !Number.isInteger(score.home) || !Number.isInteger(score.away)) {
+    return 'game.score must have integer home and away';
+  }
+  return undefined;
+}
+
+function idProblem(game: Fields): string | undefined {
   if (!isNonEmptyString(game.id)) return 'game.id must be a non-empty string';
   if (typeof game.provider !== 'string') return 'game.provider must be a string';
+  return undefined;
+}
+
+function teamsProblem(game: Fields): string | undefined {
   if (!isTeam(game.homeTeam)) return 'game.homeTeam is invalid';
   if (!isTeam(game.awayTeam)) return 'game.awayTeam is invalid';
+  return undefined;
+}
+
+function statusProblem(game: Fields): string | undefined {
   if (typeof game.startTime !== 'string') return 'game.startTime must be a string';
   if (typeof game.status !== 'string') return 'game.status must be a string';
   if (typeof game.statusKind !== 'string' || !STATUS_KINDS.includes(game.statusKind)) {
     return 'game.statusKind is invalid';
   }
-  const score = game.score;
-  if (!isRecord(score) || !Number.isInteger(score.home) || !Number.isInteger(score.away)) {
-    return 'game.score must have integer home and away';
-  }
+  return scoreProblem(game.score);
+}
+
+// Checked in this order, so the first problem reported does not change.
+function gameProblem(game: unknown): string | undefined {
+  if (!isRecord(game)) return 'game must be an object';
+  const problem = idProblem(game) ?? teamsProblem(game) ?? statusProblem(game);
+  if (problem) return problem;
   if (game.meta !== undefined && !isRecord(game.meta)) return 'game.meta must be an object';
   return undefined;
 }

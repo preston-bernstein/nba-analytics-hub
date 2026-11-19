@@ -17,6 +17,28 @@ import { runPool } from './lib/pool.mjs';
 
 const BASE_URL = 'https://api.balldontlie.io';
 
+// Each flag maps to how it changes the args. A flag with a value reads the next argument.
+const FLAGS = {
+  '--smoke': (args) => {
+    args.smoke = true;
+  },
+  '--out': (args, value) => {
+    args.out = value;
+  },
+  '--phase': (args, value) => {
+    args.phase = value;
+  },
+  '--rate': (args, value) => {
+    args.rate = Number(value);
+  },
+  '--concurrency': (args, value) => {
+    args.concurrency = Number(value);
+  },
+  '--only': (args, value) => {
+    args.only = value.split(',');
+  },
+};
+
 function parseArgs(argv) {
   const args = {
     phase: 'all',
@@ -28,13 +50,10 @@ function parseArgs(argv) {
   };
   for (let i = 0; i < argv.length; i += 1) {
     const flag = argv[i];
-    if (flag === '--smoke') args.smoke = true;
-    else if (flag === '--out') args.out = argv[++i];
-    else if (flag === '--phase') args.phase = argv[++i];
-    else if (flag === '--rate') args.rate = Number(argv[++i]);
-    else if (flag === '--concurrency') args.concurrency = Number(argv[++i]);
-    else if (flag === '--only') args.only = argv[++i].split(',');
-    else throw new Error(`Unknown flag ${flag}`);
+    if (!Object.hasOwn(FLAGS, flag)) throw new Error(`Unknown flag ${flag}`);
+    // Only --smoke takes no value.
+    if (flag === '--smoke') FLAGS[flag](args);
+    else FLAGS[flag](args, argv[++i]);
   }
   if (!args.out) throw new Error('--out <dir> is required');
   return args;
@@ -66,7 +85,19 @@ function loadSlates(root) {
   return readRecords(file).flatMap((record) => record.body?.data ?? []);
 }
 
-async function runJobs(jobs, client, root, log, concurrency) {
+/** Fetches every page of one job into its file. Counts pages and non-200 responses in `bucket`. */
+async function runJob({ job, client, file, bucket }) {
+  const pages = (async function* () {
+    for await (const page of fetchAllPages(client, job.path, job.params)) {
+      if (page.status !== 200) bucket.nonOk += 1;
+      yield page;
+    }
+  })();
+  bucket.pages += await writeJob(file, pages);
+  bucket.jobs += 1;
+}
+
+async function runJobs({ jobs, client, root, log, concurrency }) {
   const stats = new Map();
   let finished = 0;
   await runPool(jobs, concurrency, async (job) => {
@@ -74,14 +105,7 @@ async function runJobs(jobs, client, root, log, concurrency) {
     if (!jobDone(file)) {
       const bucket = stats.get(job.endpoint) ?? { jobs: 0, pages: 0, nonOk: 0 };
       stats.set(job.endpoint, bucket);
-      const pages = (async function* () {
-        for await (const page of fetchAllPages(client, job.path, job.params)) {
-          if (page.status !== 200) bucket.nonOk += 1;
-          yield page;
-        }
-      })();
-      bucket.pages += await writeJob(file, pages);
-      bucket.jobs += 1;
+      await runJob({ job, client, file, bucket });
     }
     finished += 1;
     if (finished % 100 === 0) log(`[${finished}/${jobs.length}] ${job.endpoint} ${job.key}`);
@@ -89,38 +113,53 @@ async function runJobs(jobs, client, root, log, concurrency) {
   return stats;
 }
 
+function planJobs(phase, args) {
+  let jobs =
+    phase === 1
+      ? buildJobs({ phase: 1 })
+      : buildJobs({
+          phase: 2,
+          games: loadGames(args.out),
+          players: loadActivePlayers(args.out),
+          slates: loadSlates(args.out),
+        });
+  if (args.only) jobs = jobs.filter((job) => args.only.includes(job.endpoint));
+  if (args.smoke) {
+    const seen = new Set();
+    jobs = jobs.filter((job) => !seen.has(job.endpoint) && seen.add(job.endpoint));
+  }
+  return jobs;
+}
+
+function makeLogger(out) {
+  const logFile = path.join(out, 'run.log');
+  return (line) => {
+    const text = `${new Date().toISOString()} ${line}`;
+    console.log(text);
+    fs.appendFileSync(logFile, `${text}\n`);
+  };
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const apiKey = process.env.BALLDONTLIE_API_KEY;
   if (!apiKey) throw new Error('Set BALLDONTLIE_API_KEY');
   fs.mkdirSync(args.out, { recursive: true });
-  const logFile = path.join(args.out, 'run.log');
-  const log = (line) => {
-    const text = `${new Date().toISOString()} ${line}`;
-    console.log(text);
-    fs.appendFileSync(logFile, `${text}\n`);
-  };
+  const log = makeLogger(args.out);
   const limiter = createLimiter({ perMinute: args.rate });
   const client = createClient({ apiKey, baseUrl: BASE_URL, limiter });
 
   const phases = args.phase === 'all' ? [1, 2] : [Number(args.phase)];
   for (const phase of phases) {
-    let jobs =
-      phase === 1
-        ? buildJobs({ phase: 1 })
-        : buildJobs({
-            phase: 2,
-            games: loadGames(args.out),
-            players: loadActivePlayers(args.out),
-            slates: loadSlates(args.out),
-          });
-    if (args.only) jobs = jobs.filter((job) => args.only.includes(job.endpoint));
-    if (args.smoke) {
-      const seen = new Set();
-      jobs = jobs.filter((job) => !seen.has(job.endpoint) && seen.add(job.endpoint));
-    }
+    const jobs = planJobs(phase, args);
     log(`phase ${phase}: ${jobs.length} jobs`);
-    const stats = await runJobs(jobs, client, args.out, log, args.concurrency);
+    const stats = await runJobs({
+      jobs,
+      client,
+      root: args.out,
+      log,
+      concurrency: args.concurrency,
+    });
     for (const [endpoint, s] of stats) {
       log(`  ${endpoint}: ${s.jobs} jobs, ${s.pages} pages, ${s.nonOk} non-200`);
     }

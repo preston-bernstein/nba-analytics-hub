@@ -5,7 +5,7 @@ import {
   createRouteHandler,
   resolveRequestId,
   sendError,
-} from '../platform/routeUtils.js';
+} from '../platform/routeHandling.js';
 import { parseLeaderboardQuery } from './leaderboardQuery.js';
 import type { LeaderboardRepo } from './pgLeaderboardRepo.js';
 

@@ -1,6 +1,6 @@
 import { fetchJson } from '@nba-analytics-hub/platform';
 import type { LeaderboardPage, LeaderboardQuery } from '@nba-analytics-hub/players';
-import { apiClientConfig } from '../../apiConfig';
+import { apiClientConfig } from '../../shared/apiConfig';
 
 export function fetchLeaderboardPage(query: LeaderboardQuery): Promise<LeaderboardPage> {
   const params = new URLSearchParams({

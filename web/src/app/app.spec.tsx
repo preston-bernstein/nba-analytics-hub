@@ -4,6 +4,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import App from './app.tsx';
 
+function renderApp() {
+  return render(
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}
+
 describe('App', () => {
   const originalFetch = globalThis.fetch;
 
@@ -21,11 +29,7 @@ describe('App', () => {
   });
 
   it('should render successfully', async () => {
-    const { baseElement } = render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    const { baseElement } = renderApp();
 
     await waitFor(() => {
       expect(screen.getByTestId('app-title')).toBeInTheDocument();
@@ -34,11 +38,7 @@ describe('App', () => {
   });
 
   it('should render the app shell title', async () => {
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    renderApp();
 
     const title = await screen.findByTestId('app-title');
     expect(title).toHaveTextContent('NBA Analytics Hub');
@@ -46,11 +46,7 @@ describe('App', () => {
 
   it('links to the games and players pages, and shows the leaderboard at /players', async () => {
     window.history.pushState({}, '', '/players');
-    render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    );
+    renderApp();
     expect(await screen.findByRole('link', { name: 'Games' })).toHaveAttribute('href', '/');
     expect(screen.getByRole('link', { name: 'Players' })).toHaveAttribute('href', '/players');
     expect(await screen.findByRole('heading', { name: 'Player leaderboard' })).toBeInTheDocument();

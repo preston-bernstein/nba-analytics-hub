@@ -1,8 +1,10 @@
 import nx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
+import { boundaryRules, dataRules, tailwindRules } from './eslint.react.mjs';
 
 // oxlint does the general linting (see .oxlintrc.json).
-// ESLint only runs the Nx workspace rules, which oxlint does not have.
+// ESLint runs the Nx workspace rules and the react-frontend pack rules (eslint.react.mjs),
+// which oxlint does not have.
 export default [
   ...nx.configs['flat/base'],
   {
@@ -59,4 +61,7 @@ export default [
       ],
     },
   },
+  ...boundaryRules,
+  ...dataRules,
+  ...tailwindRules,
 ];

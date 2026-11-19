@@ -8,7 +8,7 @@ It exists to reduce duplication and provide consistent testing behavior across a
 
 ## Purpose
 
-- Provide reusable test helpers (e.g., mock factories, MSW handlers, test wrappers).
+- Provide reusable test helpers (for example, mock factories, MSW handlers, test wrappers).
 - Centralize configuration or utilities needed by multiple test suites.
 - Ensure consistent patterns across:
   - `apps/api` (Supertest)

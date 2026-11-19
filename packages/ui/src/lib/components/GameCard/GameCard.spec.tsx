@@ -4,19 +4,19 @@ import type { Game } from '@nba-analytics-hub/games';
 import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { GameCard } from './GameCard';
 
-describe('GameCard', () => {
-  const baseGame: Game = {
-    id: '1',
-    provider: 'mock-provider',
-    homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
-    awayTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
-    startTime: '2025-01-15T18:30:00.000Z',
-    status: 'Scheduled',
-    statusKind: 'SCHEDULED',
-    score: { home: 0, away: 0 },
-    meta: { season: '2024-2025', upstreamGameId: 1234 },
-  };
+const baseGame: Game = {
+  id: '1',
+  provider: 'mock-provider',
+  homeTeam: { id: 'ATL', name: 'Atlanta Hawks' },
+  awayTeam: { id: 'LAL', name: 'Los Angeles Lakers' },
+  startTime: '2025-01-15T18:30:00.000Z',
+  status: 'Scheduled',
+  statusKind: 'SCHEDULED',
+  score: { home: 0, away: 0 },
+  meta: { season: '2024-2025', upstreamGameId: 1234 },
+};
 
+describe('GameCard', () => {
   it('should render team names', () => {
     render(<GameCard game={baseGame} />);
     expect(screen.getByText('Atlanta Hawks')).toBeInTheDocument();
@@ -56,7 +56,9 @@ describe('GameCard', () => {
     expect(screen.getByText('45')).toBeInTheDocument();
     expect(screen.getByText('52')).toBeInTheDocument();
   });
+});
 
+describe('GameCard', () => {
   it('should render Final badge and scores for FINAL games (away wins)', () => {
     const finalGame: Game = {
       ...baseGame,
@@ -97,7 +99,9 @@ describe('GameCard', () => {
     // Home team wins, so right arrow should be present
     expect(screen.getByText('▶')).toBeInTheDocument();
   });
+});
 
+describe('GameCard', () => {
   it('should handle single-word team names', () => {
     const singleWordGame: Game = {
       ...baseGame,
@@ -142,7 +146,9 @@ describe('GameCard', () => {
     render(<GameCard game={postponedGame} />);
     expect(screen.getByText('Postponed')).toBeInTheDocument();
   });
+});
 
+describe('GameCard', () => {
   it('keeps scheduled time when status is an ISO string and scores are zero', () => {
     const scheduledGame: Game = {
       ...baseGame,
@@ -179,7 +185,9 @@ describe('GameCard', () => {
     expect(screen.getByText('49')).toBeInTheDocument();
     expect(screen.getByText('47')).toBeInTheDocument();
   });
+});
 
+describe('GameCard', () => {
   it('shows live scores when statusKind is scheduled but status indicates live play', () => {
     const liveGame: Game = {
       ...baseGame,
@@ -223,7 +231,9 @@ describe('GameCard', () => {
     render(<GameCard game={halftimeGame} />);
     expect(screen.getByText('Halftime')).toBeInTheDocument();
   });
+});
 
+describe('GameCard', () => {
   it('should render prediction row and percentages when provided', () => {
     const prediction: PredictionResponse = {
       homeTeamId: 'ATL',

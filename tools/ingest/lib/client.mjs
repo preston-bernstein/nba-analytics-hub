@@ -14,6 +14,30 @@ export function buildUrl(baseUrl, path, params = {}) {
   return url.toString();
 }
 
+async function fetchOnce(doFetch, url, apiKey) {
+  try {
+    return { res: await doFetch(url, { headers: { Authorization: apiKey } }) };
+  } catch (error) {
+    return { error };
+  }
+}
+
+async function readBody(res) {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function assertAuthorized(res, path) {
+  if (res.status === 401 || res.status === 403) {
+    throw new Error(`HTTP ${res.status} for ${path}: check the API key and plan`);
+  }
+}
+
+const isRetryable = (res) => res.status === 429 || res.status >= 500;
+
 /**
  * A small API client. It waits for the limiter before each call and retries
  * 429 and 5xx responses with backoff. A 401 or 403 throws, because the key or
@@ -33,29 +57,24 @@ export function createClient({
       const url = buildUrl(baseUrl, path, params);
       for (let attempt = 0; ; attempt += 1) {
         await limiter.take();
-        let res;
-        try {
-          res = await doFetch(url, { headers: { Authorization: apiKey } });
-        } catch (err) {
-          if (attempt >= maxRetries) throw err;
+        const { res, error } = await fetchOnce(doFetch, url, apiKey);
+        if (error) {
+          if (attempt >= maxRetries) throw error;
           await sleep(Math.min(30_000, 1000 * 2 ** attempt));
           continue;
         }
-        if (res.status === 401 || res.status === 403) {
-          throw new Error(`HTTP ${res.status} for ${path}: check the API key and plan`);
-        }
-        if (res.status === 429 || res.status >= 500) {
+        assertAuthorized(res, path);
+        if (isRetryable(res)) {
           if (attempt >= maxRetries) throw new Error(`HTTP ${res.status} for ${url} after retries`);
           await sleep(Math.min(60_000, 2000 * 2 ** attempt));
           continue;
         }
-        let body = null;
-        try {
-          body = await res.json();
-        } catch {
-          body = null;
-        }
-        return { url, status: res.status, fetchedAt: new Date().toISOString(), body };
+        return {
+          url,
+          status: res.status,
+          fetchedAt: new Date().toISOString(),
+          body: await readBody(res),
+        };
       }
     },
   };

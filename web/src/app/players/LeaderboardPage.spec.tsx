@@ -2,11 +2,11 @@ import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { http, HttpResponse } from 'msw';
 import { LEADERBOARD_PAGE_SIZE } from '@nba-analytics-hub/players';
-import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
+import { renderWithQueryClient } from '../../testing/renderWithQueryClient';
 import { makeLeaderboard } from '../../mocks/data/leaderboard';
 import { server } from '../../mocks/server';
 import { LeaderboardPage } from './LeaderboardPage';
-import { usePlayersStore } from './hooks/usePlayersStore';
+import { usePlayersStore } from './stores/usePlayersStore';
 
 const PAGE_SIZE = LEADERBOARD_PAGE_SIZE.default;
 const requests: URL[] = [];
@@ -76,7 +76,9 @@ describe('LeaderboardPage', () => {
     expect(await screen.findByText(byPoints[PAGE_SIZE].name)).toBeInTheDocument();
     expect(requests.map((r) => r.searchParams.get('offset'))).toEqual(['0', String(PAGE_SIZE)]);
   });
+});
 
+describe('LeaderboardPage', () => {
   it('reloads from the first page when the season changes', async () => {
     renderWithQueryClient(<LeaderboardPage />);
     await screen.findByText(byPoints[0].name);

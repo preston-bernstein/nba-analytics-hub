@@ -14,7 +14,7 @@
   "aliases": {
     "components": "@/lib/components",
     "ui": "@/lib/components/ui",
-    "utils": "@/lib/utils/cn",
+    "utils": "@/lib/formatting/cn",
     "lib": "@/lib",
     "hooks": "@/lib/hooks"
   }

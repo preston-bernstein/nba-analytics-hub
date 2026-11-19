@@ -18,6 +18,35 @@ interface LeaderboardFiltersProps {
 
 const seasonLabel = (year: number) => `${year}-${String(year + 1).slice(2)}`;
 
+interface SelectFieldProps<T extends string | number> {
+  id: string;
+  label: string;
+  value: T;
+  options: Array<{ value: T; label: string }>;
+  onChange: (raw: string) => void;
+}
+
+function SelectField<T extends string | number>({
+  id,
+  label,
+  value,
+  options,
+  onChange,
+}: SelectFieldProps<T>) {
+  return (
+    <div className={fieldClass}>
+      <label htmlFor={id}>{label}</label>
+      <NativeSelect id={id} value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </NativeSelect>
+    </div>
+  );
+}
+
 export function LeaderboardFilters({
   season,
   seasonType,
@@ -32,34 +61,20 @@ export function LeaderboardFilters({
   return (
     <Card>
       <CardContent className="flex flex-wrap items-end gap-4">
-        <div className={fieldClass}>
-          <label htmlFor={ids.season}>Season</label>
-          <NativeSelect
-            id={ids.season}
-            value={season}
-            onChange={(e) => onSeasonChange(Number(e.target.value))}
-          >
-            {seasons.map((year) => (
-              <option key={year} value={year}>
-                {seasonLabel(year)}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-        <div className={fieldClass}>
-          <label htmlFor={ids.seasonType}>Season type</label>
-          <NativeSelect
-            id={ids.seasonType}
-            value={seasonType}
-            onChange={(e) => onSeasonTypeChange(e.target.value as SeasonType)}
-          >
-            {SEASON_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {SEASON_TYPE_LABELS[type]}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
+        <SelectField
+          id={ids.season}
+          label="Season"
+          value={season}
+          options={seasons.map((year) => ({ value: year, label: seasonLabel(year) }))}
+          onChange={(raw) => onSeasonChange(Number(raw))}
+        />
+        <SelectField
+          id={ids.seasonType}
+          label="Season type"
+          value={seasonType}
+          options={SEASON_TYPES.map((type) => ({ value: type, label: SEASON_TYPE_LABELS[type] }))}
+          onChange={(raw) => onSeasonTypeChange(raw as SeasonType)}
+        />
         <div className={cn(fieldClass, 'min-w-48 flex-1')}>
           <label htmlFor={ids.search}>Search players</label>
           <Input
