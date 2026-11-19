@@ -9,9 +9,9 @@ import { mockFetch } from '@nba-analytics-hub/testing';
 
 const BASE_URL = 'https://predictor-service.example.com';
 
-describe('createPredictorServiceClient', () => {
-  const fetchMock = mockFetch();
+const fetchMock = mockFetch();
 
+describe('createPredictorServiceClient', () => {
   it('calls /v1/predict with correct query params and returns parsed response on success', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -38,7 +38,9 @@ describe('createPredictorServiceClient', () => {
 
     expect(result).toEqual(predictorResponse);
   });
+});
 
+describe('createPredictorServiceClient', () => {
   it('omits date when not provided and URL-encodes params', async () => {
     const mockResponse: PredictorServicePredictResponse = {
       home_team: 'NY Knicks',
@@ -71,7 +73,9 @@ describe('createPredictorServiceClient', () => {
     expect(calledUrl.searchParams.get('home')).toBe('NY Knicks');
     expect(result).toEqual(mockResponse);
   });
+});
 
+describe('createPredictorServiceClient', () => {
   it('throws a descriptive error when the predictor service returns 422 with detail', async () => {
     fetchMock.mockResolvedValue({
       ok: false,
@@ -105,7 +109,9 @@ describe('createPredictorServiceClient', () => {
       'Predictor service returned 422: Unprocessable predictor request'
     );
   });
+});
 
+describe('createPredictorServiceClient', () => {
   it('throws a generic 422 error when parsing the body fails', async () => {
     fetchMock.mockResolvedValue({
       ok: false,

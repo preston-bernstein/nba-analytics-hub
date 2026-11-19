@@ -41,7 +41,9 @@ describe('AppShell', () => {
 
     expect(screen.getByText(/Powered by NBA Analytics Hub/i)).toBeInTheDocument();
   });
+});
 
+describe('AppShell', () => {
   it('renders custom footer when provided', () => {
     render(
       <AppShell title="Custom footer" footer={<span>Custom footer · v0.1</span>}>

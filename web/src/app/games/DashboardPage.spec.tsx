@@ -109,7 +109,9 @@ describe('DashboardPage', () => {
 
     expect(screen.getByText(/Failed to load dashboard:/i)).toBeInTheDocument();
   });
+});
 
+describe('DashboardPage', () => {
   it('shows an error message when predictions fail', async () => {
     server.use(
       http.get('*/predict', () => HttpResponse.json({ error: 'Predictor down' }, { status: 500 }))
@@ -148,7 +150,9 @@ describe('DashboardPage', () => {
       expect(screen.getByText('1 game scheduled')).toBeInTheDocument();
     });
   });
+});
 
+describe('DashboardPage', () => {
   it('shows loading predictions badge while fetching predictions', async () => {
     // Delay predictions response significantly to catch the loading state
     server.use(

@@ -44,7 +44,9 @@ describe('parseLeaderboardQuery', () => {
       },
     });
   });
+});
 
+describe('parseLeaderboardQuery', () => {
   it.each([
     [{}],
     [{ season: 'abc' }],

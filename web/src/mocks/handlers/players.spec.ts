@@ -57,7 +57,9 @@ describe('mock leaderboard handler', () => {
     expect(body.total).toBeLessThan(all.body.total);
     for (const row of body.rows) expect(row.name.toUpperCase()).toContain(term);
   });
+});
 
+describe('mock leaderboard handler', () => {
   it('shows a different list for the playoffs', async () => {
     const regular = await get('season=2024&seasonType=regular');
     const playoffs = await get('season=2024&seasonType=playoffs');

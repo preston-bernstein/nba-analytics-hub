@@ -109,7 +109,9 @@ describe('resolveApiConfig', () => {
     expect(config.baseUrl).toBe('https://app.example.com');
     expect(config.basePath).toBe('/api');
   });
+});
 
+describe('resolveApiConfig', () => {
   it('treats whitespace-only explicit base URLs as empty', () => {
     const config = resolveApiConfig(
       {
@@ -166,7 +168,9 @@ describe('useDashboardData', () => {
       expect(screen.getByTestId('selected-date')).toHaveTextContent(today);
     });
   });
+});
 
+describe('useDashboardData', () => {
   it('serves a date it has already loaded from the cache', async () => {
     let gamesRequests = 0;
     let predictRequests = 0;

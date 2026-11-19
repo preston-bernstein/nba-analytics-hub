@@ -76,7 +76,9 @@ describe('LeaderboardPage', () => {
     expect(await screen.findByText(byPoints[PAGE_SIZE].name)).toBeInTheDocument();
     expect(requests.map((r) => r.searchParams.get('offset'))).toEqual(['0', String(PAGE_SIZE)]);
   });
+});
 
+describe('LeaderboardPage', () => {
   it('reloads from the first page when the season changes', async () => {
     renderWithQueryClient(<LeaderboardPage />);
     await screen.findByText(byPoints[0].name);

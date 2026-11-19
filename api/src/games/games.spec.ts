@@ -52,7 +52,9 @@ describeIfSockets('games routes', () => {
       requestId: 'client-req-2',
     });
   });
+});
 
+describeIfSockets('games routes', () => {
   it('returns 502 with request id when upstream fails', async () => {
     const { app } = createTestContext({
       getGames: vi.fn().mockRejectedValue(new Error('service down')),
