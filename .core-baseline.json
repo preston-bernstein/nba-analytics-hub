@@ -1,46 +1,6 @@
 {
-  "_reason": "Existing over-limit functions accepted on 2026-11-13; new code must stay within the limits. Fix them when touched.",
+  "_reason": "Existing over-limit functions in the tools/ingest scripts and the generated msw worker, accepted on 2026-11-13; new code must stay within the limits.",
   "functions": {
-    "api/src/platform/kafka/consumer.ts::startConsumer": {
-      "nloc": 26,
-      "length": 79,
-      "ccn": 5,
-      "param": 1,
-      "token": 133,
-      "nd": 0
-    },
-    "api/src/players/leaderboardQuery.ts::parseLeaderboardQuery": {
-      "nloc": 35,
-      "length": 37,
-      "ccn": 7,
-      "param": 1,
-      "token": 272,
-      "nd": 0
-    },
-    "packages/events/src/domain/game-updated.ts::gameProblem": {
-      "nloc": 18,
-      "length": 18,
-      "ccn": 15,
-      "param": 1,
-      "token": 183,
-      "nd": 0
-    },
-    "packages/ui/src/lib/components/DataTable/DataTable.tsx::DataTable": {
-      "nloc": 59,
-      "length": 111,
-      "ccn": 9,
-      "param": 1,
-      "token": 262,
-      "nd": 0
-    },
-    "packages/ui/src/lib/components/GameCard/GameCard.tsx::GameCard": {
-      "nloc": 53,
-      "length": 70,
-      "ccn": 14,
-      "param": 1,
-      "token": 253,
-      "nd": 0
-    },
     "tools/ingest/lib/client.mjs::get": {
       "nloc": 29,
       "length": 29,
@@ -103,46 +63,6 @@
       "ccn": 5,
       "param": 4,
       "token": 134,
-      "nd": 0
-    },
-    "web/src/app/games/DashboardPage.tsx::DashboardPage": {
-      "nloc": 41,
-      "length": 74,
-      "ccn": 7,
-      "param": 0,
-      "token": 142,
-      "nd": 0
-    },
-    "web/src/app/games/hooks/useDashboardData.ts::useDashboardData": {
-      "nloc": 35,
-      "length": 65,
-      "ccn": 7,
-      "param": 0,
-      "token": 248,
-      "nd": 0
-    },
-    "web/src/app/players/components/LeaderboardFilters.tsx::LeaderboardFilters": {
-      "nloc": 39,
-      "length": 56,
-      "ccn": 1,
-      "param": 1,
-      "token": 160,
-      "nd": 0
-    },
-    "web/src/mocks/handlers/players.ts::(anonymous)": {
-      "nloc": 33,
-      "length": 43,
-      "ccn": 12,
-      "param": 1,
-      "token": 323,
-      "nd": 0
-    },
-    "web/src/mocks/handlers/players.ts::intParam": {
-      "nloc": 14,
-      "length": 14,
-      "ccn": 6,
-      "param": 5,
-      "token": 110,
       "nd": 0
     }
   }
