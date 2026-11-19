@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '../../utils/cn';
+import { cn } from '../../formatting/cn';
 import { Progress as ProgressPrimitive } from 'radix-ui';
 
 function Progress({

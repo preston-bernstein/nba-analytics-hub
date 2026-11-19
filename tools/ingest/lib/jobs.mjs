@@ -142,152 +142,165 @@ function seasonTypesFor(season) {
   return types;
 }
 
-function phaseOne(seasons) {
-  const jobs = [];
-  const from = (min) => seasons.filter((s) => s >= min);
+const seasonKey = (season) => `season-${season}`;
 
-  jobs.push(paged({ endpoint: 'teams', key: 'all', path: '/nba/v1/teams', params: {} }));
-  jobs.push(paged({ endpoint: 'players', key: 'all', path: '/nba/v1/players', params: {} }));
-  jobs.push(
-    paged({ endpoint: 'players_active', key: 'all', path: '/nba/v1/players/active', params: {} })
-  );
-  jobs.push(
+function basicJobs() {
+  return [
+    paged({ endpoint: 'teams', key: 'all', path: '/nba/v1/teams', params: {} }),
+    paged({ endpoint: 'players', key: 'all', path: '/nba/v1/players', params: {} }),
+    paged({ endpoint: 'players_active', key: 'all', path: '/nba/v1/players/active', params: {} }),
     paged({
       endpoint: 'player_injuries',
       key: 'current',
       path: '/nba/v1/player_injuries',
       params: {},
+    }),
+  ];
+}
+
+function leaderJobs(season) {
+  const key = seasonKey(season);
+  const jobs = [];
+  for (const statType of season >= 1980 ? LEADER_STATS : []) {
+    for (const seasonType of SEASON_TYPES) {
+      jobs.push({
+        endpoint: 'leaders',
+        key: `${key}_${statType}_${seasonType}`,
+        path: '/nba/v1/leaders',
+        params: { season, stat_type: statType, season_type: seasonType },
+      });
+    }
+  }
+  return jobs;
+}
+
+function seasonJobs(season) {
+  const key = seasonKey(season);
+  return [
+    paged({ endpoint: 'games', key, path: '/nba/v1/games', params: { seasons: [season] } }),
+    paged({ endpoint: 'stats', key, path: '/nba/v1/stats', params: { seasons: [season] } }),
+    { endpoint: 'standings', key, path: '/nba/v1/standings', params: { season } },
+    ...leaderJobs(season),
+  ];
+}
+
+/** One job per category, type and season type, for the two season-average endpoints. */
+function averageJobs({ season, endpoint, types, seasonTypes }) {
+  const jobs = [];
+  for (const [category, categoryTypes] of Object.entries(types)) {
+    for (const type of categoryTypes) {
+      for (const seasonType of seasonTypes) {
+        jobs.push(
+          paged({
+            endpoint,
+            key: `${seasonKey(season)}_${slug(category, type)}_${seasonType}`,
+            path: `/nba/v1/${endpoint}/${category}`,
+            params: { season, season_type: seasonType, type },
+          })
+        );
+      }
+    }
+  }
+  return jobs;
+}
+
+function modernSeasonJobs(season) {
+  return [
+    paged({
+      endpoint: 'stats_advanced_v1',
+      key: seasonKey(season),
+      path: '/nba/v1/stats/advanced',
+      params: { seasons: [season] },
+    }),
+    ...averageJobs({
+      season,
+      endpoint: 'season_averages',
+      types: SEASON_AVERAGE_TYPES,
+      seasonTypes: seasonTypesFor(season),
+    }),
+    ...averageJobs({
+      season,
+      endpoint: 'team_season_averages',
+      types: TEAM_SEASON_AVERAGE_TYPES,
+      seasonTypes: SEASON_TYPES,
+    }),
+  ];
+}
+
+function periodJobs(season) {
+  const jobs = range(1, 7).map((period) =>
+    paged({
+      endpoint: 'stats_period',
+      key: `${seasonKey(season)}_period-${period}`,
+      path: '/nba/v1/stats',
+      params: { seasons: [season], period },
     })
   );
+  jobs.push(
+    paged({
+      endpoint: 'stats_advanced_v2',
+      key: seasonKey(season),
+      path: '/nba/v2/stats/advanced',
+      params: { seasons: [season] },
+    })
+  );
+  return jobs;
+}
 
-  for (const season of seasons) {
-    const key = `season-${season}`;
-    jobs.push(
-      paged({ endpoint: 'games', key, path: '/nba/v1/games', params: { seasons: [season] } })
-    );
-    jobs.push(
-      paged({ endpoint: 'stats', key, path: '/nba/v1/stats', params: { seasons: [season] } })
-    );
-    jobs.push({ endpoint: 'standings', key, path: '/nba/v1/standings', params: { season } });
-    for (const statType of season >= 1980 ? LEADER_STATS : []) {
-      for (const seasonType of SEASON_TYPES) {
-        jobs.push({
-          endpoint: 'leaders',
-          key: `${key}_${statType}_${seasonType}`,
-          path: '/nba/v1/leaders',
-          params: { season, stat_type: statType, season_type: seasonType },
-        });
-      }
-    }
-  }
-  for (const season of from(1996)) {
-    const key = `season-${season}`;
-    jobs.push(
-      paged({
-        endpoint: 'stats_advanced_v1',
-        key,
-        path: '/nba/v1/stats/advanced',
-        params: { seasons: [season] },
-      })
-    );
-    for (const [category, types] of Object.entries(SEASON_AVERAGE_TYPES)) {
-      for (const type of types) {
-        for (const seasonType of seasonTypesFor(season)) {
-          jobs.push(
-            paged({
-              endpoint: 'season_averages',
-              key: `${key}_${slug(category, type)}_${seasonType}`,
-              path: `/nba/v1/season_averages/${category}`,
-              params: { season, season_type: seasonType, type },
-            })
-          );
-        }
-      }
-    }
-    for (const [category, types] of Object.entries(TEAM_SEASON_AVERAGE_TYPES)) {
-      for (const type of types) {
-        for (const seasonType of SEASON_TYPES) {
-          jobs.push(
-            paged({
-              endpoint: 'team_season_averages',
-              key: `${key}_${slug(category, type)}_${seasonType}`,
-              path: `/nba/v1/team_season_averages/${category}`,
-              params: { season, season_type: seasonType, type },
-            })
-          );
-        }
-      }
-    }
-  }
-  for (const season of from(2015)) {
-    for (const period of range(1, 7)) {
+/** One job per type (and range) of a game-level stats endpoint, for one season type. */
+function statsTypeJobs({ season, seasonType, endpoint, types }) {
+  return types.map((type) =>
+    paged({
+      endpoint: `stats_${endpoint}`,
+      key: `${seasonKey(season)}_${type}_${seasonType}`,
+      path: `/nba/v1/stats/${endpoint}`,
+      params: { seasons: [season], type, season_type: seasonType },
+    })
+  );
+}
+
+function shootingJobs(season, seasonType) {
+  const jobs = [];
+  for (const [type, ranges] of Object.entries(GAME_SHOOTING_RANGES)) {
+    for (const rangeValue of ranges) {
       jobs.push(
         paged({
-          endpoint: 'stats_period',
-          key: `season-${season}_period-${period}`,
-          path: '/nba/v1/stats',
-          params: { seasons: [season], period },
+          endpoint: 'stats_shooting',
+          key: `${seasonKey(season)}_${type}_${rangeValue}_${seasonType}`,
+          path: '/nba/v1/stats/shooting',
+          params: { seasons: [season], type, range: rangeValue, season_type: seasonType },
         })
       );
     }
+  }
+  return jobs;
+}
+
+function trackingSeasonJobs(season) {
+  const key = seasonKey(season);
+  const jobs = [
+    paged({
+      endpoint: 'lineup_stats',
+      key,
+      path: '/nba/v1/lineup_stats',
+      params: { seasons: [season] },
+    }),
+    paged({ endpoint: 'matchups', key, path: '/nba/v1/matchups', params: { seasons: [season] } }),
+  ];
+  for (const seasonType of SEASON_TYPES) {
     jobs.push(
-      paged({
-        endpoint: 'stats_advanced_v2',
-        key: `season-${season}`,
-        path: '/nba/v2/stats/advanced',
-        params: { seasons: [season] },
-      })
+      ...statsTypeJobs({ season, seasonType, endpoint: 'tracking', types: GAME_TRACKING_TYPES }),
+      ...statsTypeJobs({ season, seasonType, endpoint: 'defense', types: GAME_DEFENSE_TYPES }),
+      ...shootingJobs(season, seasonType)
     );
   }
-  for (const season of from(2018)) {
-    const key = `season-${season}`;
-    jobs.push(
-      paged({
-        endpoint: 'lineup_stats',
-        key,
-        path: '/nba/v1/lineup_stats',
-        params: { seasons: [season] },
-      })
-    );
-    jobs.push(
-      paged({ endpoint: 'matchups', key, path: '/nba/v1/matchups', params: { seasons: [season] } })
-    );
-    for (const seasonType of SEASON_TYPES) {
-      for (const type of GAME_TRACKING_TYPES) {
-        jobs.push(
-          paged({
-            endpoint: 'stats_tracking',
-            key: `${key}_${type}_${seasonType}`,
-            path: '/nba/v1/stats/tracking',
-            params: { seasons: [season], type, season_type: seasonType },
-          })
-        );
-      }
-      for (const type of GAME_DEFENSE_TYPES) {
-        jobs.push(
-          paged({
-            endpoint: 'stats_defense',
-            key: `${key}_${type}_${seasonType}`,
-            path: '/nba/v1/stats/defense',
-            params: { seasons: [season], type, season_type: seasonType },
-          })
-        );
-      }
-      for (const [type, ranges] of Object.entries(GAME_SHOOTING_RANGES)) {
-        for (const rangeValue of ranges) {
-          jobs.push(
-            paged({
-              endpoint: 'stats_shooting',
-              key: `${key}_${type}_${rangeValue}_${seasonType}`,
-              path: '/nba/v1/stats/shooting',
-              params: { seasons: [season], type, range: rangeValue, season_type: seasonType },
-            })
-          );
-        }
-      }
-    }
-  }
-  jobs.push(paged({ endpoint: 'dfs_slates', key: 'all', path: '/nba/v1/dfs/slates', params: {} }));
+  return jobs;
+}
+
+function slateAndContractJobs() {
+  const jobs = [
+    paged({ endpoint: 'dfs_slates', key: 'all', path: '/nba/v1/dfs/slates', params: {} }),
+  ];
   for (const teamId of range(1, 30)) {
     jobs.push({
       endpoint: 'contracts_teams',
@@ -299,43 +312,58 @@ function phaseOne(seasons) {
   return jobs;
 }
 
-function phaseTwo(games, players, slates) {
+function phaseOne(seasons) {
+  const from = (min) => seasons.filter((s) => s >= min);
+  return [
+    ...basicJobs(),
+    ...seasons.flatMap(seasonJobs),
+    ...from(1996).flatMap(modernSeasonJobs),
+    ...from(2015).flatMap(periodJobs),
+    ...from(2018).flatMap(trackingSeasonJobs),
+    ...slateAndContractJobs(),
+  ];
+}
+
+/** The per-game jobs, which depend on how far back the API has data for that season. */
+function gameJobs(game) {
+  const key = `game-${game.id}`;
   const jobs = [];
-  const dates = new Map();
-  for (const game of games) {
-    if (game.date && !dates.has(game.date)) dates.set(game.date, game.season);
-    const key = `game-${game.id}`;
-    if (game.season >= 2018) {
-      jobs.push({
+  if (game.season >= 2018) {
+    jobs.push(
+      {
         endpoint: 'win_probabilities',
         key,
         path: '/nba/v1/win_probabilities',
         params: { game_id: game.id },
-      });
-      jobs.push({ endpoint: 'plays', key, path: '/nba/v1/plays', params: { game_id: game.id } });
-      jobs.push(
-        paged({
-          endpoint: 'shot_charts',
-          key,
-          path: '/nba/v1/shot_charts',
-          params: { game_ids: [game.id] },
-        })
-      );
-    }
-    if (game.season >= 2024) {
-      jobs.push({
-        endpoint: 'player_props_opening',
+      },
+      { endpoint: 'plays', key, path: '/nba/v1/plays', params: { game_id: game.id } },
+      paged({
+        endpoint: 'shot_charts',
         key,
-        path: '/nba/v2/odds/player_props/opening',
-        params: { game_id: game.id },
-      });
-    }
-    if (game.season >= 2025) {
-      jobs.push(
-        paged({ endpoint: 'lineups', key, path: '/nba/v1/lineups', params: { game_ids: game.id } })
-      );
-    }
+        path: '/nba/v1/shot_charts',
+        params: { game_ids: [game.id] },
+      })
+    );
   }
+  if (game.season >= 2024) {
+    jobs.push({
+      endpoint: 'player_props_opening',
+      key,
+      path: '/nba/v2/odds/player_props/opening',
+      params: { game_id: game.id },
+    });
+  }
+  if (game.season >= 2025) {
+    jobs.push(
+      paged({ endpoint: 'lineups', key, path: '/nba/v1/lineups', params: { game_ids: game.id } })
+    );
+  }
+  return jobs;
+}
+
+/** The per-date jobs. `dates` maps each date to the season of its first game. */
+function dateJobs(dates) {
+  const jobs = [];
   for (const [date, season] of dates) {
     const key = `date-${date}`;
     if (season >= 2000) {
@@ -343,9 +371,7 @@ function phaseTwo(games, players, slates) {
     }
     if (season >= 2024) {
       jobs.push(
-        paged({ endpoint: 'odds_v2', key, path: '/nba/v2/odds', params: { dates: [date] } })
-      );
-      jobs.push(
+        paged({ endpoint: 'odds_v2', key, path: '/nba/v2/odds', params: { dates: [date] } }),
         paged({
           endpoint: 'odds_opening',
           key,
@@ -355,33 +381,47 @@ function phaseTwo(games, players, slates) {
       );
     }
   }
-  for (const slate of slates) {
-    jobs.push({
+  return jobs;
+}
+
+function slateJobs(slate) {
+  const key = `slate-${slate.id}`;
+  return [
+    {
       endpoint: 'dfs_slate_detail',
-      key: `slate-${slate.id}`,
+      key,
       path: `/nba/v1/dfs/slates/${slate.id}`,
       params: {},
-    });
-    jobs.push(
-      paged({
-        endpoint: 'dfs_draftables',
-        key: `slate-${slate.id}`,
-        path: '/nba/v1/dfs/draftables',
-        params: { slate_ids: [slate.id] },
-      })
-    );
+    },
+    paged({
+      endpoint: 'dfs_draftables',
+      key,
+      path: '/nba/v1/dfs/draftables',
+      params: { slate_ids: [slate.id] },
+    }),
+  ];
+}
+
+function playerContractJob(player) {
+  return paged({
+    endpoint: 'contracts_players',
+    key: `player-${player.id}`,
+    path: '/nba/v1/contracts/players',
+    params: { player_id: player.id },
+  });
+}
+
+function phaseTwo(games, players, slates) {
+  const dates = new Map();
+  for (const game of games) {
+    if (game.date && !dates.has(game.date)) dates.set(game.date, game.season);
   }
-  for (const player of players) {
-    jobs.push(
-      paged({
-        endpoint: 'contracts_players',
-        key: `player-${player.id}`,
-        path: '/nba/v1/contracts/players',
-        params: { player_id: player.id },
-      })
-    );
-  }
-  return jobs;
+  return [
+    ...games.flatMap(gameJobs),
+    ...dateJobs(dates),
+    ...slates.flatMap(slateJobs),
+    ...players.map(playerContractJob),
+  ];
 }
 
 /**

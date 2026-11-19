@@ -7,7 +7,7 @@ import {
 } from '@nba-analytics-hub/players';
 import type { LeaderboardQuery } from '@nba-analytics-hub/players';
 import { type Parsed, parseEnum, parseInteger } from '../platform/queryParams.js';
-import { queryString } from '../platform/routeUtils.js';
+import { queryString } from '../platform/routeHandling.js';
 
 const LAST_SEASON = 2100;
 

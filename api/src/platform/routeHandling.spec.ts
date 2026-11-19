@@ -1,10 +1,10 @@
 import { vi } from 'vitest';
 import express from 'express';
 import request from 'supertest';
-import { resolveRequestId, sendError, sendSuccess, createRouteHandler } from './routeUtils.js';
+import { resolveRequestId, sendError, sendSuccess, createRouteHandler } from './routeHandling.js';
 import { describeIfSockets } from './testing/describeIfSockets.js';
 
-describeIfSockets('routeUtils', () => {
+describeIfSockets('routeHandling', () => {
   describe('resolveRequestId', () => {
     it('returns the x-request-id header when present', () => {
       const req = { header: vi.fn().mockReturnValue('abc-123') } as never;
@@ -19,7 +19,7 @@ describeIfSockets('routeUtils', () => {
   });
 });
 
-describeIfSockets('routeUtils', () => {
+describeIfSockets('routeHandling', () => {
   describe('createRouteHandler', () => {
     it('sends a success response when the fetcher resolves', async () => {
       const logger = { error: vi.fn() };
@@ -65,7 +65,7 @@ describeIfSockets('routeUtils', () => {
   });
 });
 
-describeIfSockets('routeUtils', () => {
+describeIfSockets('routeHandling', () => {
   describe('sendError', () => {
     it('defaults to 502 and sets the request id header', async () => {
       const app = express();
