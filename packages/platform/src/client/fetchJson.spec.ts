@@ -4,9 +4,9 @@ import { mockFetch } from '@nba-analytics-hub/testing';
 
 const BASE = 'https://api.example.com';
 
-describe('fetchJson', () => {
-  const fetchMock = mockFetch();
+const fetchMock = mockFetch();
 
+describe('fetchJson', () => {
   it('returns parsed JSON on success', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -40,7 +40,9 @@ describe('fetchJson', () => {
     const [calledUrl] = fetchMock.mock.calls[0] as [string];
     expect(calledUrl).toContain('foo=bar');
   });
+});
 
+describe('fetchJson', () => {
   it('passes init options to fetch', async () => {
     fetchMock.mockResolvedValue({
       ok: true,

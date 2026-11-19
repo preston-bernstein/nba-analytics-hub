@@ -17,7 +17,9 @@ describeIfSockets('routeUtils', () => {
       expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
     });
   });
+});
 
+describeIfSockets('routeUtils', () => {
   describe('createRouteHandler', () => {
     it('sends a success response when the fetcher resolves', async () => {
       const logger = { error: vi.fn() };
@@ -61,7 +63,9 @@ describeIfSockets('routeUtils', () => {
       expect(logger.error).toHaveBeenCalledWith('upstream failed', expect.any(Error));
     });
   });
+});
 
+describeIfSockets('routeUtils', () => {
   describe('sendError', () => {
     it('defaults to 502 and sets the request id header', async () => {
       const app = express();

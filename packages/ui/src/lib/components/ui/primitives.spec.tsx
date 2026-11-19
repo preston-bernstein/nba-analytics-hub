@@ -70,7 +70,9 @@ describe('shadcn primitives', () => {
     expect(el?.className).toMatch(/animate-pulse/);
     expect(el?.className).toMatch(/h-4/);
   });
+});
 
+describe('shadcn primitives', () => {
   it('Button and Badge render as their child with asChild', () => {
     render(
       <>
@@ -92,7 +94,9 @@ describe('shadcn primitives', () => {
     const indicator = container.querySelector('[data-slot="progress-indicator"]') as HTMLElement;
     expect(indicator.style.transform).toBe('translateX(-100%)');
   });
+});
 
+describe('shadcn primitives', () => {
   it('Table renders every part with its data-slot, inside a scroll container', () => {
     const { container } = render(
       <Table>
@@ -128,7 +132,9 @@ describe('shadcn primitives', () => {
       expect(container.querySelector(`[data-slot="${slot}"]`)).not.toBeNull();
     }
   });
+});
 
+describe('shadcn primitives', () => {
   it('Input and NativeSelect render with a data-slot and merge class names', () => {
     render(
       <>

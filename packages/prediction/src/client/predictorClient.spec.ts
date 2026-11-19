@@ -6,9 +6,9 @@ import { mockPredictionResponse } from './test-fixtures.js';
 
 const BASE_URL = 'https://example.com';
 
-describe('createPredictorClient', () => {
-  const fetchMock = mockFetch();
+const fetchMock = mockFetch();
 
+describe('createPredictorClient', () => {
   it('calls /predict with correct query params and returns parsed response on success', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -36,7 +36,9 @@ describe('createPredictorClient', () => {
 
     expect(result).toEqual(mockPredictionResponse);
   });
+});
 
+describe('createPredictorClient', () => {
   it('prefixes requests with a normalized basePath', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -80,7 +82,9 @@ describe('createPredictorClient', () => {
     expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/api/predict`);
     expect(result).toEqual(mockPredictionResponse);
   });
+});
 
+describe('createPredictorClient', () => {
   it('adds a leading slash when the basePath lacks one', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -124,7 +128,9 @@ describe('createPredictorClient', () => {
     expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/predict`);
     expect(result).toEqual(mockPredictionResponse);
   });
+});
 
+describe('createPredictorClient', () => {
   it('throws a descriptive error when the predictor returns a non-OK status', async () => {
     fetchMock.mockResolvedValue({
       ok: false,

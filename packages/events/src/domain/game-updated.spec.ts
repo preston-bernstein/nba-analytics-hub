@@ -110,7 +110,9 @@ describe('applyGameUpdated', () => {
     });
     expect(applyGameUpdated(final, late)).toBeUndefined();
   });
+});
 
+describe('applyGameUpdated', () => {
   it('lets a newer FINAL event replace a FINAL game', () => {
     const final = applyGameUpdated(
       undefined,

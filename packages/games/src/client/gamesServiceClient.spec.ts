@@ -6,9 +6,9 @@ import { mockFetch } from '@nba-analytics-hub/testing';
 
 const BASE_URL = 'https://games-service.example.com';
 
-describe('createGamesServiceClient', () => {
-  const fetchMock = mockFetch();
+const fetchMock = mockFetch();
 
+describe('createGamesServiceClient', () => {
   it('calls /health and forwards request id', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -43,7 +43,9 @@ describe('createGamesServiceClient', () => {
     expect(calledUrl.searchParams.get('date')).toBe('2025-01-02');
     expect(calledUrl.searchParams.get('tz')).toBe('America/New_York');
   });
+});
 
+describe('createGamesServiceClient', () => {
   it('calls /games when no params are provided', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -85,7 +87,9 @@ describe('createGamesServiceClient', () => {
     expect(init?.headers).toMatchObject({ 'X-Request-ID': 'req-456' });
     expect(result).toEqual(mockGame);
   });
+});
 
+describe('createGamesServiceClient', () => {
   it('throws a descriptive error when the games service returns non-OK', async () => {
     fetchMock.mockResolvedValue({
       ok: false,
@@ -111,7 +115,9 @@ describe('createGamesServiceClient', () => {
       'Games service request failed with status 404'
     );
   });
+});
 
+describe('createGamesServiceClient', () => {
   it('encodes game ids in the URL path', async () => {
     const mockGame: GamesServiceGame = {
       id: 'game id with spaces',

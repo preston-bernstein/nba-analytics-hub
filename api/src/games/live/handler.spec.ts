@@ -93,7 +93,9 @@ describe('game.updated handler', () => {
     const { handle } = setup();
     expect(() => handle('{nope')).toThrow(PoisonMessageError);
   });
+});
 
+describe('game.updated handler', () => {
   it('throws PoisonMessageError for a schema mismatch', () => {
     const { handle } = setup();
     expect(() => handle(JSON.stringify({ hello: 'world' }))).toThrow(PoisonMessageError);

@@ -5,9 +5,9 @@ import { mockGames } from './test-fixtures.js';
 
 const BASE_URL = 'https://example.com';
 
-describe('createGamesClient', () => {
-  const fetchMock = mockFetch();
+const fetchMock = mockFetch();
 
+describe('createGamesClient', () => {
   it('fetches games with optional date/tz filters', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -49,7 +49,9 @@ describe('createGamesClient', () => {
     expect(calledUrl.search).toBe('');
     expect(result).toEqual(mockGames);
   });
+});
 
+describe('createGamesClient', () => {
   it('prefixes requests with a normalized basePath', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
@@ -83,7 +85,9 @@ describe('createGamesClient', () => {
     expect(calledUrl.origin + calledUrl.pathname).toBe(`${BASE_URL}/api/games`);
     expect(result).toEqual(mockGames);
   });
+});
 
+describe('createGamesClient', () => {
   it('ignores basePath values that are only whitespace', async () => {
     fetchMock.mockResolvedValue({
       ok: true,

@@ -11,11 +11,11 @@ import {
   DAYS_AHEAD,
 } from './date-utils.js';
 
-describe('date utilities', () => {
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+afterEach(() => {
+  vi.useRealTimers();
+});
 
+describe('date utilities', () => {
   describe('getTodayDate', () => {
     it('returns date in YYYY-MM-DD format', () => {
       const result = getTodayDate();
@@ -56,7 +56,9 @@ describe('date utilities', () => {
       expect(result).toBe('2025-01-01');
     });
   });
+});
 
+describe('date utilities', () => {
   describe('isToday', () => {
     it('returns true for today date', () => {
       const today = getTodayDate();
@@ -87,7 +89,9 @@ describe('date utilities', () => {
       expect(getMaxDate()).toBe(expected);
     });
   });
+});
 
+describe('date utilities', () => {
   describe('isAtMinDate', () => {
     it('returns true when date equals min date', () => {
       const minDate = getMinDate();

@@ -1,13 +1,13 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { loadEnv, type AppEnv } from './loadEnv';
 
+const originalEnv = { ...process.env };
+
+afterEach(() => {
+  process.env = { ...originalEnv };
+});
+
 describe('loadEnv', () => {
-  const originalEnv = { ...process.env };
-
-  afterEach(() => {
-    process.env = { ...originalEnv };
-  });
-
   it('defaults values when missing', () => {
     delete process.env.VITE_API_BASE_URL;
     delete process.env.API_BASE_URL;
@@ -53,7 +53,9 @@ describe('loadEnv', () => {
     expect(env.API_BASE_URL).toBe('https://proc-api.example.com');
     expect(env.PREDICTOR_BASE_URL).toBe('https://proc-predictor.example.com');
   });
+});
 
+describe('loadEnv', () => {
   it('throws on invalid NODE_ENV', () => {
     expect(() => loadEnv({ NODE_ENV: 'staging' as AppEnv['NODE_ENV'] })).toThrow(/NODE_ENV/);
   });
@@ -84,12 +86,6 @@ describe('loadEnv', () => {
 });
 
 describe('loadEnv KAFKA_BROKERS', () => {
-  const originalEnv = { ...process.env };
-
-  afterEach(() => {
-    process.env = { ...originalEnv };
-  });
-
   it('is an empty list when unset', () => {
     delete process.env.KAFKA_BROKERS;
     expect(loadEnv({}).KAFKA_BROKERS).toEqual([]);

@@ -77,7 +77,9 @@ describe('useInfinitePage', () => {
     expect(result.current.rows).toEqual([1, 2]);
     await waitFor(() => expect(result.current.isPlaceholderData).toBe(false));
   });
+});
 
+describe('useInfinitePage', () => {
   it('reports an error when a page fails', async () => {
     const fetchPage = vi.fn().mockRejectedValue(new Error('boom'));
     const { result } = setup(fetchPage);

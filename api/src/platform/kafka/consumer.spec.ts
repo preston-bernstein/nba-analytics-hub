@@ -106,7 +106,9 @@ describe('startConsumer', () => {
     expect(sleep.mock.calls.map((c) => c[0])).toEqual([100, 200]);
     expect(state.sent).toHaveLength(0);
   });
+});
 
+describe('startConsumer', () => {
   it('caps the backoff delay', async () => {
     const { kafka, state } = fakeKafka();
     const handler = vi.fn(() => {
@@ -144,7 +146,9 @@ describe('startConsumer', () => {
     expect(handler).toHaveBeenCalledTimes(3);
     expect(state.sent).toHaveLength(0);
   });
+});
 
+describe('startConsumer', () => {
   it('sends a poison message to the DLQ with headers, without retrying', async () => {
     const { kafka, state } = fakeKafka();
     const handler = vi.fn(() => {
@@ -191,7 +195,9 @@ describe('startConsumer', () => {
     await startConsumer({ kafka, groupId: 'bff', ...topics, handler, logger: quiet });
     await expect(state.eachMessage!(payload())).rejects.toThrow('dlq down');
   });
+});
 
+describe('startConsumer', () => {
   it('uses topic names from options', async () => {
     const { kafka, state } = fakeKafka();
     const handler = vi.fn(() => {

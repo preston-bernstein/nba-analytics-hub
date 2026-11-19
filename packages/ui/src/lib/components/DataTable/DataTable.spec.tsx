@@ -97,7 +97,9 @@ describe('DataTable', () => {
     fireEvent.click(screen.getByRole('button', { name: /Player/ }));
     expect(onSortingChange).toHaveBeenCalledWith([{ id: 'name', desc: false }]);
   });
+});
 
+describe('DataTable', () => {
   it('does not sort rows itself, because the server sorts', () => {
     setup({ sorting: [{ id: 'name', desc: false }], data: [data[1], data[0]] });
     const cells = screen
@@ -141,7 +143,9 @@ describe('DataTable', () => {
     const { onEndReached } = setup();
     expect(onEndReached).toHaveBeenCalledTimes(1);
   });
+});
 
+describe('DataTable', () => {
   it('shows a loading row while it fetches more', () => {
     setup({ isFetching: true });
     expect(screen.getByRole('status')).toHaveTextContent(/loading/i);
