@@ -10,7 +10,7 @@ import {
   createRouteHandler,
   queryString,
   serviceUrl,
-} from '../platform/routeUtils.js';
+} from '../platform/routeHandling.js';
 
 interface PredictRouteDeps {
   predictorService?: PredictorServiceClient;

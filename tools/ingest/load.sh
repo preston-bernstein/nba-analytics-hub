@@ -1,10 +1,8 @@
-#!/bin/sh
-# sh-allow: nostrict legacy script with no bats test yet; strict mode would change its error handling
-# sh-allow: posix kept as #!/bin/sh: it runs where bash may be absent (container or appliance)
+#!/usr/bin/env bash
 # Load the raw archive into Postgres. Run on the NAS as root (sudo).
 # Usage: load.sh [endpoint ...]   (default: every folder under raw/)
 # Reloads each endpoint inside one transaction, so a failed load changes nothing.
-set -eu
+set -euo pipefail
 BASE=${BASE:-/volume1/docker/nba-data}
 DOCKER=${DOCKER:-/usr/local/bin/docker}
 PG=${PG:-nba-postgres}

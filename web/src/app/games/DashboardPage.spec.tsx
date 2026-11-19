@@ -5,7 +5,7 @@ import { setupServer } from 'msw/node';
 import type { Game } from '@nba-analytics-hub/games';
 import type { PredictionResponse } from '@nba-analytics-hub/prediction';
 import { DashboardPage } from './DashboardPage.tsx';
-import { renderWithQueryClient } from '../../test-utils/renderWithQueryClient';
+import { renderWithQueryClient } from '../../testing/renderWithQueryClient';
 
 const mockGames: Game[] = [
   {

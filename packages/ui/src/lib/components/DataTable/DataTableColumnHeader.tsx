@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import type { Column, SortDirection } from '@tanstack/react-table';
-import { cn } from '../../utils/cn';
+import { cn } from '../../formatting/cn';
 import { Button } from '../ui/button';
 
 export const ariaSort = (sorted: false | SortDirection) =>

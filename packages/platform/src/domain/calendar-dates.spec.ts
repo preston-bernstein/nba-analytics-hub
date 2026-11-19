@@ -9,7 +9,7 @@ import {
   isAtMaxDate,
   DAYS_BEHIND,
   DAYS_AHEAD,
-} from './date-utils.js';
+} from './calendar-dates.js';
 
 afterEach(() => {
   vi.useRealTimers();

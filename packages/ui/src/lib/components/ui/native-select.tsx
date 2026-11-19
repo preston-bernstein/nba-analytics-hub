@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ChevronDownIcon } from 'lucide-react';
-import { cn } from '../../utils/cn';
+import { cn } from '../../formatting/cn';
 
 function NativeSelect({ className, ...props }: React.ComponentProps<'select'>) {
   return (

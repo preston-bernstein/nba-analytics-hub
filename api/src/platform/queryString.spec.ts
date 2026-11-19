@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { Request } from 'express';
-import { queryString } from './routeUtils.js';
+import { queryString } from './routeHandling.js';
 
 const reqWith = (query: Record<string, unknown>) => ({ query } as unknown as Request);
 

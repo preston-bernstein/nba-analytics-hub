@@ -9,7 +9,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { cn } from '../../utils/cn';
+import { cn } from '../../formatting/cn';
 import { DataTableColumnHeader, ariaSort } from './DataTableColumnHeader';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
